@@ -36,10 +36,13 @@ class HomeView extends GetView<HomeController> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10),
-                        child: Text(
-                          'Kategori',
-                          style: Styles.headerStyles,
+                            vertical: 15.0, horizontal: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Kategori',
+                            style: Styles.headerStyles,
+                          ),
                         ),
                       ),
                       SizedBox(
