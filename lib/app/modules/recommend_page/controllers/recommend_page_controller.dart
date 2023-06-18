@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
-
-  final count = 0.obs;
+class RecommendPageController extends GetxController {
+  //TODO: Implement RecommendPageController
 
   List<CarouselItem> itemList = [
     CarouselItem(
@@ -50,6 +48,7 @@ class HomeController extends GetxController {
     )
   ];
 
+  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();

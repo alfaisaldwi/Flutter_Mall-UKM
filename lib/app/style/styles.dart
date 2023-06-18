@@ -7,7 +7,7 @@ class Styles {
 
   // header style
   static final TextStyle headerStyles =
-      GoogleFonts.montserrat(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold);
+      GoogleFonts.inter(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold);
 
   // extend the header style into body
   static final bodyStyle =

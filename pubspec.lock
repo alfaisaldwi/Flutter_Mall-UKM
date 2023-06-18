@@ -83,6 +83,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_custom_carousel_slider:
+    dependency: "direct main"
+    description:
+      name: flutter_custom_carousel_slider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -200,6 +207,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.7"
+  persistent_bottom_nav_bar:
+    dependency: "direct main"
+    description:
+      name: persistent_bottom_nav_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.2"
   platform:
     dependency: transitive
     description:

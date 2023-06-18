@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 4), () => Get.offAndToNamed(Routes.HOME));
+    Timer(const Duration(seconds: 4), () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
   }
 
   @override
@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   height: 100,
                 ),
                 Image.asset(
-                  "assets/images/logo.jpeg",
+                  "assets/images/logo.png",
                   height: 250.0,
                   width: 250.0,
                 ),
@@ -58,25 +58,13 @@ class _SplashScreenState extends State<SplashScreen> {
                 const SizedBox(
                   height: 90,
                 ),
-                Text(
-                  'Temukan investasi yang',
-                  style:
-                      Styles.bodyStyle,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text('tepat khusus untuk kamu',
-                    style: Styles.bodyStyle),
-                const SizedBox(
-                  height: 20,
-                ),
+
                 Container(
-                  width: 90,
-                  height: 30,
+                  width: 220,
+                  height: 45,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: const Color(0xff5EE8D1),
+                      color: const Color(0xff034779),
                       width: 1,
                     ),
                     borderRadius: BorderRadius.circular(11),
@@ -86,12 +74,11 @@ class _SplashScreenState extends State<SplashScreen> {
                       child: Padding(
                     padding: const EdgeInsets.all(1.0),
                     child: Text(
-                      'Disini',
-                      style: GoogleFonts.inter(
-                          fontSize: 14, color: const Color(0xff034779)),
+                      'Ayo Berbelanja disini!',
+                      style:Styles.bodyStyle),
                     ),
-                  )),
-                ),
+                  ),),
+                
               ],
             ),
             const SizedBox(
