@@ -8,7 +8,7 @@ import '../controllers/recommend_page_controller.dart';
 
 class RecommendPageView extends GetView<RecommendPageController> {
   @override
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(

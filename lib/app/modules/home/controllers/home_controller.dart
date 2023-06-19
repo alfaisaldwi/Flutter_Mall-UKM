@@ -3,7 +3,7 @@ import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.da
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  TextEditingController cSearch = TextEditingController();
 
   final count = 0.obs;
 
