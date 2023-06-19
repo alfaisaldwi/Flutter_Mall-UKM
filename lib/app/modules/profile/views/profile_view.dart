@@ -103,22 +103,15 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                             ),
                             ListTile(
-                              leading: const Icon(Icons.flight),
+                              leading: const Icon(
+                                Icons.shopping_cart,
+                                size: 20,
+                              ),
                               title: Text(
-                                'Flight',
+                                'Keranjang',
                                 style: Styles.bodyStyle(),
                               ),
                             ),
-                            ListTile(
-                              leading: const Icon(
-                                Icons.train,
-                                size: 25,
-                              ),
-                              title: Text(
-                                'Train',
-                                style: Styles.bodyStyle(),
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -228,13 +221,14 @@ class ProfileView extends GetView<ProfileController> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 25),
                 child: Align(
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.centerLeft,
                   child: Text(
-                    'Logout',
+                    'Keluar',
                     style: Styles.headerStyles(
-                        color: Colors.redAccent, weight: FontWeight.bold),
+                        color: const Color(0xff990000),
+                        weight: FontWeight.bold),
                   ),
                 ),
               )

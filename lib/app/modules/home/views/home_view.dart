@@ -118,7 +118,7 @@ class HomeView extends GetView<HomeController> {
                         height: MediaQuery.of(context).size.height * .1 + 20,
                         width: MediaQuery.of(context).size.width * .9,
                         child: ListView.builder(
-                            physics: ClampingScrollPhysics(),
+                            physics: const ClampingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemCount: 8,
@@ -129,7 +129,7 @@ class HomeView extends GetView<HomeController> {
                                   //     arguments: kontenData[index]);
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 8.0, right: 8.0, bottom: 4.0),
@@ -137,7 +137,7 @@ class HomeView extends GetView<HomeController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 80,
                                           width: 50,
                                           child: Column(
