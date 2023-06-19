@@ -16,7 +16,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 4), () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
+    Timer(const Duration(seconds: 4),
+        () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
   }
 
   @override
@@ -58,7 +59,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 const SizedBox(
                   height: 90,
                 ),
-
                 Container(
                   width: 220,
                   height: 45,
@@ -71,14 +71,13 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: Colors.white,
                   ),
                   child: Center(
-                      child: Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: Text(
-                      'Ayo Berbelanja disini!',
-                      style:Styles.bodyStyle),
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text('Ayo Berbelanja disini!',
+                          style: Styles.bodyStyle()),
                     ),
-                  ),),
-                
+                  ),
+                ),
               ],
             ),
             const SizedBox(

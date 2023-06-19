@@ -33,7 +33,7 @@ class ProfileView extends GetView<ProfileController> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Akun',
-                          style: Styles.headerStyles,
+                          style: Styles.headerStyles(),
                         ),
                       ),
                       const Padding(
@@ -60,7 +60,7 @@ class ProfileView extends GetView<ProfileController> {
                           Expanded(
                             child: Text(
                               'Alleexx Lexxaa Xyeeee',
-                              style: Styles.headerStyles,
+                              style: Styles.headerStyles(),
                             ),
                           ),
                         ],
@@ -81,7 +81,7 @@ class ProfileView extends GetView<ProfileController> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Aktifitas Akun',
-                            style: Styles.headerStyles,
+                            style: Styles.headerStyles(),
                           ),
                         ),
                       ),
@@ -99,14 +99,14 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                               title: Text(
                                 'Daftar Transaksi',
-                                style: Styles.bodyStyle,
+                                style: Styles.bodyStyle(),
                               ),
                             ),
                             ListTile(
                               leading: const Icon(Icons.flight),
                               title: Text(
                                 'Flight',
-                                style: Styles.bodyStyle,
+                                style: Styles.bodyStyle(),
                               ),
                             ),
                             ListTile(
@@ -116,7 +116,7 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                               title: Text(
                                 'Train',
-                                style: Styles.bodyStyle,
+                                style: Styles.bodyStyle(),
                               ),
                             )
                           ],
@@ -141,7 +141,7 @@ class ProfileView extends GetView<ProfileController> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Pengaturan Akun',
-                            style: Styles.headerStyles,
+                            style: Styles.headerStyles(),
                           ),
                         ),
                       ),
@@ -159,14 +159,14 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                               title: Text(
                                 'Alamat Pengiriman',
-                                style: Styles.bodyStyle,
+                                style: Styles.bodyStyle(),
                               ),
                             ),
                             ListTile(
                               leading: const Icon(Icons.key_outlined),
                               title: Text(
                                 'Ubah Kata Sandi',
-                                style: Styles.bodyStyle,
+                                style: Styles.bodyStyle(),
                               ),
                             ),
                           ],
@@ -191,7 +191,7 @@ class ProfileView extends GetView<ProfileController> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Pusat Bantuan',
-                            style: Styles.headerStyles,
+                            style: Styles.headerStyles(),
                           ),
                         ),
                       ),
@@ -209,14 +209,14 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                               title: Text(
                                 'Hubungi Customer Service Mall UKM Cirebon',
-                                style: Styles.bodyStyle,
+                                style: Styles.bodyStyle(),
                               ),
                             ),
                             ListTile(
                               leading: const Icon(Icons.file_copy_outlined),
                               title: Text(
                                 'Syarat dan Ketentuan',
-                                style: Styles.bodyStyle,
+                                style: Styles.bodyStyle(),
                               ),
                             ),
                           ],
@@ -226,6 +226,18 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
               ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Logout',
+                    style: Styles.headerStyles(
+                        color: Colors.redAccent, weight: FontWeight.bold),
+                  ),
+                ),
+              )
             ]),
           ),
         ),

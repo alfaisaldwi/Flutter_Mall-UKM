@@ -110,7 +110,7 @@ class HomeView extends GetView<HomeController> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Kategori',
-                            style: Styles.headerStyles,
+                            style: Styles.headerStyles(),
                           ),
                         ),
                       ),
@@ -159,7 +159,7 @@ class HomeView extends GetView<HomeController> {
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
-                                                  style: Styles.bodyStyle2,
+                                                  style: Styles.bodyStyle2(),
                                                 ),
                                               ),
                                             ],
