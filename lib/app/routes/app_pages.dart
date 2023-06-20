@@ -8,6 +8,8 @@ import 'package:mall_ukm/app/modules/profile/bindings/profile_binding.dart';
 import 'package:mall_ukm/app/modules/profile/views/profile_view.dart';
 import 'package:mall_ukm/app/modules/recommend_page/bindings/recommend_page_binding.dart';
 import 'package:mall_ukm/app/modules/recommend_page/views/recommend_page_view.dart';
+import 'package:mall_ukm/app/modules/survey_page/bindings/survey_page_binding.dart';
+import 'package:mall_ukm/app/modules/survey_page/views/survey_page_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/bindings/transaction_page_binding.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction_page_view.dart';
 import 'package:mall_ukm/splash_binding.dart';
@@ -50,6 +52,11 @@ class AppPages {
       name: _Paths.TRANSACTION_PAGE,
       page: () => TransactionPageView(),
       binding: TransactionPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.SURVEY_PAGE,
+      page: () => SurveyPageView(),
+      binding: SurveyPageBinding(),
     ),
   ];
 }

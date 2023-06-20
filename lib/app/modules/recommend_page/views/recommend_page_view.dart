@@ -8,7 +8,7 @@ import '../controllers/recommend_page_controller.dart';
 
 class RecommendPageView extends GetView<RecommendPageController> {
   @override
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -37,13 +37,13 @@ class RecommendPageView extends GetView<RecommendPageController> {
                 ),
                 Text(
                   'Produk hari ini',
-                  style: Styles.headerStyles,
+                  style: Styles.headerStyles(),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .3 - 30,
                   width: MediaQuery.of(context).size.width * .9,
                   child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
+                      physics: const ClampingScrollPhysics(),
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemCount: 8,
@@ -55,7 +55,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                           },
                           child: Card(
                             child: Container(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     left: 8.0, right: 8.0, bottom: 4.0),

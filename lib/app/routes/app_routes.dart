@@ -10,6 +10,7 @@ abstract class Routes {
   static const NAVBAR_PAGE = _Paths.NAVBAR_PAGE;
   static const RECOMMEND_PAGE = _Paths.RECOMMEND_PAGE;
   static const TRANSACTION_PAGE = _Paths.TRANSACTION_PAGE;
+  static const SURVEY_PAGE = _Paths.SURVEY_PAGE;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const NAVBAR_PAGE = '/navbar-page';
   static const RECOMMEND_PAGE = '/recommend-page';
   static const TRANSACTION_PAGE = '/transaction-page';
+  static const SURVEY_PAGE = '/survey-page';
 }
