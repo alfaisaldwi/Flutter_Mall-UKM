@@ -16,6 +16,15 @@ class HomeView extends GetView<HomeController> {
       'Barron',
       64,
     ];
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    const int count = 16;
+    const int itemsPerRow = 2;
+    const double ratio = 1 / 1;
+    const double horizontalPadding = 0;
+    final double calcHeight = ((width / itemsPerRow) - (horizontalPadding)) *
+        (count / itemsPerRow).ceil() *
+        (1 / ratio);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -93,7 +102,7 @@ class HomeView extends GetView<HomeController> {
                     children: [
                       Center(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(6),
                           child: CustomCarouselSlider(
                             items: controller.itemList,
                             height: 180,
@@ -175,6 +184,89 @@ class HomeView extends GetView<HomeController> {
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 10.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Produk yang mungkin anda cari',
+                      style: Styles.headerStyles(),
+                    ),
+                  ),
+                ),
+                GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 2),
+                    itemCount: 8,
+                    itemBuilder: (BuildContext ctx, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          // Get.to(() => DetailKontentLokalView(),
+                          //     arguments: kontenData[index]);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Card(
+                            child: Container(
+                              margin: const EdgeInsets.all(2),
+                              padding: const EdgeInsets.all(5),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, right: 8.0, bottom: 4.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          child: Image.network(
+                                            "https://www.pilar.id/wp-content/uploads/2023/02/A3DF586A-4C1B-446B-9478-4BE82EA6EC14-768x512.jpeg",
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 8.0),
+                                      child: Text(
+                                        'Data Produk Kurt D. Cobain',
+                                        textAlign: TextAlign.left,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Styles.bodyStyle(
+                                            weight: FontWeight.w600),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 2.0),
+                                      child: Text(
+                                        'Rp. 500.000',
+                                        textAlign: TextAlign.left,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Styles.bodyStyle(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    })
               ],
             ),
           ),

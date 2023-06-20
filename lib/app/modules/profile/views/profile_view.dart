@@ -162,6 +162,13 @@ class ProfileView extends GetView<ProfileController> {
                                 style: Styles.bodyStyle(),
                               ),
                             ),
+                            ListTile(
+                              leading: const Icon(Icons.call_outlined),
+                              title: Text(
+                                'Ubah No. Handphone',
+                                style: Styles.bodyStyle(),
+                              ),
+                            ),
                           ],
                         ),
                       ),
