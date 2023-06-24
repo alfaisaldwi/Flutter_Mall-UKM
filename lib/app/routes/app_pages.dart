@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import 'package:mall_ukm/app/modules/cart/bindings/cart_binding.dart';
+import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/home/bindings/home_binding.dart';
 import 'package:mall_ukm/app/modules/home/views/home_view.dart';
 import 'package:mall_ukm/app/modules/navbar_page/bindings/navbar_page_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.SURVEY_PAGE,
       page: () => SurveyPageView(),
       binding: SurveyPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.CART,
+      page: () => CartView(),
+      binding: CartBinding(),
     ),
   ];
 }

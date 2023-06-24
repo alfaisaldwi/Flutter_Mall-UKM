@@ -20,28 +20,17 @@ class RecommendPageView extends GetView<RecommendPageController> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: CustomCarouselSlider(
-                      items: controller.itemList,
-                      height: 180,
-                      subHeight: 0,
-                      width: MediaQuery.of(context).size.width * .9,
-                      autoplay: true,
-                    ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: Text(
+                    'Paling banyak diminati',
+                    style: Styles.headerStyles(),
                   ),
                 ),
-                const SizedBox(
-                  height: 2,
-                ),
-                Text(
-                  'Produk hari ini',
-                  style: Styles.headerStyles(),
-                ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * .3 - 30,
-                  width: MediaQuery.of(context).size.width * .9,
+                  height: MediaQuery.of(context).size.height * .3 - 45,
+                  width: double.infinity,
                   child: ListView.builder(
                       physics: const ClampingScrollPhysics(),
                       shrinkWrap: true,
@@ -53,37 +42,62 @@ class RecommendPageView extends GetView<RecommendPageController> {
                             // Get.to(() => DetailKontentLokalView(),
                             //     arguments: kontenData[index]);
                           },
-                          child: Card(
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, right: 8.0, bottom: 4.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Image.network(
-                                      "https://scontent.fbdo8-1.fna.fbcdn.net/v/t39.30808-6/241471008_415928503283085_261101322942725413_n.png?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCSGxrdskCW7kZOKXhmlB4SVIeRwFHkhtJUh5HAUeSG7Jzaz9y89DHKXMUTiOAXler-aGRfYtTZ3uRl_F9XYqr&_nc_ohc=67wM9UY9CaIAX9iwslF&_nc_zt=23&_nc_ht=scontent.fbdo8-1.fna&oh=00_AfCYpA451sbMesPMujQUyHY9pjzBBFtoqLJnR6o96z_Nbg&oe=6494BE32",
-                                      width: 100,
-                                      height: 140,
-                                      fit: BoxFit.fill,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    const Text(
-                                      'Dataa Produk',
-                                      textAlign: TextAlign.left,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const Text(
-                                      'Rp. 500.000',
-                                      textAlign: TextAlign.left,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Card(
+                              child: Container(
+                                width: 140,
+                                padding: const EdgeInsets.all(5),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 8.0,
+                                      right: 8.0,
+                                      bottom: 0.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          child: Image.network(
+                                            "https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg",
+                                            fit: BoxFit.cover,
+                                            width: 140,
+                                            height: 90,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 4.0),
+                                        child: Text(
+                                          'Dataa Produk Art Kurt D. Cobain ',
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Styles.bodyStyle(
+                                              weight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 2.0),
+                                        child: Text(
+                                          'Rp. 5.000.000',
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Styles.bodyStyle(size: 12),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
