@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class TransactionPageController extends GetxController {
-  //TODO: Implement TransactionPageController
+   final iconSize = 350.0.obs;
 
   final count = 0.obs;
   @override
