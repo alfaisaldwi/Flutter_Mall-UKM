@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 
@@ -134,8 +135,9 @@ class HomeView extends GetView<HomeController> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  // Get.to(() => DetailKontentLokalView(),
-                                  //     arguments: kontenData[index]);
+                                  Get.to(
+                                    () => ProductDetailView(),
+                                  );
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(5),
@@ -207,8 +209,9 @@ class HomeView extends GetView<HomeController> {
                     itemBuilder: (BuildContext ctx, index) {
                       return GestureDetector(
                         onTap: () {
-                          // Get.to(() => DetailKontentLokalView(),
-                          //     arguments: kontenData[index]);
+                          Get.to(
+                            () => ProductDetailView(),
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
