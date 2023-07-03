@@ -14,7 +14,7 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
             physics: ScrollPhysics(),
-            itemCount: 4,
+            itemCount: 8,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {

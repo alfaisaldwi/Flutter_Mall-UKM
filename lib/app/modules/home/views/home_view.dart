@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
@@ -81,10 +82,13 @@ class HomeView extends GetView<HomeController> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(
-                Icons.shopping_cart,
-                color: Colors.black,
-                size: 32,
+              icon: GestureDetector(
+                onTap: () => (Get.toNamed('/cart')),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.black,
+                  size: 32,
+                ),
               ),
               onPressed: () {},
             ),

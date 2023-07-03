@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class NavbarPageController extends GetxController {
-  var tabIndex = 0.obs;
   Rx<bool>? isSelected;
+  final contr = PersistentTabController(initialIndex: 0);
+  
 
-  void changeTabIndex(int index) {
-    tabIndex.value = index;
-  }
+final PersistentTabController tabController = PersistentTabController();
 
   @override
   void onInit() {
