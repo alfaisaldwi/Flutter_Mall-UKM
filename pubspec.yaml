@@ -16,6 +16,7 @@ dependencies:
   anim_search_bar: ^2.0.3
   search_page: ^2.3.0
   flutter_svg: ^1.1.6
+  cart_stepper: ^4.1.1
 
 
 dev_dependencies: 

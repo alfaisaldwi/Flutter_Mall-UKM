@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 
@@ -77,10 +78,13 @@ class ProductDetailView extends GetView<ProductDetailController> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(
-                Icons.shopping_cart,
-                color: Colors.black,
-                size: 32,
+              icon: GestureDetector(
+                onTap: () => (Get.to(() => CartView())),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.black,
+                  size: 32,
+                ),
               ),
               onPressed: () {},
             ),
@@ -129,7 +133,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    //add chart
+                    Get.to(() => CartView());
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,

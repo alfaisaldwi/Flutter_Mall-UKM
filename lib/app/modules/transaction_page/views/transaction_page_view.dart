@@ -24,25 +24,25 @@ class TransactionPageView extends GetView<TransactionPageController> {
               Tab(
                 child: Text(
                   'Semua ',
-                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w500),
+                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
                 ),
               ),
               Tab(
                 child: Text(
                   'Dikemas',
-                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w500),
+                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
                 ),
               ),
               Tab(
                 child: Text(
                   'Diproses',
-                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w500),
+                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
                 ),
               ),
               Tab(
                 child: Text(
                   'Selesai',
-                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w500),
+                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
                 ),
               ),
             ],

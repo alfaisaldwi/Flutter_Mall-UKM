@@ -19,8 +19,6 @@ class NavbarPageView extends GetView<NavbarPageController> {
   final TextStyle selectedLabelStyle =
       TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12);
 
-  final contr = PersistentTabController(initialIndex: 0);
-
   List<Widget> _buildScreen() {
     return [
       HomeView(),
@@ -29,7 +27,6 @@ class NavbarPageView extends GetView<NavbarPageController> {
       ProfileView(),
     ];
   }
-
   List<PersistentBottomNavBarItem> _navbarItem() {
     return [
       PersistentBottomNavBarItem(
@@ -91,7 +88,7 @@ class NavbarPageView extends GetView<NavbarPageController> {
           ),
         ],
       ),
-      controller: contr,
+      controller: controller.tabController,
     );
   }
 }

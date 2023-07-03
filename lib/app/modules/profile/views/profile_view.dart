@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
+    NavbarPageController controllerNav = Get.find<NavbarPageController>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -92,24 +95,35 @@ class ProfileView extends GetView<ProfileController> {
                           shrinkWrap: true,
                           physics: const ScrollPhysics(),
                           children: [
-                            ListTile(
-                              leading: const Icon(
-                                Icons.wallet_rounded,
-                                size: 20,
-                              ),
-                              title: Text(
-                                'Daftar Transaksi',
-                                style: Styles.bodyStyle(),
+                            GestureDetector(
+                              onTap: () {
+                                controllerNav.tabController.index = 2;
+                                // controllerNav.contr.index = 2;
+
+                                // Get.toNamed('/transaction-page');
+                              },
+                              child: ListTile(
+                                leading: const Icon(
+                                  Icons.wallet_rounded,
+                                  size: 20,
+                                ),
+                                title: Text(
+                                  'Daftar Transaksi',
+                                  style: Styles.bodyStyle(),
+                                ),
                               ),
                             ),
-                            ListTile(
-                              leading: const Icon(
-                                Icons.shopping_cart,
-                                size: 20,
-                              ),
-                              title: Text(
-                                'Keranjang',
-                                style: Styles.bodyStyle(),
+                            GestureDetector(
+                              onTap: () => (Get.toNamed('/cart')),
+                              child: ListTile(
+                                leading: const Icon(
+                                  Icons.shopping_cart,
+                                  size: 20,
+                                ),
+                                title: Text(
+                                  'Keranjang',
+                                  style: Styles.bodyStyle(),
+                                ),
                               ),
                             ),
                           ],
