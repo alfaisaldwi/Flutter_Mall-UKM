@@ -7,7 +7,7 @@ class Styles {
   // header style
   static TextStyle headerStyles(
       {Color? color, double? size, FontWeight? weight}) {
-    return GoogleFonts.inter(
+    return GoogleFonts.roboto(
         color: color ?? Colors.black,
         fontSize: size ?? 15,
         fontWeight: weight ?? FontWeight.bold);
@@ -15,14 +15,14 @@ class Styles {
 
   // extend the header style into body
   static bodyStyle({Color? color, double? size, FontWeight? weight}) {
-    return GoogleFonts.montserrat(
+    return GoogleFonts.roboto(
         color: color ?? Colors.black,
         fontSize: size ?? 13,
         fontWeight: weight ?? FontWeight.normal);
   }
 
   static bodyStyle2({Color? color, FontWeight? weight}) {
-    return GoogleFonts.montserrat(
+    return GoogleFonts.roboto(
       color: color ?? Colors.black,
       fontSize: 11,
       fontWeight: weight ?? FontWeight.normal,

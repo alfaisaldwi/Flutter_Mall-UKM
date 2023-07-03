@@ -1,9 +1,13 @@
 import 'package:get/get.dart';
 
+import 'package:mall_ukm/app/modules/cart/bindings/cart_binding.dart';
+import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/home/bindings/home_binding.dart';
 import 'package:mall_ukm/app/modules/home/views/home_view.dart';
 import 'package:mall_ukm/app/modules/navbar_page/bindings/navbar_page_binding.dart';
 import 'package:mall_ukm/app/modules/navbar_page/views/navbar_page_view.dart';
+import 'package:mall_ukm/app/modules/product_detail/bindings/product_detail_binding.dart';
+import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/modules/profile/bindings/profile_binding.dart';
 import 'package:mall_ukm/app/modules/profile/views/profile_view.dart';
 import 'package:mall_ukm/app/modules/recommend_page/bindings/recommend_page_binding.dart';
@@ -57,6 +61,16 @@ class AppPages {
       name: _Paths.SURVEY_PAGE,
       page: () => SurveyPageView(),
       binding: SurveyPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.CART,
+      page: () => CartView(),
+      binding: CartBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT_DETAIL,
+      page: () => ProductDetailView(),
+      binding: ProductDetailBinding(),
     ),
   ];
 }

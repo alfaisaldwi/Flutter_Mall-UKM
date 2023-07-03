@@ -42,12 +42,14 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const SizedBox(
-                  height: 100,
+                  height: 150,
                 ),
-                Image.asset(
-                  "assets/images/logo.png",
-                  height: 250.0,
-                  width: 250.0,
+                Center(
+                  child: Image.asset(
+                    "assets/images/logo.jpeg",
+                    height: 150.0,
+                    width: 250.0,
+                  ),
                 ),
               ],
             ),

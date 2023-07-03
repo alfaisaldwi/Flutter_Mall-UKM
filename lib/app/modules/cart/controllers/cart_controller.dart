@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class TransactionPageController extends GetxController {
-   final iconSize = 350.0.obs;
+class CartController extends GetxController {
+  //TODO: Implement CartController
 
   final count = 0.obs;
   @override
