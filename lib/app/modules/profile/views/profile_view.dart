@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
+import 'package:mall_ukm/app/modules/profile/views/get_user.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -169,18 +170,24 @@ class ProfileView extends GetView<ProfileController> {
                                 style: Styles.bodyStyle(),
                               ),
                             ),
-                            ListTile(
-                              leading: const Icon(Icons.key_outlined),
-                              title: Text(
-                                'Ubah Kata Sandi',
-                                style: Styles.bodyStyle(),
+                            GestureDetector(
+                              onTap: (() => Get.toNamed('/signin')),
+                              child: ListTile(
+                                leading: const Icon(Icons.key_outlined),
+                                title: Text(
+                                  'Ubah Kata Sandi',
+                                  style: Styles.bodyStyle(),
+                                ),
                               ),
                             ),
-                            ListTile(
-                              leading: const Icon(Icons.call_outlined),
-                              title: Text(
-                                'Ubah No. Handphone',
-                                style: Styles.bodyStyle(),
+                            GestureDetector(
+                              onTap: () => (Get.toNamed('/signup')),
+                              child: ListTile(
+                                leading: const Icon(Icons.call_outlined),
+                                title: Text(
+                                  'Ubah No. Handphone',
+                                  style: Styles.bodyStyle(),
+                                ),
                               ),
                             ),
                           ],
@@ -224,6 +231,19 @@ class ProfileView extends GetView<ProfileController> {
                               title: Text(
                                 'Hubungi Customer Service Mall UKM Cirebon',
                                 style: Styles.bodyStyle(),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => (Get.toNamed('/survey-page')),
+                              child: ListTile(
+                                leading: const Icon(
+                                  Icons.question_answer_rounded,
+                                  size: 20,
+                                ),
+                                title: Text(
+                                  'Survey Mall UKM Kota Cirebon',
+                                  style: Styles.bodyStyle(),
+                                ),
                               ),
                             ),
                             ListTile(

@@ -133,7 +133,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    Get.to(() => CartView());
+                    Get.toNamed(('/cart'));
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,

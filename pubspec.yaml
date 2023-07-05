@@ -17,6 +17,12 @@ dependencies:
   search_page: ^2.3.0
   flutter_svg: ^1.1.6
   cart_stepper: ^4.1.1
+  shared_preferences: ^2.2.0
+  http: ^0.13.5
+  dio: ^5.2.1+1
+  shimmer: ^3.0.0
+  flutter_survey: ^0.1.4
+  fluttertoast: ^8.2.2
 
 
 dev_dependencies: 

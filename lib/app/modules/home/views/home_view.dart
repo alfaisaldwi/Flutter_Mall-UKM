@@ -135,8 +135,9 @@ class HomeView extends GetView<HomeController> {
                             physics: const ClampingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: 8,
+                            itemCount: controller.category.length,
                             itemBuilder: (context, index) {
+                              var category = controller.category[index];
                               return GestureDetector(
                                 onTap: () {
                                   Get.to(
@@ -169,7 +170,7 @@ class HomeView extends GetView<HomeController> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  'Fashion Wanita',
+                                                  category.title,
                                                   textAlign: TextAlign.left,
                                                   maxLines: 2,
                                                   overflow:

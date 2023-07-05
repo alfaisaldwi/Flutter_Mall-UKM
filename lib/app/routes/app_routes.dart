@@ -13,6 +13,8 @@ abstract class Routes {
   static const SURVEY_PAGE = _Paths.SURVEY_PAGE;
   static const CART = _Paths.CART;
   static const PRODUCT_DETAIL = _Paths.PRODUCT_DETAIL;
+  static const SIGNUP = _Paths.SIGNUP;
+  static const SIGNIN = _Paths.SIGNIN;
 }
 
 abstract class _Paths {
@@ -25,4 +27,6 @@ abstract class _Paths {
   static const SURVEY_PAGE = '/survey-page';
   static const CART = '/cart';
   static const PRODUCT_DETAIL = '/product-detail';
+  static const SIGNUP = '/signup';
+  static const SIGNIN = '/signin';
 }
