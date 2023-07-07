@@ -1,9 +1,6 @@
-import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
-
 import 'package:get/get.dart';
-import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
@@ -131,7 +128,7 @@ class HomeView extends GetView<HomeController> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .1 + 20,
                         width: MediaQuery.of(context).size.width * .9,
-                        child: ListView.builder(
+                        child: Obx(() => ListView.builder(
                             physics: const ClampingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -186,7 +183,7 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                 ),
                               );
-                            }),
+                            })),
                       ),
                     ],
                   ),
@@ -202,7 +199,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                 ),
-                GridView.builder(
+                Obx(() => GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
@@ -210,8 +207,10 @@ class HomeView extends GetView<HomeController> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 1,
                             mainAxisSpacing: 2),
-                    itemCount: 8,
+                    itemCount: controller.products.length,
                     itemBuilder: (BuildContext ctx, index) {
+                      var product = controller.products[index];
+
                       return GestureDetector(
                         onTap: () {
                           Get.to(
@@ -248,7 +247,7 @@ class HomeView extends GetView<HomeController> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0, vertical: 8.0),
                                       child: Text(
-                                        'Data Produk Kurt D. Cobain',
+                                        product.title,
                                         textAlign: TextAlign.left,
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
@@ -260,7 +259,7 @@ class HomeView extends GetView<HomeController> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0, vertical: 2.0),
                                       child: Text(
-                                        'Rp. 500.000',
+                                        product.price,
                                         textAlign: TextAlign.left,
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
@@ -274,7 +273,7 @@ class HomeView extends GetView<HomeController> {
                           ),
                         ),
                       );
-                    })
+                    }))
               ],
             ),
           ),

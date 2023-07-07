@@ -16,10 +16,18 @@ import 'package:mall_ukm/app/service/helper/users_helper.dart';
 class ApiEndPoints {
   static final String baseUrl = 'https://nonameapi.my.id';
   static _AuthEndPoints authEndpoints = _AuthEndPoints();
+  static _ProductEndPoints productEndPoints = _ProductEndPoints();
+
 }
 
 class _AuthEndPoints {
   final String registerEmail = '';
   final String loginEmail = '/api/auth/login';
-  final String category = '/api/auth/category';
+  final String logout = '/api/auth/logout';
+  
+}
+class _ProductEndPoints {
+  final String category = '/api/category';
+  final String product = '/api/product/';
+  
 }

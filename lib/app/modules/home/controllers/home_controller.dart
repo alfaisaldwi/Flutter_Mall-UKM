@@ -4,15 +4,19 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/model/product/product_model.dart';
+import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
 import 'package:mall_ukm/app/service/repository/users_repository.dart';
 
-import '../../../model/users/category/index_model.dart';
+import '../../../model/category/category_model.dart';
 
 class HomeController extends GetxController {
   TextEditingController cSearch = TextEditingController();
 
   final count = 0.obs;
   var category = <Category>[].obs;
+  RxList<Product> products = <Product>[].obs;
+  RxBool isLoading = false.obs;
 
   List<CarouselItem> itemList = [
     CarouselItem(
@@ -59,8 +63,10 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    fetchCategories();
     super.onInit();
+    fetchCategories();
+    fetchProduct();
+    print(PreferenceUtils.token);
   }
 
   @override
@@ -75,12 +81,10 @@ class HomeController extends GetxController {
   Future<List<Category>> getCategories() async {
     var headers = {
       'Accept': 'application/json',
-      'Authorization':
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL25vbmFtZWFwaS5teS5pZC9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTY4ODU2OTA1MSwiZXhwIjoxNjg4NTcyNjUxLCJuYmYiOjE2ODg1NjkwNTEsImp0aSI6IjJGelp5Mm9kbU13dTJybUIiLCJzdWIiOiIzIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.31PffV3e-Sy6VjoQ1xZNYncUgeSEIzkWiXSrAE25k4c'
     };
     try {
       var url = Uri.parse(
-        ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.category,
+        ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.category,
       );
       http.Response response = await http.get(url, headers: headers);
 
@@ -105,10 +109,51 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<List<Category>> getProduct() async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+    try {
+      var url = Uri.parse(
+        ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.product,
+      );
+      http.Response response = await http.get(url, headers: headers);
+
+      print(response.body);
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        if (json['code'] == 200) {
+          List<Category> categories = [];
+          for (var data in json['data']) {
+            var product = Product.fromJson(data);
+            products.add(product);
+          }
+          return categories;
+        } else {
+          throw jsonDecode(response.body)['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occured";
+      }
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
   Future<void> fetchCategories() async {
     try {
       var fetchedCategories = await getCategories();
       category.assignAll(fetchedCategories);
+    } catch (error) {
+      // Handle error jika terjadi kesalahan dalam mengambil kategori
+      print('Terjadi kesalahan: $error');
+    }
+  }
+
+  Future<void> fetchProduct() async {
+    try {
+      var fetchedProduct = await getProduct();
+      category.assignAll(fetchedProduct);
     } catch (error) {
       // Handle error jika terjadi kesalahan dalam mengambil kategori
       print('Terjadi kesalahan: $error');
