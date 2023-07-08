@@ -4,7 +4,11 @@ class Category {
   String createdAt;
   String updatedAt;
 
-  Category({required this.id, required this.title, required this.createdAt, required this.updatedAt});
+  Category(
+      {required this.id,
+      required this.title,
+      required this.createdAt,
+      required this.updatedAt});
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(

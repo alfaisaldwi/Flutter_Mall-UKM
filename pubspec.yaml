@@ -24,6 +24,7 @@ dependencies:
   flutter_survey: ^0.1.4
   fluttertoast: ^8.2.2
   get_storage: ^2.1.1
+  intl: ^0.18.1
 
 
 dev_dependencies: 

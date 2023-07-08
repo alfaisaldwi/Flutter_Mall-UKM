@@ -1,39 +1,34 @@
-  import 'dart:convert';
-
-List<UserModel> userModelFromMap(String str) =>
-    List<UserModel>.from(json.decode(str).map((x) => UserModel.fromMap(x)));
-
-String userModelToMap(List<UserModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
-
 class UserModel {
+  final int id;
+  final String name;
+  final String email;
+  final DateTime emailVerifiedAt;
+  final String role;
+  final String avatar;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
   UserModel({
     required this.id,
+    required this.name,
     required this.email,
-    required this.firstName,
-    required this.lastName,
+    required this.emailVerifiedAt,
+    required this.role,
     required this.avatar,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String email;
-  String firstName;
-  String lastName;
-  String avatar;
-
-  factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
-        id: json["id"] == null ? null : json["id"],
-        email: json["email"] == null ? null : json["email"],
-        firstName: json["first_name"] == null ? null : json["first_name"],
-        lastName: json["last_name"] == null ? null : json["last_name"],
-        avatar: json["avatar"] == null ? null : json["avatar"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "id": id == null ? null : id,
-        "email": email == null ? null : email,
-        "first_name": firstName == null ? null : firstName,
-        "last_name": lastName == null ? null : lastName,
-        "avatar": avatar == null ? null : avatar,
-      };
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      emailVerifiedAt: DateTime.parse(json['email_verified_at']),
+      role: json['role'],
+      avatar: json['avatar'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+    );
+  }
 }

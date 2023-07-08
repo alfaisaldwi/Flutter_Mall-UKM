@@ -1,34 +1,38 @@
-class Product {
+class ProductDetail {
   int id;
-  String? categoryId;
+  String categoryId;
   String title;
   String price;
   String priceRetail;
   String qty;
   String unit;
-  List<String>? unitVariant;
+  List<String> unitVariant;
   String description;
   List<String> photo;
   DateTime createdAt;
   DateTime updatedAt;
+  int discount;
+  String status;
 
-  Product({
+  ProductDetail({
     required this.id,
-    this.categoryId,
+    required this.categoryId,
     required this.title,
     required this.price,
     required this.priceRetail,
     required this.qty,
     required this.unit,
-    this.unitVariant,
+    required this.unitVariant,
     required this.description,
     required this.photo,
     required this.createdAt,
     required this.updatedAt,
+    required this.discount,
+    required this.status,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory ProductDetail.fromJson(Map<String, dynamic> json) {
+    return ProductDetail(
       id: json['id'],
       categoryId: json['category_id'],
       title: json['title'],
@@ -36,11 +40,13 @@ class Product {
       priceRetail: json['price_retail'],
       qty: json['qty'],
       unit: json['unit'],
-      unitVariant: (json['unit_variant'] as List<dynamic>?)?.cast<String>(),
+      unitVariant: List<String>.from(json['unit_variant']),
       description: json['description'],
-      photo: (json['photo'] as List<dynamic>).cast<String>(),
+      photo: List<String>.from(json['photo']),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      discount: json['discount'],
+      status: json['status'],
     );
   }
 }

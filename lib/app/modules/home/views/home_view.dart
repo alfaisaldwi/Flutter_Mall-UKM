@@ -172,7 +172,8 @@ class HomeView extends GetView<HomeController> {
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
-                                                  style: Styles.bodyStyle2(),
+                                                  style: Styles.bodyStyle(
+                                                      size: 11),
                                                 ),
                                               ),
                                             ],
@@ -212,10 +213,11 @@ class HomeView extends GetView<HomeController> {
                       var product = controller.products[index];
 
                       return GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            () => ProductDetailView(),
-                          );
+                        onTap: () async {
+                          var productDetails =
+                              await controller.fetchProductDetails(product.id);
+                          Get.toNamed('product-detail',
+                              arguments: [productDetails]);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),

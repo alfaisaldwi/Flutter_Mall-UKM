@@ -62,12 +62,14 @@ class AccountView extends GetView<ProfileController> {
                                   child: Image.asset(
                                       'assets/images/profile-avatar.png')),
                             ),
-                            Expanded(
-                              child: Text(
-                                'Alleexx Lexxaa Xyeeee',
-                                style: Styles.headerStyles(),
-                              ),
-                            ),
+                            Obx(() {
+                              return Expanded(
+                                child: Text(
+                                  controller.accountData?.value['name'],
+                                  style: Styles.headerStyles(),
+                                ),
+                              );
+                            }),
                           ],
                         ),
                       ],
@@ -250,6 +252,7 @@ class AccountView extends GetView<ProfileController> {
                     child: GestureDetector(
                       onTap: () {
                         controllerP.logout();
+                        // GetStorage().remove('token');
                       },
                       child: Text(
                         'Keluar',

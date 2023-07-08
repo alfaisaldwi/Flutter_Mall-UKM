@@ -1,16 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mall_ukm/app/model/users/users_model.dart';
-import 'package:mall_ukm/app/modules/home/views/home_view.dart';
-import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
-import 'package:mall_ukm/app/service/helper/users_helper.dart';
 import 'package:mall_ukm/app/service/repository/users_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 
@@ -24,7 +18,7 @@ class ProfileController extends GetxController {
   var isLoading = true.obs;
   var isError = false.obs;
   var errmsg = "".obs;
-  var acountData = <UserModel>[].obs;
+  var accountData = RxMap<String, dynamic>({});
 
   Dio dio = Dio();
   final count = 0.obs;
@@ -32,11 +26,17 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    String? token = GetStorage().read('token');
+    // GetStorage().remove('token');
+
+    print('print tokennn ---- $token');
+    print('print akuuubn ---- $accountData');
   }
 
   @override
   void onReady() {
     super.onReady();
+    getUsers();
   }
 
   @override
@@ -93,8 +93,8 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
-          Timer(const Duration(seconds: 1),
-              () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
+          // Timer(const Duration(seconds: 1),
+          //     () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
 
           // Lakukan tindakan yang diperlukan setelah logout berhasil
         } else {
@@ -107,4 +107,32 @@ class ProfileController extends GetxController {
       throw 'Terjadi kesalahan saat logout: $error ||||| $token';
     }
   }
+
+  void getUsers() async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.me);
+    http.Response response = await http.post(url, headers: headers);
+    print('Response: ${response.body}');
+    print('Status Code: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      accountData.value = RxMap<String, dynamic>(jsonData['data']);
+    }
+  }
+
+  // Future<void> fetchUsers() async {
+  //   try {
+  //     var fetchedUsers = await getUsers();
+  //     accountData.assignAll(fetchedUsers);
+  //   } catch (error) {
+  //     // Handle error jika terjadi kesalahan dalam mengambil pengguna
+  //     print('Terjadi kesalahan: $error');
+  //   }
+  // }
 }

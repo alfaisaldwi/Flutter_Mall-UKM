@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
 import 'package:mall_ukm/app/service/repository/users_repository.dart';
@@ -15,7 +16,7 @@ class HomeController extends GetxController {
 
   final count = 0.obs;
   var category = <Category>[].obs;
-  RxList<Product> products = <Product>[].obs;
+  var products = <Product>[].obs;
   RxBool isLoading = false.obs;
 
   List<CarouselItem> itemList = [
@@ -64,8 +65,10 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchCategories();
     fetchProduct();
+    fetchCategories();
+    print('fetchhhh $fetchCategories');
+    print('catergory $category');
     print(PreferenceUtils.token);
   }
 
@@ -109,34 +112,65 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<List<Category>> getProduct() async {
+  Future<List<Product>> getProduct() async {
     var headers = {
       'Accept': 'application/json',
     };
     try {
       var url = Uri.parse(
-        ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.product,
-      );
+          ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.product);
       http.Response response = await http.get(url, headers: headers);
 
       print(response.body);
       if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-        if (json['code'] == 200) {
-          List<Category> categories = [];
-          for (var data in json['data']) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['code'] == 200) {
+          final productData = jsonResponse['data'] as List<dynamic>;
+          List<Product> productsList = [];
+          for (var data in productData) {
             var product = Product.fromJson(data);
-            products.add(product);
+            productsList.add(product);
           }
-          return categories;
+          return productsList;
         } else {
-          throw jsonDecode(response.body)['message'];
+          throw jsonResponse['message'];
         }
       } else {
-        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occured";
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
       }
     } catch (error) {
       throw error.toString();
+    }
+  }
+
+  Future<ProductDetail> fetchProductDetails(int productId) async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+    try {
+      var url = Uri.parse(
+        ApiEndPoints.baseUrl +
+            ApiEndPoints.productEndPoints.show +
+            '$productId',
+      );
+      http.Response response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['code'] == 200) {
+          final data = jsonResponse['data'];
+          final productDetail = ProductDetail.fromJson(data);
+          return productDetail;
+        } else {
+          throw Exception(
+              'Failed to fetch product details: ${jsonResponse['message']}');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch product details. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error occurred while fetching product details: $e');
     }
   }
 
@@ -152,11 +186,11 @@ class HomeController extends GetxController {
 
   Future<void> fetchProduct() async {
     try {
-      var fetchedProduct = await getProduct();
-      category.assignAll(fetchedProduct);
+      var fetchedProducts = await getProduct();
+      products.assignAll(fetchedProducts);
     } catch (error) {
-      // Handle error jika terjadi kesalahan dalam mengambil kategori
-      print('Terjadi kesalahan: $error');
+      // Handle error if there is an issue fetching the products
+      print('Error fetching products: $error');
     }
   }
 }
