@@ -106,7 +106,7 @@ class HomeView extends GetView<HomeController> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(6),
                           child: CustomCarouselSlider(
-                            items: controller.itemList,
+                            items: controller.itemList ,
                             height: 180,
                             subHeight: 0,
                             width: MediaQuery.of(context).size.width * .9 + 10,

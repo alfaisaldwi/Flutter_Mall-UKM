@@ -36,4 +36,6 @@ class _ProductEndPoints {
 class _CartEndPoints {
   final String cart = '/api/auth/cart';
   final String store = '/api/auth/cart';
+  final String delete = '/api/auth/cart/delete/';
+  
 }

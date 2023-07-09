@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mall_ukm/app/model/cart/cart_model.dart';
+import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
@@ -93,7 +93,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
           actions: [
             IconButton(
               icon: GestureDetector(
-                onTap: () => (Get.to(() => CartView())),
+                onTap: () => (Get.toNamed('/cart')),
                 child: const Icon(
                   Icons.shopping_cart,
                   color: Colors.black,
@@ -148,12 +148,9 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    CartItem cartItem = CartItem(
-                      productId: 1,
-                      qty: 5,
-                      unitVariant: 'Pedas',
-                      total: 15000,
-                    );
+                    CartItem cartItem =
+                        CartItem(product_id: 1, qty: 99, unit_variant: "1");
+
                     ctrlCart.addToCart(cartItem);
                     Get.toNamed(('/cart'));
                   },

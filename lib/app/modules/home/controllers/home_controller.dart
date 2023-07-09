@@ -40,7 +40,9 @@ class HomeController extends GetxController {
         fontSize: 12,
         color: Colors.white,
       ),
-      onImageTap: (i) {},
+      onImageTap: (i) {
+        
+      },
     ),
     CarouselItem(
       image: AssetImage('assets/images/thumbnail2.png'),
