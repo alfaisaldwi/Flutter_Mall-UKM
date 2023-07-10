@@ -10,6 +10,8 @@ import 'package:mall_ukm/app/modules/product_detail/bindings/product_detail_bind
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/modules/profile/bindings/profile_binding.dart';
 import 'package:mall_ukm/app/modules/profile/views/profile_view.dart';
+import 'package:mall_ukm/app/modules/profile/views/signin_view.dart';
+import 'package:mall_ukm/app/modules/profile/views/signup_view.dart';
 import 'package:mall_ukm/app/modules/recommend_page/bindings/recommend_page_binding.dart';
 import 'package:mall_ukm/app/modules/recommend_page/views/recommend_page_view.dart';
 import 'package:mall_ukm/app/modules/survey_page/bindings/survey_page_binding.dart';
@@ -71,6 +73,16 @@ class AppPages {
       name: _Paths.PRODUCT_DETAIL,
       page: () => ProductDetailView(),
       binding: ProductDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGNUP,
+      page: () => SignupPageView(),
+      binding: ProfileBinding(),
+    ),
+     GetPage(
+      name: _Paths.SIGNIN,
+      page: () => SigninView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

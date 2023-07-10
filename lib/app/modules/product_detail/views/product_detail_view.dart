@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
+import 'package:mall_ukm/app/model/product/product_detail_model.dart';
+import 'package:mall_ukm/app/model/product/product_model.dart';
+import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
 import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
-
+import 'package:intl/intl.dart';
 import '../controllers/product_detail_controller.dart';
 
 class ProductDetailView extends GetView<ProductDetailController> {
   @override
   Widget build(BuildContext context) {
+    var ctrlCart = CartController();
+    var productDetails = Get.arguments as List<ProductDetail>;
+    var product = productDetails.first;
+    final numberFormat =
+        NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 0);
+    final originalPrice = product.price;
+    final discountedPrice = product.priceRetail;
+    List<String> imageUrls = [];
+    imageUrls = product.photo;
     List people = [
       'Mike',
       'Barron',
@@ -79,7 +93,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
           actions: [
             IconButton(
               icon: GestureDetector(
-                onTap: () => (Get.to(() => CartView())),
+                onTap: () => (Get.toNamed('/cart')),
                 child: const Icon(
                   Icons.shopping_cart,
                   color: Colors.black,
@@ -108,6 +122,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 child: InkWell(
                   onTap: () {
                     //WA
+                    Get.toNamed('/profile-page');
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,
@@ -133,7 +148,11 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    Get.to(() => CartView());
+                    CartItem cartItem =
+                        CartItem(product_id: 1, qty: 99, unit_variant: "1");
+
+                    ctrlCart.addToCart(cartItem);
+                    Get.toNamed(('/cart'));
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,
@@ -184,13 +203,31 @@ class ProductDetailView extends GetView<ProductDetailController> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: Text(
-                          'Rp150.000',
-                          style: Styles.headerStyles(
-                              weight: FontWeight.w500, size: 18),
-                        ),
-                      ),
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: RichText(
+                            text: TextSpan(
+                              text: originalPrice,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                WidgetSpan(
+                                  child: Container(
+                                    width: 8, // Adjust the width as needed
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: discountedPrice,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -198,7 +235,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                         padding: const EdgeInsets.only(
                             left: 12.0, top: 8.0, bottom: 14.0),
                         child: Text(
-                          'Data Produk Art Kurt Cobain ',
+                          '${product.title}',
                           textAlign: TextAlign.left,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -243,7 +280,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              'Stok : ',
+                              'Stok : ${product.qty}',
                               style: Styles.bodyStyle(
                                   color: Colors.black45, size: 15),
                             ),
@@ -283,7 +320,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Text(
-                          'IY PAINTING BY NUMBER - SAKURA CASTLE Canvas Size: 50 cm x 40 cm NO FRAME ( PRICE IDR 115K ) 1 lembar canvas berkode warna dan berpola 1 set cat sesuai kode pada canvas 3 pcs kuas lukis FRAMED ( PRICE IDR 165K ) 1 Canvas terpasang inner frame kayu,  berkode warna dan berpola 1 set cat sesuai kode pada canvas 3 pcs kuas lukis * silakan chat ke seller untuk detail n info produk lainnya * tersedia gambar lain, stock banyak Siapa bilang melukis itu susah? Coba DIY PAINT BY NUMBER dijual sudah lengkap dgn tools, hanya tinggal oles saja siapapun bisa menghasilkan lukisan seperti pelukis profesional... Painting By Numbers adalah produk yang sangat seru untuk semua umur, ideal digunakan untuk anak-anak maupun orang dewasa, pemula juga pasti bisa..',
+                          '${product.description}',
                           style: Styles.bodyStyle(
                             size: 14,
                           ),

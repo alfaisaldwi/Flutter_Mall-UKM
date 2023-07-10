@@ -68,116 +68,129 @@ class CartView extends GetView<CartController> {
           child: Container(
             color: Colors.white,
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: ScrollPhysics(),
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          Obx(() => Checkbox(
-                                value: controller.checkbox.value,
-                                onChanged: (bool? value) {
-                                  if (value == true) {
-                                    controller.checkbox.value = value!;
-                                  } else {
-                                    controller.checkbox.value = value!;
-                                  }
-                                  print(controller.checkbox.value);
-                                },
-                              )),
-                          Container(
-                            height: 120,
-                            width: MediaQuery.of(context).size.width * 0.85,
-                            padding: EdgeInsets.all(5),
-                            child: Row(children: [
-                              Image.network(
-                                'https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg',
-                                width: 100,
-                                height: 80,
-                                fit: BoxFit.cover,
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8.0, bottom: 4.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        'Produk Kurt Cobain Produk Kurt Cobain Produk Kurt Cobain Produk Kurt Cobain Produk Kurt Cobain',
-                                        textAlign: TextAlign.left,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Styles.bodyStyle(),
-                                      ),
-                                      Text(
-                                        'Rp300.000',
-                                        style: Styles.bodyStyle(),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Obx(() => CartStepperInt(
-                                                  value:
-                                                      controller.counter.value,
-                                                  size: 22,
-                                                  style: CartStepperStyle(
-                                                    foregroundColor:
-                                                        Colors.black87,
-                                                    activeForegroundColor:
-                                                        Colors.black87,
-                                                    activeBackgroundColor:
-                                                        Colors.white,
-                                                    border: Border.all(
-                                                        color: Colors.grey),
-                                                    radius:
-                                                        const Radius.circular(
-                                                            8),
-                                                    elevation: 0,
-                                                    buttonAspectRatio: 1.5,
-                                                  ),
-                                                  didChangeCount: (count) {
-                                                    controller.counter.value =
-                                                        count;
-                                                  },
-                                                )),
-                                            const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                              child: Icon(
-                                                Icons.delete_outline_rounded,
-                                                color: Colors.red,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+                child: Obx(
+                  () => ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: ScrollPhysics(),
+                      itemCount: controller.carts.length,
+                      itemBuilder: (context, index) {
+                        var carts = controller.carts[index];
+                        var counter = carts.qty.obs;
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              Obx(() => Checkbox(
+                                    value: controller.checkbox.value,
+                                    onChanged: (bool? value) {
+                                      if (value == true) {
+                                        controller.checkbox.value = value!;
+                                      } else {
+                                        controller.checkbox.value = value!;
+                                      }
+                                      print(controller.checkbox.value);
+                                    },
+                                  )),
+                              Container(
+                                height: 120,
+                                width: MediaQuery.of(context).size.width * 0.85,
+                                padding: EdgeInsets.all(5),
+                                child: Row(children: [
+                                  Image.network(
+                                    'https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg',
+                                    width: 100,
+                                    height: 80,
+                                    fit: BoxFit.cover,
                                   ),
-                                ),
-                              )
-                            ]),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8.0, bottom: 4.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          Text(
+                                            carts.title,
+                                            textAlign: TextAlign.left,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Styles.bodyStyle(),
+                                          ),
+                                          Text(
+                                            'Rp300.000',
+                                            style: Styles.bodyStyle(),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Obx(() {
+                                                  return CartStepperInt(
+                                                    value: counter.value,
+                                                    size: 22,
+                                                    style: CartStepperStyle(
+                                                      foregroundColor:
+                                                          Colors.black87,
+                                                      activeForegroundColor:
+                                                          Colors.black87,
+                                                      activeBackgroundColor:
+                                                          Colors.white,
+                                                      border: Border.all(
+                                                          color: Colors.grey),
+                                                      radius:
+                                                          const Radius.circular(
+                                                              8),
+                                                      elevation: 0,
+                                                      buttonAspectRatio: 1.5,
+                                                    ),
+                                                    didChangeCount: (count) {
+                                                      counter.value = count;
+                                                    },
+                                                  );
+                                                }),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    controller
+                                                        .deleteCart(carts.id);
+                                                    print(carts.id);
+                                                  },
+                                                  child: const Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8.0),
+                                                    child: Icon(
+                                                      Icons
+                                                          .delete_outline_rounded,
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ]),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  }),
-            ),
+                        );
+                      }),
+                )),
           ),
         ));
   }
