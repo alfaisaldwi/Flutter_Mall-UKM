@@ -106,7 +106,7 @@ class HomeView extends GetView<HomeController> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(6),
                           child: CustomCarouselSlider(
-                            items: controller.itemList ,
+                            items: controller.itemList,
                             height: 180,
                             subHeight: 0,
                             width: MediaQuery.of(context).size.width * .9 + 10,
@@ -155,25 +155,31 @@ class HomeView extends GetView<HomeController> {
                                           width: 50,
                                           child: Column(
                                             children: [
-                                              Image.network(
-                                                "https://cdn.iconscout.com/icon/premium/png-512-thumb/clothes-20-185191.png",
-                                                width: 30,
-                                                height: 30,
-                                                fit: BoxFit.fill,
+                                              Align(
                                                 alignment: Alignment.center,
+                                                child: Image.network(
+                                                  "https://cdn.iconscout.com/icon/premium/png-512-thumb/clothes-20-185191.png",
+                                                  width: 28,
+                                                  height: 28,
+                                                  fit: BoxFit.fill,
+                                                  alignment: Alignment.center,
+                                                ),
                                               ),
                                               const SizedBox(
                                                 height: 10,
                                               ),
                                               Expanded(
-                                                child: Text(
-                                                  category.title,
-                                                  textAlign: TextAlign.left,
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: Styles.bodyStyle(
-                                                      size: 11),
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    category.title,
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: Styles.bodyStyle(
+                                                        size: 10),
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -239,7 +245,7 @@ class HomeView extends GetView<HomeController> {
                                           borderRadius:
                                               BorderRadius.circular(4),
                                           child: Image.network(
-                                            "https://www.pilar.id/wp-content/uploads/2023/02/A3DF586A-4C1B-446B-9478-4BE82EA6EC14-768x512.jpeg",
+                                            "${product.photo.first}",
                                             fit: BoxFit.cover,
                                           ),
                                         ),

@@ -147,11 +147,13 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   ),
                 ),
                 child: InkWell(
-                  onTap: () {
-                    CartItem cartItem =
-                        CartItem(product_id: 1, qty: 99, unit_variant: "1");
+                  onTap: () async {
+                    CartItem cartItem = CartItem(
+                        product_id: product.id,
+                        qty: int.parse(product.qty),
+                        unit_variant: product.unitVariant.first);
 
-                    ctrlCart.addToCart(cartItem);
+                    await ctrlCart.addToCart(cartItem);
                     Get.toNamed(('/cart'));
                   },
                   child: SizedBox(
@@ -193,7 +195,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 20.0),
                             child: Image.network(
-                              'https://www.pilar.id/wp-content/uploads/2023/02/A3DF586A-4C1B-446B-9478-4BE82EA6EC14-768x512.jpeg',
+                              product.photo.first,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -269,7 +271,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Kategori',
+                              'Kategori ${product.category}',
                               style: Styles.bodyStyle(
                                   color: Colors.black54, size: 15),
                             ),
@@ -291,7 +293,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              'Berat Satuan : ',
+                              'Berat Satuan : ${product.weight}',
                               style: Styles.bodyStyle(
                                   color: Colors.black45, size: 15),
                             ),

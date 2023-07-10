@@ -14,7 +14,13 @@ class CartController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+  }
+
+  @override
+  void onReady() {
     fetchCart();
+
+    super.onReady();
   }
 
   Future<void> addToCart(CartItem cartItem) async {

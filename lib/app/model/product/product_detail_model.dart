@@ -5,7 +5,9 @@ class ProductDetail {
   String price;
   String priceRetail;
   String qty;
+  String weight;
   String unit;
+  String category;
   List<String> unitVariant;
   String description;
   List<String> photo;
@@ -21,7 +23,9 @@ class ProductDetail {
     required this.price,
     required this.priceRetail,
     required this.qty,
+    required this.weight,
     required this.unit,
+    required this.category,
     required this.unitVariant,
     required this.description,
     required this.photo,
@@ -39,7 +43,9 @@ class ProductDetail {
       price: json['price'],
       priceRetail: json['price_retail'],
       qty: json['qty'],
+      weight: json['weight'],
       unit: json['unit'],
+      category: json['category'],
       unitVariant: List<String>.from(json['unit_variant']),
       description: json['description'],
       photo: List<String>.from(json['photo']),

@@ -101,7 +101,7 @@ class CartView extends GetView<CartController> {
                                 padding: EdgeInsets.all(5),
                                 child: Row(children: [
                                   Image.network(
-                                    'https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg',
+                                    '${carts.photo}',
                                     width: 100,
                                     height: 80,
                                     fit: BoxFit.cover,
