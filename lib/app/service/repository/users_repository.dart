@@ -32,6 +32,7 @@ class _ProductEndPoints {
   final String category = '/api/category';
   final String product = '/api/product/';
   final String show = '/api/product/show/';
+  final String recomend = '/api/product/recomendation/';
 }
 class _CartEndPoints {
   final String cart = '/api/auth/cart';

@@ -40,9 +40,7 @@ class HomeController extends GetxController {
         fontSize: 12,
         color: Colors.white,
       ),
-      onImageTap: (i) {
-        
-      },
+      onImageTap: (i) {},
     ),
     CarouselItem(
       image: AssetImage('assets/images/thumbnail2.png'),
@@ -146,6 +144,37 @@ class HomeController extends GetxController {
   }
 
   Future<ProductDetail> fetchProductDetails(int productId) async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+    try {
+      var url = Uri.parse(
+        ApiEndPoints.baseUrl +
+            ApiEndPoints.productEndPoints.show +
+            '$productId',
+      );
+      http.Response response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['code'] == 200) {
+          final data = jsonResponse['data'];
+          final productDetail = ProductDetail.fromJson(data);
+          return productDetail;
+        } else {
+          throw Exception(
+              'Failed to fetch product details: ${jsonResponse['message']}');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch product details. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error occurred while fetching product details: $e');
+    }
+  }
+
+  Future<ProductDetail> fetchProductDetail(int productId) async {
     var headers = {
       'Accept': 'application/json',
     };

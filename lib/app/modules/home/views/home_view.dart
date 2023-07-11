@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
@@ -80,7 +83,22 @@ class HomeView extends GetView<HomeController> {
           actions: [
             IconButton(
               icon: GestureDetector(
-                onTap: () => (Get.toNamed('/cart')),
+                onTap: () {
+                  String? token = GetStorage().read('token');
+                  if (token != null) {
+                    Get.toNamed('/cart');
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'Silahkan Signin terlebih dahulu',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[800],
+                      textColor: Colors.white,
+                      fontSize: 14.0,
+                    );
+                    Get.toNamed('/profile');
+                  }
+                },
                 child: const Icon(
                   Icons.shopping_cart,
                   color: Colors.black,
@@ -166,7 +184,7 @@ class HomeView extends GetView<HomeController> {
                                                 ),
                                               ),
                                               const SizedBox(
-                                                height: 10,
+                                                height: 5,
                                               ),
                                               Expanded(
                                                 child: Align(
@@ -240,7 +258,7 @@ class HomeView extends GetView<HomeController> {
                                     Align(
                                       alignment: Alignment.center,
                                       child: AspectRatio(
-                                        aspectRatio: 16 / 9,
+                                        aspectRatio: 4 / 3,
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(4),
@@ -257,15 +275,18 @@ class HomeView extends GetView<HomeController> {
                                       child: Text(
                                         product.title,
                                         textAlign: TextAlign.left,
-                                        maxLines: 3,
+                                        maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: Styles.bodyStyle(
                                             weight: FontWeight.w600),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 2.0),
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0,
+                                          right: 8,
+                                          top: 2.0,
+                                          bottom: 0),
                                       child: Text(
                                         product.price,
                                         textAlign: TextAlign.left,

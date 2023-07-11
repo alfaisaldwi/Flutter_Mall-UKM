@@ -21,7 +21,7 @@ class AccountView extends GetView<ProfileController> {
                   const EdgeInsets.symmetric(horizontal: 0, vertical: 60.0),
               child: Column(children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * .2,
+                  constraints: BoxConstraints.expand(),
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -65,7 +65,8 @@ class AccountView extends GetView<ProfileController> {
                             Obx(() {
                               return Expanded(
                                 child: Text(
-                                  controller.accountData.value['name'] ?? 'User' ,
+                                  controller.accountData.value['name'] ??
+                                      'User',
                                   style: Styles.headerStyles(),
                                 ),
                               );
