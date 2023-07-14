@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
-import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/reccomend_product_detail.dart';
 import 'package:mall_ukm/app/service/repository/users_repository.dart';
 import 'package:http/http.dart' as http;
@@ -11,50 +9,28 @@ import 'package:http/http.dart' as http;
 class ProductDetailController extends GetxController {
   List<String> imageUrls = [];
   var recomend = <RecommendProductDetail>[].obs;
-  var productDetails = Get.arguments as List<ProductDetail>;
+  var quantity = 1.obs;
+  var selectedVariant = ''.obs;
 
-  List<CarouselItem> itemList = [
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail1.png'),
-      boxDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          begin: FractionalOffset.bottomCenter,
-          end: FractionalOffset.topCenter,
-          colors: [
-            Colors.blueAccent.withOpacity(1),
-            Colors.black.withOpacity(.3),
-          ],
-          stops: const [0.0, 1.0],
-        ),
-      ),
-      title:
-          'Push your creativity to its limits by reimagining this classic puzzle!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    ),
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail2.png'),
-      title: '@coskuncay published flutter_custom_carousel_slider!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    ),
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail3.png'),
-      title: '@coskuncay published flutter_custom_carousel_slider!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    )
-  ];
+  var currentIndex = 0.obs;
+
+  void onPageChanged(int index, CarouselPageChangedReason reason) {
+    currentIndex.value = index;
+  }
+
+  void incrementQuantity() {
+    quantity.value++;
+  }
+
+  void decrementQuantity() {
+    if (quantity.value > 1) {
+      quantity.value--;
+    }
+  }
+
+  void selectVariant(String variant) {
+    selectedVariant.value = variant;
+  }
 
   @override
   void onInit() {

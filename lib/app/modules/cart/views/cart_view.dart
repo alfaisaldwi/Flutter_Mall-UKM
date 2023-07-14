@@ -1,7 +1,9 @@
 import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
 import '../controllers/cart_controller.dart';
@@ -9,6 +11,7 @@ import '../controllers/cart_controller.dart';
 class CartView extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
+    RxDouble tot = 0.0.obs;
     return Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.black),
@@ -35,27 +38,32 @@ class CartView extends GetView<CartController> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                      child: Text(
-                        'Rp300.000',
-                        style:
-                            Styles.bodyStyle(weight: FontWeight.w500, size: 15),
-                      ),
+                      child: Obx(() => Text(
+                            '$tot',
+                            style: Styles.bodyStyle(
+                                weight: FontWeight.w500, size: 15),
+                          )),
                     )
                   ],
                 ),
                 Center(
-                  child: Container(
-                    height: 45,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(11),
-                      color: const Color(0xff034779),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(1.0),
-                        child: Text('Checkout',
-                            style: Styles.bodyStyle(color: Colors.white)),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/checkout', );
+                    },
+                    child: Container(
+                      height: 45,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(11),
+                        color: const Color(0xff034779),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Text('Checkout',
+                              style: Styles.bodyStyle(color: Colors.white)),
+                        ),
                       ),
                     ),
                   ),
@@ -79,22 +87,25 @@ class CartView extends GetView<CartController> {
                       itemBuilder: (context, index) {
                         var carts = controller.carts[index];
                         var counter = carts.qty.obs;
+                        var isChecked = false.obs;
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             children: [
-                              Obx(() => Checkbox(
-                                    value: controller.checkbox.value,
-                                    onChanged: (bool? value) {
-                                      if (value == true) {
-                                        controller.checkbox.value = value!;
-                                      } else {
-                                        controller.checkbox.value = value!;
-                                      }
-                                      print(controller.checkbox.value);
-                                    },
-                                  )),
+                              Obx(
+                                () => Checkbox(
+                                  value: isChecked.value,
+                                  onChanged: (bool? value) {
+                                    isChecked.value = value!;
+                                    if (value == true) {
+                                      tot.value += carts.price;
+                                    } else {
+                                      tot.value -= carts.price;
+                                    }
+                                  },
+                                ),
+                              ),
                               Container(
                                 height: 120,
                                 width: MediaQuery.of(context).size.width * 0.85,
@@ -127,7 +138,14 @@ class CartView extends GetView<CartController> {
                                             style: Styles.bodyStyle(),
                                           ),
                                           Text(
-                                            'Rp300.000',
+                                            'Varian : ${carts.unitVariant}',
+                                            textAlign: TextAlign.left,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Styles.bodyStyle(),
+                                          ),
+                                          Text(
+                                            'Rp${carts.price}',
                                             style: Styles.bodyStyle(),
                                           ),
                                           Align(
@@ -155,14 +173,90 @@ class CartView extends GetView<CartController> {
                                                       elevation: 0,
                                                       buttonAspectRatio: 1.5,
                                                     ),
-                                                    didChangeCount: (count) {
-                                                      counter.value = count;
+                                                    didChangeCount:
+                                                        (count) async {
+                                                      if (count >
+                                                          counter.value) {
+                                                        counter.value++;
+                                                        tot.value =
+                                                            counter.value *
+                                                                carts.price;
+                                                        CartItem cartItem =
+                                                            CartItem(
+                                                          product_id: int.parse(
+                                                              carts.productId),
+                                                          qty: 1,
+                                                          unit_variant:
+                                                              carts.unitVariant,
+                                                        );
+                                                        await controller
+                                                            .updateCart(
+                                                                carts.id,
+                                                                cartItem);
+                                                        Fluttertoast.showToast(
+                                                          msg:
+                                                              'Berhasil menambahkan kuantitas',
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          backgroundColor:
+                                                              Colors.grey[800],
+                                                          textColor:
+                                                              Colors.white,
+                                                          fontSize: 14.0,
+                                                        );
+                                                      } else if (count <
+                                                          counter.value) {
+                                                        // Jika tombol "-" ditekan, kurangi qty sebanyak 1
+                                                        tot.value = tot.value -
+                                                            carts.price;
+
+                                                        counter.value--;
+                                                        CartItem cartItem =
+                                                            CartItem(
+                                                          product_id: int.parse(
+                                                              carts.productId),
+                                                          qty: -1,
+                                                          unit_variant:
+                                                              carts.unitVariant,
+                                                        );
+                                                        await controller
+                                                            .updateCart(
+                                                                carts.id,
+                                                                cartItem);
+                                                        Fluttertoast.showToast(
+                                                          msg:
+                                                              'Berhasil mengurangi kuantitas',
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          backgroundColor:
+                                                              Colors.grey[800],
+                                                          textColor:
+                                                              Colors.white,
+                                                          fontSize: 14.0,
+                                                        );
+                                                      }
                                                     },
                                                   );
                                                 }),
                                                 GestureDetector(
-                                                  onTap: () {
-                                                    controller
+                                                  onTap: () async {
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          'Berhasil menghapus barang dari keranjang',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      backgroundColor:
+                                                          Colors.grey[800],
+                                                      textColor: Colors.white,
+                                                      fontSize: 14.0,
+                                                    );
+                                                    await controller
                                                         .deleteCart(carts.id);
                                                     print(carts.id);
                                                   },

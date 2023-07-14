@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, avoid_print
+
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -116,6 +118,33 @@ class CartController extends GetxController {
       }
     } else {
       print('Gagal menghapus cart. Kode status: ${response.statusCode}');
+    }
+  }
+
+  Future<void> updateCart(int cartId, CartItem cartItem) async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    var url = Uri.parse(
+        ApiEndPoints.baseUrl + ApiEndPoints.cartEndPoints.update + '$cartId');
+    final body = jsonEncode(cartItem.toJson());
+
+    print(url);
+    final response = await http.post(url, body: body, headers: headers);
+    print('response');
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['code'] == 200) {
+        print('Item berhasil diupdate');
+      } else {
+        print('Gagal mengupdate cart: ${jsonResponse['message']}');
+      }
+    } else {
+      print('Gagal mengupdate cart. Kode status: ${response.statusCode}');
     }
   }
 }

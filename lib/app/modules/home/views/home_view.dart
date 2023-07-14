@@ -1,9 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
@@ -112,7 +114,7 @@ class HomeView extends GetView<HomeController> {
         child: Container(
           color: Colors.white,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,16 +123,21 @@ class HomeView extends GetView<HomeController> {
                   child: Column(
                     children: [
                       Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: CustomCarouselSlider(
-                            items: controller.itemList,
-                            height: 180,
-                            subHeight: 0,
-                            width: MediaQuery.of(context).size.width * .9 + 10,
-                            autoplay: true,
-                          ),
-                        ),
+                        child: Obx(() => CarouselSlider(
+                              options: CarouselOptions(
+                                  autoPlay: true,
+                                  viewportFraction: 1,
+                                  height: 200,
+                                  aspectRatio: 16 / 9),
+                              items: controller.carouselList.map((carousel) {
+                                return Container(
+                                  child: Image.network(
+                                    carousel.photo,
+                                    fit: BoxFit.contain,
+                                  ),
+                                );
+                              }).toList(),
+                            )),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -229,12 +236,17 @@ class HomeView extends GetView<HomeController> {
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 1,
-                            mainAxisSpacing: 2),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 2,
+                    ),
                     itemCount: controller.products.length,
                     itemBuilder: (BuildContext ctx, index) {
                       var product = controller.products[index];
+                      final originalPrice = NumberFormat.decimalPattern()
+                          .format(int.parse(product.price));
+                      final discountedPrice = NumberFormat.decimalPattern()
+                          .format(int.parse(product.priceRetail));
 
                       return GestureDetector(
                         onTap: () async {
@@ -243,60 +255,75 @@ class HomeView extends GetView<HomeController> {
                           Get.toNamed('product-detail',
                               arguments: [productDetails]);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Card(
-                            child: Container(
-                              margin: const EdgeInsets.all(2),
-                              padding: const EdgeInsets.all(5),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, right: 8.0, bottom: 4.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: AspectRatio(
-                                        aspectRatio: 4 / 3,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          child: Image.network(
-                                            "${product.photo.first}",
-                                            fit: BoxFit.cover,
-                                          ),
+                        child: Card(
+                          child: Container(
+                            margin: const EdgeInsets.all(2),
+                            padding: const EdgeInsets.all(5),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8.0, bottom: 4.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: AspectRatio(
+                                      aspectRatio: 4 / 3,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(4),
+                                        child: Image.network(
+                                          "${product.photo.first}",
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 8.0),
-                                      child: Text(
-                                        product.title,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Styles.bodyStyle(
-                                            weight: FontWeight.w600),
-                                      ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 6.0),
+                                    child: Text(
+                                      product.title,
+                                      textAlign: TextAlign.left,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Styles.bodyStyle(
+                                          weight: FontWeight.w600),
                                     ),
-                                    Padding(
+                                  ),
+                                  Padding(
                                       padding: const EdgeInsets.only(
                                           left: 8.0,
                                           right: 8,
                                           top: 2.0,
-                                          bottom: 0),
-                                      child: Text(
-                                        product.price,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Styles.bodyStyle(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                          bottom: 2),
+                                      child: RichText(
+                                        softWrap: true,
+                                        text: TextSpan(
+                                          text: 'Rp.$originalPrice',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.black,
+                                          ),
+                                          children: [
+                                            WidgetSpan(
+                                              child: Container(
+                                                width:
+                                                    8, // Adjust the width as needed
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: '$discountedPrice',
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.red,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                ],
                               ),
                             ),
                           ),

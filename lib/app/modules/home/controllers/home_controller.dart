@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/model/carousel/carousel_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
@@ -18,7 +19,7 @@ class HomeController extends GetxController {
   var category = <Category>[].obs;
   var products = <Product>[].obs;
   RxBool isLoading = false.obs;
-
+  var carouselList = <CarouselIndex>[].obs;
   List<CarouselItem> itemList = [
     CarouselItem(
       image: AssetImage('assets/images/thumbnail1.png'),
@@ -64,12 +65,13 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     fetchProduct();
     fetchCategories();
+    getCarouselData();
     print('fetchhhh $fetchCategories');
     print('catergory $category');
     print(PreferenceUtils.token);
+    super.onInit();
   }
 
   @override
@@ -80,6 +82,36 @@ class HomeController extends GetxController {
   @override
   void onClose() {}
   void increment() => count.value++;
+
+
+  Future<void> getCarouselData() async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+    try {
+      var url = Uri.parse( ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.carousel);
+      http.Response response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['code'] == 200) {
+          final carouselData = jsonResponse['data'] as List<dynamic>;
+          List<CarouselIndex> carouselListData = [];
+          for (var data in carouselData) {
+            var carousel = CarouselIndex.fromJson(data);
+            carouselListData.add(carousel);
+          }
+          carouselList.assignAll(carouselListData);
+        } else {
+          throw jsonResponse['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      throw error.toString();
+    }
+  }
 
   Future<List<Category>> getCategories() async {
     var headers = {
@@ -142,6 +174,16 @@ class HomeController extends GetxController {
       throw error.toString();
     }
   }
+
+  // Future<void> fetchCarousel() async {
+  //   try {
+  //     var fetchedCarousel = await getCarouselData();
+  //     carouselList.assignAll(fetchedCarousel);
+  //   } catch (error) {
+  //     // Handle error if there is an issue fetching the products
+  //     print('Error fetching products: $error');
+  //   }
+  // }
 
   Future<ProductDetail> fetchProductDetails(int productId) async {
     var headers = {
