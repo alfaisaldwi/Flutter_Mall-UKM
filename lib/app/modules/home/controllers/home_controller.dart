@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -20,52 +21,12 @@ class HomeController extends GetxController {
   var products = <Product>[].obs;
   RxBool isLoading = false.obs;
   var carouselList = <CarouselIndex>[].obs;
-  List<CarouselItem> itemList = [
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail1.png'),
-      boxDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          begin: FractionalOffset.bottomCenter,
-          end: FractionalOffset.topCenter,
-          colors: [
-            Colors.blueAccent.withOpacity(1),
-            Colors.black.withOpacity(.3),
-          ],
-          stops: const [0.0, 1.0],
-        ),
-      ),
-      title:
-          'Push your creativity to its limits by reimagining this classic puzzle!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    ),
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail2.png'),
-      title: '@coskuncay published flutter_custom_carousel_slider!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    ),
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail3.png'),
-      title: '@coskuncay published flutter_custom_carousel_slider!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    )
-  ];
+  Timer? _timer;
 
   @override
   void onInit() {
     fetchProduct();
+    startDataRefreshTimer();
     fetchCategories();
     getCarouselData();
     print('fetchhhh $fetchCategories');
@@ -80,16 +41,30 @@ class HomeController extends GetxController {
   }
 
   @override
-  void onClose() {}
-  void increment() => count.value++;
+  void onClose() {
+    _timer?.cancel();
+  }
 
+  void startDataRefreshTimer() {
+    const refreshInterval =
+        Duration(minutes: 1); // Set the refresh interval as desired
+
+    // Start the timer
+    _timer = Timer.periodic(refreshInterval, (timer) {
+      // Fetch data periodically
+      fetchProduct();
+      getCarouselData();
+      fetchCategories();
+    });
+  }
 
   Future<void> getCarouselData() async {
     var headers = {
       'Accept': 'application/json',
     };
     try {
-      var url = Uri.parse( ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.carousel);
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.carousel);
       http.Response response = await http.get(url, headers: headers);
 
       if (response.statusCode == 200) {
@@ -174,16 +149,6 @@ class HomeController extends GetxController {
       throw error.toString();
     }
   }
-
-  // Future<void> fetchCarousel() async {
-  //   try {
-  //     var fetchedCarousel = await getCarouselData();
-  //     carouselList.assignAll(fetchedCarousel);
-  //   } catch (error) {
-  //     // Handle error if there is an issue fetching the products
-  //     print('Error fetching products: $error');
-  //   }
-  // }
 
   Future<ProductDetail> fetchProductDetails(int productId) async {
     var headers = {

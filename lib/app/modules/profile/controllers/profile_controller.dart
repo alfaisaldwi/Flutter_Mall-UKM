@@ -121,7 +121,6 @@ class ProfileController extends GetxController {
     var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.me);
     http.Response response = await http.post(url, headers: headers);
     print('Response: ${response.body}');
-    print('Status Code: ${response.statusCode}');
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);

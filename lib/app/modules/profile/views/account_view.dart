@@ -164,7 +164,7 @@ class AccountView extends GetView<ProfileController> {
                             children: [
                               ListTile(
                                 onTap: () {
-                                  Get.toNamed('/address');
+                                  Get.toNamed('/address-index');
                                 },
                                 leading: const Icon(
                                   Icons.location_on_outlined,

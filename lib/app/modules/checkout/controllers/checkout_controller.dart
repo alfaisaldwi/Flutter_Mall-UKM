@@ -1,11 +1,20 @@
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/model/cart/kurir_model.dart';
 
 class CheckoutController extends GetxController {
   //TODO: Implement CheckoutController
 
-  final count = 0.obs;
+  Rx<Kurir> selectedKurir = Rx<Kurir>(Kurir('', ''));
+
+  final List<String> namaKurir = ['JNE', 'J&T', 'TIKI', 'POS Indonesia'];
+  final RxString kurirTerpilih = ''.obs;
+  void selectKurir(Kurir kurir) {
+    selectedKurir.value = kurir;
+  }
+
   @override
   void onInit() {
+    kurirTerpilih.value = namaKurir[0];
     super.onInit();
   }
 
@@ -16,5 +25,4 @@ class CheckoutController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }
