@@ -10,7 +10,7 @@ void main() {
   GetStorage.init();
   runApp(
     GetMaterialApp(
-      title: "Application",
+      title: "Mall UKM",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,

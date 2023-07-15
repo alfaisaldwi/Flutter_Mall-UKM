@@ -1,7 +1,12 @@
 import 'package:get/get.dart';
 
+import 'package:mall_ukm/app/modules/address/bindings/address_binding.dart';
+import 'package:mall_ukm/app/modules/address/views/address_index_view.dart';
+import 'package:mall_ukm/app/modules/address/views/address_view.dart';
 import 'package:mall_ukm/app/modules/cart/bindings/cart_binding.dart';
 import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
+import 'package:mall_ukm/app/modules/checkout/bindings/checkout_binding.dart';
+import 'package:mall_ukm/app/modules/checkout/views/checkout_view.dart';
 import 'package:mall_ukm/app/modules/home/bindings/home_binding.dart';
 import 'package:mall_ukm/app/modules/home/views/home_view.dart';
 import 'package:mall_ukm/app/modules/navbar_page/bindings/navbar_page_binding.dart';
@@ -79,10 +84,25 @@ class AppPages {
       page: () => SignupPageView(),
       binding: ProfileBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.SIGNIN,
       page: () => SigninView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADDRESS,
+      page: () => AddressView(),
+      binding: AddressBinding(),
+    ),
+     GetPage(
+      name: _Paths.ADDRESS_INDEX,
+      page: () => AddressIndexView(),
+      binding: AddressBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT,
+      page: () => CheckoutView(),
+      binding: CheckoutBinding(),
     ),
   ];
 }

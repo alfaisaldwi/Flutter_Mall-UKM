@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
 import 'package:mall_ukm/app/service/repository/users_repository.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,7 @@ class ProfileController extends GetxController {
   TextEditingController cnamalengkap = TextEditingController();
   TextEditingController cusername = TextEditingController();
   TextEditingController cnohp = TextEditingController();
+  var cNav = NavbarPageController();
 
   var isLoading = true.obs;
   var isError = false.obs;
@@ -35,8 +37,8 @@ class ProfileController extends GetxController {
 
   @override
   void onReady() {
-    super.onReady();
     getUsers();
+    super.onReady();
   }
 
   @override
@@ -55,6 +57,7 @@ class ProfileController extends GetxController {
         final json = jsonDecode(response.body);
         var token = json['data'];
         GetStorage().write('token', token);
+        cNav.tabController.index = 2;
         Timer(const Duration(seconds: 1),
             () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
         cemail.clear();
@@ -93,8 +96,8 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
-          // Timer(const Duration(seconds: 1),
-          //     () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
+          Timer(const Duration(seconds: 1),
+              () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
 
           // Lakukan tindakan yang diperlukan setelah logout berhasil
         } else {
@@ -118,7 +121,6 @@ class ProfileController extends GetxController {
     var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.me);
     http.Response response = await http.post(url, headers: headers);
     print('Response: ${response.body}');
-    print('Status Code: ${response.statusCode}');
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);

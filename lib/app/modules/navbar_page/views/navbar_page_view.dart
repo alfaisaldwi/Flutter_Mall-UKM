@@ -27,6 +27,7 @@ class NavbarPageView extends GetView<NavbarPageController> {
       ProfileView(),
     ];
   }
+
   List<PersistentBottomNavBarItem> _navbarItem() {
     return [
       PersistentBottomNavBarItem(

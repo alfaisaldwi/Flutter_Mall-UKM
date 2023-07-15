@@ -18,6 +18,7 @@ class ApiEndPoints {
   static _AuthEndPoints authEndpoints = _AuthEndPoints();
   static _ProductEndPoints productEndPoints = _ProductEndPoints();
   static _CartEndPoints cartEndPoints = _CartEndPoints();
+  static _AddressEndPoints addressEndPoints = _AddressEndPoints();
 }
 
 class _AuthEndPoints {
@@ -25,17 +26,24 @@ class _AuthEndPoints {
   final String loginEmail = '/api/auth/login';
   final String logout = '/api/auth/logout';
   final String me = '/api/auth/me';
+}
 
+class _AddressEndPoints {
+  final String addressIndex = '/api/auth/address';
+  final String addressAdd = '/api/auth/address';
 }
 
 class _ProductEndPoints {
   final String category = '/api/category';
   final String product = '/api/product/';
   final String show = '/api/product/show/';
+  final String recomend = '/api/product/recomendation/';
+  final String carousel = '/api/carousel/';
 }
+
 class _CartEndPoints {
   final String cart = '/api/auth/cart';
   final String store = '/api/auth/cart';
   final String delete = '/api/auth/cart/delete/';
-  
+  final String update = '/api/auth/cart/update/';
 }

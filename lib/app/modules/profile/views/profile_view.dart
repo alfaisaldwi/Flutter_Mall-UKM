@@ -13,22 +13,24 @@ class ProfileView extends GetView<ProfileController> {
     String? token = GetStorage().read('token');
     RxString tokenRx = RxString(token ?? '');
     return Obx(() => Scaffold(
-          body: SingleChildScrollView(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  if (tokenRx.value.isNotEmpty)
-                    GetBuilder<ProfileController>(
-                      init: ProfileController(),
-                      builder: (controller) => AccountView(),
-                    ),
-                  if (tokenRx.value.isEmpty)
-                    GetBuilder<ProfileController>(
-                      init: ProfileController(),
-                      builder: (controller) => SigninView(),
-                    ),
-                ],
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    if (tokenRx.value.isNotEmpty)
+                      GetBuilder<ProfileController>(
+                        init: ProfileController(),
+                        builder: (controller) => AccountView(),
+                      ),
+                    if (tokenRx.value.isEmpty)
+                      GetBuilder<ProfileController>(
+                        init: ProfileController(),
+                        builder: (controller) => SigninView(),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

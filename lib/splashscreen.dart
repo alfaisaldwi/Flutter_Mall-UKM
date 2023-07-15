@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 Center(
                   child: Image.asset(
-                    "assets/images/logo.jpeg",
+                    "assets/images/logo2.png",
                     height: 150.0,
                     width: 250.0,
                   ),
@@ -54,32 +54,33 @@ class _SplashScreenState extends State<SplashScreen> {
               ],
             ),
             Column(
-              children: [
-                const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-                ),
-                const SizedBox(
+              children:const [
+                 SizedBox(
                   height: 90,
                 ),
-                Container(
-                  width: 220,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: const Color(0xff034779),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(11),
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Text('Ayo Berbelanja disini!',
-                          style: Styles.bodyStyle()),
-                    ),
-                  ),
+                 CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
                 ),
+              
+                // Container(
+                //   width: 220,
+                //   height: 45,
+                //   decoration: BoxDecoration(
+                //     border: Border.all(
+                //       color: const Color(0xff034779),
+                //       width: 1,
+                //     ),
+                //     borderRadius: BorderRadius.circular(11),
+                //     color: Colors.white,
+                //   ),
+                //   child: Center(
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(1.0),
+                //       child: Text('Ayo Berbelanja disini!',
+                //           style: Styles.bodyStyle()),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(

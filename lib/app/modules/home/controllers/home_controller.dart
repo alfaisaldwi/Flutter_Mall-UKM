@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/model/carousel/carousel_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
@@ -18,60 +20,19 @@ class HomeController extends GetxController {
   var category = <Category>[].obs;
   var products = <Product>[].obs;
   RxBool isLoading = false.obs;
-
-  List<CarouselItem> itemList = [
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail1.png'),
-      boxDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          begin: FractionalOffset.bottomCenter,
-          end: FractionalOffset.topCenter,
-          colors: [
-            Colors.blueAccent.withOpacity(1),
-            Colors.black.withOpacity(.3),
-          ],
-          stops: const [0.0, 1.0],
-        ),
-      ),
-      title:
-          'Push your creativity to its limits by reimagining this classic puzzle!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {
-        
-      },
-    ),
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail2.png'),
-      title: '@coskuncay published flutter_custom_carousel_slider!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    ),
-    CarouselItem(
-      image: AssetImage('assets/images/thumbnail3.png'),
-      title: '@coskuncay published flutter_custom_carousel_slider!',
-      titleTextStyle: const TextStyle(
-        fontSize: 12,
-        color: Colors.white,
-      ),
-      onImageTap: (i) {},
-    )
-  ];
+  var carouselList = <CarouselIndex>[].obs;
+  Timer? _timer;
 
   @override
   void onInit() {
-    super.onInit();
     fetchProduct();
+    startDataRefreshTimer();
     fetchCategories();
+    getCarouselData();
     print('fetchhhh $fetchCategories');
     print('catergory $category');
     print(PreferenceUtils.token);
+    super.onInit();
   }
 
   @override
@@ -80,8 +41,52 @@ class HomeController extends GetxController {
   }
 
   @override
-  void onClose() {}
-  void increment() => count.value++;
+  void onClose() {
+    _timer?.cancel();
+  }
+
+  void startDataRefreshTimer() {
+    const refreshInterval =
+        Duration(minutes: 1); // Set the refresh interval as desired
+
+    // Start the timer
+    _timer = Timer.periodic(refreshInterval, (timer) {
+      // Fetch data periodically
+      fetchProduct();
+      getCarouselData();
+      fetchCategories();
+    });
+  }
+
+  Future<void> getCarouselData() async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.carousel);
+      http.Response response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['code'] == 200) {
+          final carouselData = jsonResponse['data'] as List<dynamic>;
+          List<CarouselIndex> carouselListData = [];
+          for (var data in carouselData) {
+            var carousel = CarouselIndex.fromJson(data);
+            carouselListData.add(carousel);
+          }
+          carouselList.assignAll(carouselListData);
+        } else {
+          throw jsonResponse['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      throw error.toString();
+    }
+  }
 
   Future<List<Category>> getCategories() async {
     var headers = {
@@ -146,6 +151,37 @@ class HomeController extends GetxController {
   }
 
   Future<ProductDetail> fetchProductDetails(int productId) async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+    try {
+      var url = Uri.parse(
+        ApiEndPoints.baseUrl +
+            ApiEndPoints.productEndPoints.show +
+            '$productId',
+      );
+      http.Response response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['code'] == 200) {
+          final data = jsonResponse['data'];
+          final productDetail = ProductDetail.fromJson(data);
+          return productDetail;
+        } else {
+          throw Exception(
+              'Failed to fetch product details: ${jsonResponse['message']}');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch product details. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error occurred while fetching product details: $e');
+    }
+  }
+
+  Future<ProductDetail> fetchProductDetail(int productId) async {
     var headers = {
       'Accept': 'application/json',
     };

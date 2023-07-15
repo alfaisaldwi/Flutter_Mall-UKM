@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
@@ -118,8 +119,10 @@ class RecommendPageView extends GetView<RecommendPageController> {
                         physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: 8,
+                        itemCount: controller.recomend.length,
                         itemBuilder: (context, index) {
+                          var recomend = controller.recomend[index];
+
                           return GestureDetector(
                             onTap: () {
                               // Get.to(() => DetailKontentLokalView(),
@@ -146,7 +149,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                             borderRadius:
                                                 BorderRadius.circular(4),
                                             child: Image.network(
-                                              "https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg",
+                                              recomend.photo.first,
                                               fit: BoxFit.cover,
                                               width: 140,
                                               height: 90,
@@ -160,7 +163,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0, vertical: 4.0),
                                           child: Text(
-                                            'Dataa Produk Art Kurt D. Cobain ',
+                                            recomend.title,
                                             textAlign: TextAlign.left,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
@@ -297,8 +300,14 @@ class RecommendPageView extends GetView<RecommendPageController> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 1,
                             mainAxisSpacing: 2),
-                    itemCount: 8,
+                    itemCount: controller.recomend2.length,
                     itemBuilder: (BuildContext ctx, index) {
+                      var recomend = controller.recomend[index];
+                      final originalPrice = NumberFormat.decimalPattern()
+                          .format(int.parse(recomend.price));
+                      final discountedPrice = NumberFormat.decimalPattern()
+                          .format(int.parse(recomend.priceRetail));
+
                       return GestureDetector(
                         onTap: () {
                           // Get.to(() => DetailKontentLokalView(),
@@ -324,7 +333,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                           borderRadius:
                                               BorderRadius.circular(4),
                                           child: Image.network(
-                                            "https://www.pilar.id/wp-content/uploads/2023/02/A3DF586A-4C1B-446B-9478-4BE82EA6EC14-768x512.jpeg",
+                                            recomend.photo.first,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -334,7 +343,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0, vertical: 8.0),
                                       child: Text(
-                                        'Data Produk Kurt D. Cobain',
+                                        recomend.title,
                                         textAlign: TextAlign.left,
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
@@ -343,16 +352,35 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 2.0),
-                                      child: Text(
-                                        'Rp. 500.000',
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Styles.bodyStyle(),
-                                      ),
-                                    ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 2.0),
+                                        child: RichText(
+                                          softWrap: true,
+                                          text: TextSpan(
+                                            text: 'Rp.$originalPrice',
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black,
+                                            ),
+                                            children: [
+                                              WidgetSpan(
+                                                child: Container(
+                                                  width:
+                                                      8, // Adjust the width as needed
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: '$discountedPrice',
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.red,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )),
                                   ],
                                 ),
                               ),

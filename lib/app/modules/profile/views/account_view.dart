@@ -17,11 +17,9 @@ class AccountView extends GetView<ProfileController> {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 0, vertical: 60.0),
+              padding: const EdgeInsets.only(bottom: 60.0),
               child: Column(children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * .2,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -65,7 +63,8 @@ class AccountView extends GetView<ProfileController> {
                             Obx(() {
                               return Expanded(
                                 child: Text(
-                                  controller.accountData?.value['name'],
+                                  controller.accountData.value['name'] ??
+                                      'User',
                                   style: Styles.headerStyles(),
                                 ),
                               );
@@ -164,6 +163,9 @@ class AccountView extends GetView<ProfileController> {
                             physics: const ScrollPhysics(),
                             children: [
                               ListTile(
+                                onTap: () {
+                                  Get.toNamed('/address-index');
+                                },
                                 leading: const Icon(
                                   Icons.location_on_outlined,
                                   size: 20,

@@ -1,43 +1,38 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
-import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
-import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
-import 'package:intl/intl.dart';
 import '../controllers/product_detail_controller.dart';
 
 class ProductDetailView extends GetView<ProductDetailController> {
+  var controllerProductDetail = Get.put(ProductDetailController());
+  var ctrlCart = CartController();
+  var productDetails = Get.arguments as List<ProductDetail>;
+
   @override
   Widget build(BuildContext context) {
-    var ctrlCart = CartController();
-    var productDetails = Get.arguments as List<ProductDetail>;
     var product = productDetails.first;
-    final numberFormat =
-        NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 0);
-    final originalPrice = product.price;
-    final discountedPrice = product.priceRetail;
-    List<String> imageUrls = [];
-    imageUrls = product.photo;
+    final originalPrice =
+        NumberFormat.decimalPattern().format(int.parse(product.price));
+    final discountedPrice =
+        NumberFormat.decimalPattern().format(int.parse(product.priceRetail));
+    final CarouselController controllerCaraousel = CarouselController();
+
     List people = [
       'Mike',
       'Barron',
       64,
     ];
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
-    const int count = 16;
-    const int itemsPerRow = 2;
-    const double ratio = 1 / 1;
-    const double horizontalPadding = 0;
-    final double calcHeight = ((width / itemsPerRow) - (horizontalPadding)) *
-        (count / itemsPerRow).ceil() *
-        (1 / ratio);
     return Scaffold(
       appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.black),
@@ -147,12 +142,29 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   ),
                 ),
                 child: InkWell(
-                  onTap: () {
-                    CartItem cartItem =
-                        CartItem(product_id: 1, qty: 99, unit_variant: "1");
+                  onTap: () async {
+                    String? token = GetStorage().read('token');
+                    if (token != null) {
+                      // CartItem cartItem = CartItem(
+                      //     product_id: product.id,
+                      //     qty: int.parse(product.qty),
+                      //     unit_variant: product.unitVariant.first);
 
-                    ctrlCart.addToCart(cartItem);
-                    Get.toNamed(('/cart'));
+                      // await ctrlCart.addToCart(cartItem);
+                      showOrderDialog(context);
+
+                      // Get.toNamed(('/cart'));
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Silahkan Signin terlebih dahulu',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[800],
+                        textColor: Colors.white,
+                        fontSize: 14.0,
+                      );
+                      Get.toNamed('/profile');
+                    }
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,
@@ -184,29 +196,62 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   children: [
                     Container(
                       color: Colors.white,
-                      height: 300,
+                      height: 280,
                       width: double.infinity,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20.0),
-                            child: Image.network(
-                              'https://www.pilar.id/wp-content/uploads/2023/02/A3DF586A-4C1B-446B-9478-4BE82EA6EC14-768x512.jpeg',
-                              fit: BoxFit.cover,
-                            ),
+                        child: CarouselSlider(
+                          carouselController: controllerCaraousel,
+                          options: CarouselOptions(
+                            enableInfiniteScroll: false,
+                            aspectRatio: 16 /
+                                9, // Sesuaikan dengan rasio aspek gambar Anda
+                            viewportFraction: 1,
+                            height: double.infinity,
+                            autoPlay: false,
+                            enlargeCenterPage: true,
+                            onPageChanged: controller.onPageChanged,
                           ),
+                          items: product.photo.map((url) {
+                            return Container(
+                              margin: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                image: DecorationImage(
+                                  image: NetworkImage(url),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: const Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  '',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Obx(() =>
+                            buildIndicator(controller.currentIndex.value)),
                       ),
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
+                          padding: const EdgeInsets.only(left: 12.0, top: 15),
                           child: RichText(
                             text: TextSpan(
-                              text: originalPrice,
+                              text: 'Rp.$originalPrice',
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.black,
@@ -218,10 +263,10 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: discountedPrice,
+                                  text: 'Rp.$discountedPrice',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.black,
+                                    color: Colors.red,
                                     decoration: TextDecoration.lineThrough,
                                   ),
                                 ),
@@ -269,7 +314,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Kategori',
+                              'Kategori : ${product.category}',
                               style: Styles.bodyStyle(
                                   color: Colors.black54, size: 15),
                             ),
@@ -291,7 +336,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              'Berat Satuan : ',
+                              'Berat Satuan : ${product.weight}kg',
                               style: Styles.bodyStyle(
                                   color: Colors.black45, size: 15),
                             ),
@@ -356,12 +401,14 @@ class ProductDetailView extends GetView<ProductDetailController> {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * .3 - 45,
                         width: double.infinity,
-                        child: ListView.builder(
+                        child: Obx(() => ListView.builder(
                             physics: const ClampingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: 8,
+                            itemCount: controller.recomend.length,
                             itemBuilder: (context, index) {
+                              var recomend = controller.recomend[index];
+
                               return GestureDetector(
                                 onTap: () {
                                   // Get.to(() => DetailKontentLokalView(),
@@ -388,7 +435,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                                 borderRadius:
                                                     BorderRadius.circular(4),
                                                 child: Image.network(
-                                                  "https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg",
+                                                  recomend.photo.first,
                                                   fit: BoxFit.cover,
                                                   width: 140,
                                                   height: 90,
@@ -404,7 +451,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                                       horizontal: 8.0,
                                                       vertical: 4.0),
                                               child: Text(
-                                                'Dataa Produk Art Kurt D. Cobain ',
+                                                recomend.title,
                                                 textAlign: TextAlign.left,
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -433,7 +480,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                   ),
                                 ),
                               );
-                            }),
+                            })),
                       ),
                     ),
                   ],
@@ -445,4 +492,143 @@ class ProductDetailView extends GetView<ProductDetailController> {
       ),
     );
   }
+
+  Widget buildIndicator(int currentIndex) {
+    var product = productDetails.first;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: product.photo.map((url) {
+        int index = product.photo.indexOf(url);
+        return Container(
+          width: 8.0,
+          height: 8.0,
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: currentIndex == index ? Colors.blue : Colors.grey,
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+void showOrderDialog(BuildContext context) {
+  var productDetails = Get.arguments as List<ProductDetail>;
+  var product = productDetails.first;
+  RxInt selectQuantity = 0.obs;
+  var controllerProductDetail = Get.put(ProductDetailController());
+  var ctrlCart = CartController();
+
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            // Widget konten BottomSheet
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 16),
+                  Text(
+                    'Varian Produk',
+                    style: GoogleFonts.roboto(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: product.unitVariant.map((variant) {
+                      return GestureDetector(
+                        onTap: () {
+                          controllerProductDetail.selectVariant(variant);
+                        },
+                        child: Obx(() => Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: controllerProductDetail
+                                            .selectedVariant.value ==
+                                        variant
+                                    ? Colors.blue
+                                    : Colors.grey,
+                              ),
+                              child: Obx(() => Text(
+                                    variant,
+                                    style: TextStyle(
+                                      color: controllerProductDetail
+                                                  .selectedVariant.value ==
+                                              variant
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  )),
+                            )),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(height: 16),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(36, 54, 101, 1.0),
+                      border: Border.all(),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
+                    child: InkWell(
+                      onTap: () async {
+                        String? token = GetStorage().read('token');
+                        if (token != null) {
+                          CartItem cartItem = CartItem(
+                              product_id: product.id,
+                              qty: 1,
+                              unit_variant: controllerProductDetail
+                                  .selectedVariant.value);
+                          print(controllerProductDetail.selectedVariant.value);
+                          await ctrlCart.addToCart(cartItem);
+
+                          Get.toNamed(('/cart'),);
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Silahkan Signin terlebih dahulu',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[800],
+                            textColor: Colors.white,
+                            fontSize: 14.0,
+                          );
+                          Get.toNamed('/profile');
+                        }
+                      },
+                      child: SizedBox(
+                        height: kToolbarHeight - 15,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Center(
+                          child: Text(
+                            'Tambah Keranjang',
+                            style: Styles.bodyStyle(
+                                color: Colors.white,
+                                weight: FontWeight.w500,
+                                size: 13),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      });
 }
