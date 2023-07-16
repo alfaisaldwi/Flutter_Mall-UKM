@@ -28,6 +28,11 @@ class AddressController extends GetxController {
   var selectedProvinceName = ''.obs;
   var selectedCityName = ''.obs;
   var selectedDistrictName = ''.obs;
+  Rx<AddressIndex?> selectedAddress = Rx<AddressIndex?>(null);
+
+  bool isSelected(AddressIndex address) {
+    return selectedAddress.value?.id == address.id;
+  }
 
   void fetchProvinces() async {
     final String apiUrl = "https://pro.rajaongkir.com/api/province";
@@ -141,6 +146,33 @@ class AddressController extends GetxController {
       final jsonResponse = jsonDecode(response.body);
       if (jsonResponse['code'] == "200") {
         print('Alamat berhasil ditambahkan');
+      } else {
+        print(
+            'Gagal menambahkan Alamat ${response.body} ||| ${jsonResponse['code']} || ${jsonResponse}');
+      }
+    }
+  }
+
+  Future<void> updateStatus(int idAddress) async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    var url = Uri.parse(
+      ApiEndPoints.baseUrl +
+          ApiEndPoints.addressEndPoints.updateStatus +
+          '$idAddress/selected',
+    );
+
+    http.Response response = await http.post(url, headers: headers);
+    print(' ||| ${response.body} ||| STATUS ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['code'] == "200") {
+        print('Alamat berhasil dipilih');
       } else {
         print(
             'Gagal menambahkan Alamat ${response.body} ||| ${jsonResponse['code']} || ${jsonResponse}');

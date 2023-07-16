@@ -27,6 +27,7 @@ dependencies:
   intl: ^0.18.1
   carousel_slider: ^4.2.1
   phosphor_flutter: ^2.0.0
+  webview_flutter: ^4.0.7
 
 
 dev_dependencies: 

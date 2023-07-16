@@ -1,26 +1,83 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/cart/kurir_model.dart';
+import 'package:mall_ukm/app/model/cart/selectedCart.dart';
+import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
 import '../controllers/checkout_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {
-  final List<String> addresses = ['Alamat 1', 'Alamat 2', 'Alamat 3'];
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final RxString selectedAddress = ''.obs;
+  var address = Get.put(AddressController());
+  var dataCart = Get.arguments[0] as List<SelectedCartItem>;
+  var total = Get.arguments[1];
+  var subtot = 0.0.obs;
+  var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
-          'Checkoout',
+          'Checkout',
           style: Styles.headerStyles(weight: FontWeight.w500, size: 16),
         ),
         backgroundColor: Colors.white,
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        height: kToolbarHeight + 15,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 7.0, bottom: 10, top: 12),
+                    child: Text('Total Harga', style: Styles.bodyStyle()),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                    child: Obx(() {
+                      return Text(
+                        '$total',
+                        style: Styles.bodyStyle(
+                          weight: FontWeight.w500,
+                          size: 15,
+                        ),
+                      );
+                    }),
+                  )
+                ],
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: 45,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(11),
+                      color: const Color(0xff034779),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Text('Bayar',
+                            style: Styles.bodyStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -28,6 +85,30 @@ class CheckoutView extends GetView<CheckoutController> {
             color: Colors.white,
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'Alamat Pengiriman',
+                        style: Styles.bodyStyle(size: 14),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed('/address-index');
+                        },
+                        child: Text(
+                          'Ubah Alamat',
+                          style: Styles.bodyStyle(color: Colors.blue[700]),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -46,156 +127,241 @@ class CheckoutView extends GetView<CheckoutController> {
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                        FutureBuilder<AddressSelect>(
+                          future: controller.getAddress(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              // Ketika sedang menunggu respons dari API
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              // Ketika terjadi kesalahan
+                              return Align(
+                                  alignment: Alignment.center,
+                                  child: Text('Kamu belum memilih alamat.'));
+                            } else if (snapshot.hasData) {
+                              // Ketika data berhasil diambil
+                              final addressData = snapshot.data!;
+
+                              return Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Alamat Pengiriman',
-                                      style: Styles.bodyStyle(size: 14),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, top: 2),
+                                      child: Container(
+                                        width: 150,
+                                        child: Text(
+                                          '${addressData.username} | ${addressData.phone}',
+                                          style: Styles.bodyStyle(size: 14),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                     ),
-                                    Text(
-                                      'Ubah Alamat',
-                                      style: Styles.bodyStyle(
-                                          color: Colors.blue[700]),
-                                    )
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, top: 2),
+                                      child: Text(
+                                        '${addressData.addressDetail}',
+                                        style: Styles.bodyStyle(size: 14),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, top: 2, bottom: 2),
+                                      child: Text(
+                                        '${addressData.address}',
+                                        textAlign: TextAlign.left,
+                                        maxLines: 5,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Styles.bodyStyle(),
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 2),
-                                child: Text(
-                                  'Alexx X nya 2 | 089640091779',
-                                  style: Styles.bodyStyle(size: 14),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, top: 2, bottom: 2),
-                                child: Text(
-                                  'Jalan Krajan Nomor 25 Dusun Krajan, Desa Kalitengah, Kecamatan Purwonegoro Kabupaten Banjarnegara, Jawa Tengah  Jawa Tengah Jawa Tengah 53472',
-                                  textAlign: TextAlign.left,
-                                  maxLines: 5,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Styles.bodyStyle(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              );
+                            } else {
+                              // Ketika tidak ada data yang ditemukan
+                              return Text('Kamu belum memilih alamat.');
+                            }
+                          },
+                        )
                       ],
                     ),
                   ),
                 ),
-                Container(
-                  color: const Color(0xfff2f2f2),
-                  height: 120,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  child: Row(children: [
-                    Image.network(
-                      'https://rimbakita.com/wp-content/uploads/2020/10/gambar-kartun-patrick.jpg',
-                      width: 100,
-                      height: 90,
-                      fit: BoxFit.cover,
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 8.0, right: 0.0, bottom: 4.0),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: ScrollPhysics(),
+                  itemCount: dataCart.length,
+                  itemBuilder: (context, index) {
+                    var cart = dataCart[index];
+                    qty.value = cart.cart.qty;
+
+                    return Container(
+                        color: const Color(0xfff2f2f2),
+                        height: 120,
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.only(left: 8, right: 8),
+                        child: Row(children: [
+                          Image.network(
+                            cart.cart.photo,
+                            width: 100,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 0.0, bottom: 4.0),
+                              child: Row(
                                 children: [
-                                  Text(
-                                    'Patrik Patrik Patrik Patrik Patrik Patrik Patrik Patrik',
-                                    textAlign: TextAlign.left,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Styles.bodyStyle(size: 14),
+                                  const SizedBox(
+                                    width: 5,
                                   ),
-                                  Text(
-                                    'Varian : 1',
-                                    textAlign: TextAlign.left,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Styles.bodyStyle(size: 14),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          cart.cart.title,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Styles.bodyStyle(size: 14),
+                                        ),
+                                        Text(
+                                          'Varian : ${cart.cart.unitVariant}',
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Styles.bodyStyle(size: 14),
+                                        ),
+                                        Text(
+                                          '${cart.cart.price.toStringAsFixed(2)}',
+                                          style: Styles.bodyStyle(size: 14),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    'Rp300.000',
-                                    style: Styles.bodyStyle(size: 14),
-                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 10.0),
+                                    child: Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Text(
+                                        'x${cart.cart.qty}',
+                                        style: Styles.bodyStyle(
+                                            color: Colors.grey[600]),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  'x2',
-                                  style:
-                                      Styles.bodyStyle(color: Colors.grey[600]),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ]),
+                          )
+                        ]));
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: TextFormField(
                     decoration: InputDecoration(
                       prefix: Text('Pesan : '),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
                     ),
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  padding: EdgeInsets.all(16.0),
-                  child: DropdownButton<String>(
-                    value: controller.kurirTerpilih.value,
-                    onChanged: (newValue) {
-                      controller.kurirTerpilih.value = newValue!;
+                Obx(
+                  () => DropdownButtonFormField<String>(
+                    value: controller.selectedCourier.value.isNotEmpty
+                        ? controller.selectedCourier.value
+                        : null,
+                    decoration: InputDecoration(labelText: 'Kurir'),
+                    onChanged: (value) {
+                      controller.selectedCourier.value = value!;
+                      print(controller.selectedService.value);
+
+                      controller.fetchServices();
                     },
-                    items: controller.namaKurir
-                        .map<DropdownMenuItem<String>>((String value) {
+                    items: controller.couriers.map((courier) {
                       return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+                        value: courier,
+                        child: Text(courier.toUpperCase()),
                       );
                     }).toList(),
                   ),
                 ),
-                Visibility(
-                  visible: controller.kurirTerpilih.value != '',
-                  child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Obx(() => Text(
-                          'Detail dari ${controller.kurirTerpilih.value}',
-                          style: TextStyle(fontSize: 18.0),
-                        )),
-                  ),
+                Obx(() => DropdownButtonFormField<String>(
+                      value: controller.selectedService.value.isNotEmpty
+                          ? controller.selectedService.value
+                          : null,
+                      decoration: InputDecoration(labelText: 'Service'),
+                      onChanged: (value) {
+                        controller.selectedService.value = value!;
+                        final selectedService = controller.services.value
+                            .firstWhere(
+                                (service) => service['service'] == value);
+                        final costValue =
+                            selectedService['cost'][0]['value'].toString();
+                        controller.costValue.value = double.parse(costValue);
+                        controller.costSample =
+                            selectedService['cost'][0]['value'];
+
+                        subtot.value =
+                            double.parse(controller.costValue.toString()) +
+                                (qty * double.parse(total.toString()));
+                        print(subtot.value);
+                      },
+                      items: controller.services.isNotEmpty
+                          ? controller.services.value
+                              .map<DropdownMenuItem<String>>((service) {
+                              final String serviceValue =
+                                  service['service'] as String;
+                              final String description =
+                                  service['description'] as String;
+                              final String costValue =
+                                  service['cost'][0]['value'].toString();
+
+                              // Mengubah 'cost' menjadi 'description'
+                              return DropdownMenuItem<String>(
+                                value: serviceValue,
+                                child: Row(
+                                  children: [
+                                    Text(description),
+                                    SizedBox(width: 10),
+                                    Text(': Rp.$costValue'),
+                                  ],
+                                ),
+                              );
+                            }).toList()
+                          : <
+                              DropdownMenuItem<
+                                  String>>[], // Mengubah tipe data menjadi <DropdownMenuItem<String>>
+                    )),
+                const SizedBox(height: 20),
+                Container(
+                  color: Colors.white,
+                  child: Row(children: [
+                    Text(
+                      'Subtotal',
+                      style: Styles.bodyStyle(),
+                    ),
+                    Obx(() => Text('${subtot.value}')),
+                  ]),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/cart/cart_model.dart';
+import 'package:mall_ukm/app/model/cart/selectedCart.dart';
 import 'package:mall_ukm/app/service/repository/users_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,6 +14,8 @@ class CartController extends GetxController {
   RxBool checkbox = false.obs;
   RxInt counter = 1.obs;
   var carts = <Cart>[].obs;
+  var isCheckedList = <bool>[].obs;
+  var selectedItems = <SelectedCartItem>[].obs;
   @override
   void onInit() {
     super.onInit();
@@ -23,6 +26,19 @@ class CartController extends GetxController {
     fetchCart();
 
     super.onReady();
+  }
+
+  bool? isChecked(int index) {
+    if (index >= 0 && index < isCheckedList.length) {
+      return isCheckedList[index];
+    }
+    return null;
+  }
+
+  void setChecked(bool value, int index) {
+    if (index >= 0 && index < isCheckedList.length) {
+      isCheckedList[index] = value;
+    }
   }
 
   Future<void> addToCart(CartItem cartItem) async {
@@ -89,6 +105,8 @@ class CartController extends GetxController {
     try {
       var fetchedProducts = await getStoreData();
       carts.assignAll(fetchedProducts);
+      isCheckedList
+          .assignAll(List<bool>.generate(carts.length, (index) => false));
     } catch (error) {
       // Handle error if there is an issue fetching the products
       print('Error fetching products: $error');

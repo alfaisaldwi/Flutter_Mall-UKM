@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
+import 'package:mall_ukm/app/model/cart/selectedCart.dart';
+import 'package:mall_ukm/app/modules/cart/views/checkbox.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
 import '../controllers/cart_controller.dart';
@@ -12,7 +14,6 @@ class CartView extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
     RxDouble tot = 0.0.obs;
-    var isChecked = false.obs;
 
     return Scaffold(
         appBar: AppBar(
@@ -41,17 +42,13 @@ class CartView extends GetView<CartController> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8),
                       child: Obx(() {
-                        if (isChecked.value) {
-                          return Text(
-                            '$tot',
-                            style: Styles.bodyStyle(
-                              weight: FontWeight.w500,
-                              size: 15,
-                            ),
-                          );
-                        } else {
-                          return const SizedBox(); // Widget kosong jika checkbox tidak dicentang
-                        }
+                        return Text(
+                          '$tot',
+                          style: Styles.bodyStyle(
+                            weight: FontWeight.w500,
+                            size: 15,
+                          ),
+                        );
                       }),
                     )
                   ],
@@ -59,9 +56,9 @@ class CartView extends GetView<CartController> {
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed(
-                        '/checkout',
-                      );
+                      print(controller.selectedItems);
+                      Get.toNamed('/checkout',
+                          arguments: [controller.selectedItems,tot]);
                     },
                     child: Container(
                       height: 45,
@@ -95,7 +92,7 @@ class CartView extends GetView<CartController> {
                     return Align(
                       alignment: Alignment.center,
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height ,
+                        height: MediaQuery.of(context).size.height,
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
@@ -114,22 +111,31 @@ class CartView extends GetView<CartController> {
                         itemBuilder: (context, index) {
                           var carts = controller.carts[index];
                           var counter = carts.qty.obs;
+                          var isChecked = controller.isChecked(index).obs;
 
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Row(
                               children: [
-                                Obx(
-                                  () => Checkbox(
-                                    value: isChecked.value,
-                                    onChanged: (bool? value) {
-                                      isChecked.value = value!;
-                                      if (value == true) {
-                                        tot.value += carts.price;
-                                      } else {
-                                        tot.value -= carts.price;
-                                      }
-                                    },
+                                Expanded(
+                                  child: Obx(
+                                    () => CheckboxTile(
+                                      value: isChecked.value ?? false,
+                                      onChanged: (bool? value) {
+                                        isChecked.value = value ?? false;
+                                        if (value == true) {
+                                          tot.value += carts.price;
+                                          controller.selectedItems.add(
+                                            SelectedCartItem(
+                                                isChecked: true, cart: carts),
+                                          );
+                                        } else {
+                                          tot.value -= carts.price;
+                                          controller.selectedItems.removeWhere(
+                                              (item) => item.cart == carts);
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
                                 Container(

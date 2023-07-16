@@ -85,7 +85,7 @@ class AddressView extends GetView<AddressController> {
                     addressDetail: address.addressDetail.text,
                     destinationId:
                         int.parse(address.selectedSubdistrictId.value),
-                    status: 'selected');
+                    status: 'unselected');
 
                 await address.addAdress(addressItem);
               },
