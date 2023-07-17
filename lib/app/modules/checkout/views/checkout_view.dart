@@ -6,6 +6,7 @@ import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/cart/cart_model.dart';
 import 'package:mall_ukm/app/model/cart/kurir_model.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
+import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
@@ -20,6 +21,11 @@ class CheckoutView extends GetView<CheckoutController> {
   var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
+    var addressId = 0;
+    var productId = 0;
+    var cartId = 0;
+    var priceProduct = 0;
+    var variantProduct = '';
     var ongkir = 0.0.obs;
     RxString totalakhir = ''.obs;
     // int subtotValue = int.parse(subtot.value.toString());
@@ -65,7 +71,23 @@ class CheckoutView extends GetView<CheckoutController> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    controller.tambahDataTransaksi();
+                    CheckoutData checkoutData = CheckoutData(
+                      addressId: addressId,
+                      courier: controller.selectedCourier.value,
+                      costCourier: ongkir.value.toInt(),
+                      total: subtot.value.toInt(),
+                      products: [
+                        {
+                          "id": cartId,
+                          "product_id": productId,
+                          "price": priceProduct,
+                          "quantity": qty.value,
+                          "variant": variantProduct
+                        },
+                      ],
+                    );
+
+                    controller.tambahDataTransaksi(checkoutData);
                   },
                   child: Container(
                     height: 45,
@@ -151,6 +173,7 @@ class CheckoutView extends GetView<CheckoutController> {
                             } else if (snapshot.hasData) {
                               // Ketika data berhasil diambil
                               final addressData = snapshot.data!;
+                              addressId = addressData.id;
 
                               return Expanded(
                                 child: Column(
@@ -211,6 +234,10 @@ class CheckoutView extends GetView<CheckoutController> {
                   itemBuilder: (context, index) {
                     var cart = dataCart[index];
                     qty.value = cart.cart.qty;
+                    productId = int.parse(cart.cart.productId);
+                    cartId = cart.cart.id;
+                    priceProduct = cart.cart.price.toInt();
+                    variantProduct = cart.cart.unitVariant;
 
                     return Container(
                         color: const Color(0xfff2f2f2),

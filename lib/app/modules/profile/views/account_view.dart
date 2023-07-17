@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart';
-import 'package:mall_ukm/app/modules/profile/views/webwiew.dart';
+import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
 class AccountView extends GetView<ProfileController> {
@@ -178,11 +178,11 @@ class AccountView extends GetView<ProfileController> {
                               ),
                               ListTile(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MyHomePage(),
-                                      ));
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => MyHomePage(),
+                                  //     ));
                                 },
                                 leading: const Icon(Icons.key_outlined),
                                 title: Text(

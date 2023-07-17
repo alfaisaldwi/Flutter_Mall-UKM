@@ -54,11 +54,22 @@ class CartView extends GetView<CartController> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    print(totalHarga.value);
-                    Get.toNamed('/checkout', arguments: [
-                      controller.selectedItems,
-                      totalHarga.value
-                    ]);
+                    if (controller.selectedItems.isNotEmpty) {
+                      print(totalHarga.value);
+                      Get.toNamed('/checkout', arguments: [
+                        controller.selectedItems,
+                        totalHarga.value
+                      ]);
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Masukan barang ke keranjang ',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[800],
+                        textColor: Colors.white,
+                        fontSize: 14.0,
+                      );
+                    }
                   },
                   child: Container(
                     height: 45,
