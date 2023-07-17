@@ -29,9 +29,7 @@ class HomeController extends GetxController {
     startDataRefreshTimer();
     fetchCategories();
     getCarouselData();
-    print('fetchhhh $fetchCategories');
-    print('catergory $category');
-    print(PreferenceUtils.token);
+
     super.onInit();
   }
 
@@ -98,7 +96,7 @@ class HomeController extends GetxController {
       );
       http.Response response = await http.get(url, headers: headers);
 
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['code'] == 200) {
@@ -128,7 +126,7 @@ class HomeController extends GetxController {
           ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.product);
       http.Response response = await http.get(url, headers: headers);
 
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse['code'] == 200) {

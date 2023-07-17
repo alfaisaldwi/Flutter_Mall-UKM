@@ -20,6 +20,7 @@ class ApiEndPoints {
   static _CartEndPoints cartEndPoints = _CartEndPoints();
   static _AddressEndPoints addressEndPoints = _AddressEndPoints();
   static _RajaOngkirEndPoints rajaOngkirEndPoints = _RajaOngkirEndPoints();
+  static _TransactionEndPoints transactionEndPoints = _TransactionEndPoints();
 }
 
 class _AuthEndPoints {
@@ -38,6 +39,10 @@ class _AddressEndPoints {
 
 class _RajaOngkirEndPoints {
   final String shippingData = 'https://pro.rajaongkir.com/api/cost';
+}
+
+class _TransactionEndPoints {
+  final String store = '/api/auth/transaction';
 }
 
 class _ProductEndPoints {

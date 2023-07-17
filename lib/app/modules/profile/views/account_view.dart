@@ -64,7 +64,7 @@ class AccountView extends GetView<ProfileController> {
                             Obx(() {
                               return Expanded(
                                 child: Text(
-                                  controller.accountData.value['name'] ??
+                                  controllerP.accountData.value['name'] ??
                                       'User',
                                   style: Styles.headerStyles(),
                                 ),

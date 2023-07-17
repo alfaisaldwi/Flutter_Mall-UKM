@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
+import 'package:mall_ukm/app/model/cart/cart_model.dart';
 import 'package:mall_ukm/app/model/cart/kurir_model.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
 import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
@@ -11,12 +13,20 @@ import '../controllers/checkout_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {
   var address = Get.put(AddressController());
-  var dataCart = Get.arguments[0] as List<SelectedCartItem>;
-  var total = Get.arguments[1];
+  final List<SelectedCartItem> dataCart =
+      Get.arguments[0] as List<SelectedCartItem>;
+  var hargaBarang = Get.arguments[1];
   var subtot = 0.0.obs;
   var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
+    var ongkir = 0.0.obs;
+    RxString totalakhir = ''.obs;
+    // int subtotValue = int.parse(subtot.value.toString());
+    // NumberFormat formatter = NumberFormat.decimalPattern();
+    // String formattedValue = formatter.format(subtotValue);
+    // totalakhir.value = formattedValue;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -42,22 +52,21 @@ class CheckoutView extends GetView<CheckoutController> {
                     child: Text('Total Harga', style: Styles.bodyStyle()),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                    child: Obx(() {
-                      return Text(
-                        '$total',
-                        style: Styles.bodyStyle(
-                          weight: FontWeight.w500,
-                          size: 15,
-                        ),
-                      );
-                    }),
-                  )
+                      padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                      child: Obx(() => Text(
+                            '${subtot.value}',
+                            style: Styles.bodyStyle(
+                              weight: FontWeight.w500,
+                              size: 15,
+                            ),
+                          )))
                 ],
               ),
               Center(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    controller.tambahDataTransaksi();
+                  },
                   child: Container(
                     height: 45,
                     width: 120,
@@ -316,12 +325,12 @@ class CheckoutView extends GetView<CheckoutController> {
                         final costValue =
                             selectedService['cost'][0]['value'].toString();
                         controller.costValue.value = double.parse(costValue);
-                        controller.costSample =
-                            selectedService['cost'][0]['value'];
 
+                        ongkir.value =
+                            double.parse(controller.costValue.toString());
                         subtot.value =
                             double.parse(controller.costValue.toString()) +
-                                (qty * double.parse(total.toString()));
+                                (double.parse(hargaBarang.toString()));
                         print(subtot.value);
                       },
                       items: controller.services.isNotEmpty
@@ -355,12 +364,36 @@ class CheckoutView extends GetView<CheckoutController> {
                   color: Colors.white,
                   child: Row(children: [
                     Text(
-                      'Subtotal',
+                      'Harga Barang : $hargaBarang',
                       style: Styles.bodyStyle(),
                     ),
-                    Obx(() => Text('${subtot.value}')),
                   ]),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  color: Colors.white,
+                  child: Row(children: [
+                    Obx(() => Text(
+                          'Ongkir : ${ongkir.value}.',
+                          style: Styles.bodyStyle(),
+                        )),
+                  ]),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                // Container(
+                //   color: Colors.white,
+                //   child: Row(children: [
+                //     Text(
+                //       'Subtotal',
+                //       style: Styles.bodyStyle(),
+                //     ),
+                //     Obx(() => Text('${subtot.value}')),
+                //   ]),
+                // ),
                 const SizedBox(height: 20),
               ],
             ),

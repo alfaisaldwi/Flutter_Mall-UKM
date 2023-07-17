@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, avoid_print
-
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -11,11 +9,10 @@ import 'package:mall_ukm/app/service/repository/users_repository.dart';
 import 'package:http/http.dart' as http;
 
 class CartController extends GetxController {
-  RxBool checkbox = false.obs;
-  RxInt counter = 1.obs;
-  var carts = <Cart>[].obs;
-  var isCheckedList = <bool>[].obs;
-  var selectedItems = <SelectedCartItem>[].obs;
+  RxList<Cart> carts = <Cart>[].obs;
+  RxList<bool> isCheckedList = <bool>[].obs;
+  RxList<SelectedCartItem> selectedItems = <SelectedCartItem>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -24,7 +21,6 @@ class CartController extends GetxController {
   @override
   void onReady() {
     fetchCart();
-
     super.onReady();
   }
 
@@ -41,6 +37,18 @@ class CartController extends GetxController {
     }
   }
 
+  Future<void> fetchCart() async {
+    try {
+      var fetchedProducts = await getStoreData();
+      carts.assignAll(fetchedProducts);
+      isCheckedList
+          .assignAll(List<bool>.generate(carts.length, (index) => false));
+    } catch (error) {
+      // Handle error if there is an issue fetching the products
+      print('Error fetching products: $error');
+    }
+  }
+
   Future<void> addToCart(CartItem cartItem) async {
     String? token = GetStorage().read('token');
     var headers = {
@@ -49,9 +57,8 @@ class CartController extends GetxController {
       'Authorization': 'Bearer $token',
     };
 
-    var url = Uri.parse(
-      ApiEndPoints.baseUrl + ApiEndPoints.cartEndPoints.store,
-    );
+    var url =
+        Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.cartEndPoints.store);
 
     final body = jsonEncode(cartItem.toJson());
 
@@ -76,9 +83,7 @@ class CartController extends GetxController {
       'Authorization': 'Bearer $token',
     };
 
-    var url = Uri.parse(
-      ApiEndPoints.baseUrl + ApiEndPoints.cartEndPoints.cart,
-    );
+    var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.cartEndPoints.cart);
 
     final response = await http.get(url, headers: headers);
 
@@ -91,26 +96,14 @@ class CartController extends GetxController {
           var cart = Cart.fromJson(data);
           cartList.add(cart);
         }
-        return cartList; // Return outside the loop
+        return cartList;
       } else {
         print('Data Store berhasil diambil: $jsonResponse');
       }
     } else {
       print('Gagal mengambil data Store');
     }
-    return []; // Return an empty list as default value
-  }
-
-  Future<void> fetchCart() async {
-    try {
-      var fetchedProducts = await getStoreData();
-      carts.assignAll(fetchedProducts);
-      isCheckedList
-          .assignAll(List<bool>.generate(carts.length, (index) => false));
-    } catch (error) {
-      // Handle error if there is an issue fetching the products
-      print('Error fetching products: $error');
-    }
+    return [];
   }
 
   Future<void> deleteCart(int cartId) async {
