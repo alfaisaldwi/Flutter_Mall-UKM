@@ -36,14 +36,14 @@ class AddressSelectionDialog extends StatelessWidget {
                 decoration: InputDecoration(labelText: 'Provinsi'),
                 onChanged: (value) {
                   provinceController.text = value!;
-                  address.selectedProvinceName.value = value!;
+                  address.selectedProvinceName.value = value;
                   provinceName.value = address.provinces.firstWhere(
                           (province) =>
                               province['province_id'] == value)['province']
                       as String;
                   address.addressName.value =
                       '${provinceName.value}, ${cityName.value}, ${districtName.value}';
-                  Get.find<AddressController>().fetchCities(value!);
+                  Get.find<AddressController>().fetchCities(value);
                 },
                 items: address.provinces.map((province) {
                   return DropdownMenuItem<String>(
@@ -91,7 +91,7 @@ class AddressSelectionDialog extends StatelessWidget {
                       'subdistrict_name'] as String;
                   address.addressName.value =
                       '${provinceName.value}, ${cityName.value}, ${districtName.value}';
-                  address.selectedSubdistrictId.value = value!;
+                  address.selectedSubdistrictId.value = value;
                 },
                 items: address.districts.map((district) {
                   return DropdownMenuItem<String>(

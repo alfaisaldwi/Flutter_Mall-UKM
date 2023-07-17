@@ -88,6 +88,7 @@ class AddressView extends GetView<AddressController> {
                     status: 'unselected');
 
                 await address.addAdress(addressItem);
+                
               },
             ),
           ],

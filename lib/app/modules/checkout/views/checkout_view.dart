@@ -19,6 +19,7 @@ class CheckoutView extends GetView<CheckoutController> {
   var hargaBarang = Get.arguments[1];
   var subtot = 0.0.obs;
   var qty = 0.obs;
+
   @override
   Widget build(BuildContext context) {
     var addressId = 0;
@@ -174,6 +175,8 @@ class CheckoutView extends GetView<CheckoutController> {
                               // Ketika data berhasil diambil
                               final addressData = snapshot.data!;
                               addressId = addressData.id;
+                              controller.idkecamatan =
+                                  addressData.destinationId;
 
                               return Expanded(
                                 child: Column(
@@ -238,6 +241,7 @@ class CheckoutView extends GetView<CheckoutController> {
                     cartId = cart.cart.id;
                     priceProduct = cart.cart.price.toInt();
                     variantProduct = cart.cart.unitVariant;
+                    // controller.weight = cart.cart.
 
                     return Container(
                         color: const Color(0xfff2f2f2),
@@ -326,9 +330,12 @@ class CheckoutView extends GetView<CheckoutController> {
                         : null,
                     decoration: InputDecoration(labelText: 'Kurir'),
                     onChanged: (value) {
+                      if (controller.selectedCourier.value == '') {
+                        controller.selectedCourier.value = value!;
+                      } else {
+                        controller.selectedService.value = '';
+                      }
                       controller.selectedCourier.value = value!;
-                      print(controller.selectedService.value);
-
                       controller.fetchServices();
                     },
                     items: controller.couriers.map((courier) {

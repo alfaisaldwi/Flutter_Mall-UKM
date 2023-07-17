@@ -6,6 +6,7 @@ import 'package:mall_ukm/app/style/styles.dart';
 class TransactionSemuaView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
+    var ctrT = Get.put(TransactionPageController());
     return Container(
       color: Colors.white,
       child: Padding(
@@ -14,8 +15,11 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
             physics: ScrollPhysics(),
-            itemCount: 8,
+            itemCount: ctrT.transactionIndexList.length,
             itemBuilder: (context, index) {
+              var trs = ctrT.transactionIndexList[index];
+              // var trsDetail =
+              //     ctrT.transactionIndexList.detailTransactions[index];
               return GestureDetector(
                 onTap: () {
                   // Get.to(() => DetailKontentLokalView(),
@@ -28,10 +32,10 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
                     padding: EdgeInsets.all(5),
                     width: double.infinity,
                     child: Row(children: [
-                      Image.network(
-                          'https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg',
-                          width: 140,
-                          height: 120),
+                      // Image.network(
+                      //     'https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg',
+                      //     width: 140,
+                      //     height: 120),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -44,7 +48,7 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
                                 height: 8,
                               ),
                               Text(
-                                'Produk Kurt Cobain',
+                                trs.status,
                                 textAlign: TextAlign.left,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -55,13 +59,13 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('..'),
+                                  Text('total ${trs.total}'),
                                   Wrap(children: [
                                     Icon(
                                       Icons.date_range,
                                       size: 18,
                                     ),
-                                    Text('..'),
+                                    Text(' ${trs.courier} ${trs.costCourier}'),
                                   ]),
                                 ],
                               )

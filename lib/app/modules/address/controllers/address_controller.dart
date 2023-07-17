@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -145,6 +146,15 @@ class AddressController extends GetxController {
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       if (jsonResponse['code'] == "200") {
+        Fluttertoast.showToast(
+          msg: 'Berhasil menambahkan alamat ',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
+        Get.offAndToNamed('/adress-index');
         print('Alamat berhasil ditambahkan');
       } else {
         print(
@@ -172,6 +182,14 @@ class AddressController extends GetxController {
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       if (jsonResponse['code'] == "200") {
+        Fluttertoast.showToast(
+          msg: 'Berhasil mengubah alamat utama',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
         print('Alamat berhasil dipilih');
       } else {
         print(

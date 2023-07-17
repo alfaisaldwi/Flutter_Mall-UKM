@@ -42,6 +42,7 @@ class _RajaOngkirEndPoints {
 }
 
 class _TransactionEndPoints {
+  final String index = '/api/auth/transaction';
   final String store = '/api/auth/transaction';
 }
 

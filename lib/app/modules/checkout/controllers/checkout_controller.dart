@@ -16,10 +16,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 class CheckoutController extends GetxController {
   TextEditingController selectedCourier1 = TextEditingController();
   var selectedCourier = ''.obs;
+  var selectedCourierFirst = '';
   final selectedService = ''.obs;
   final services = <dynamic>[].obs;
   final costValue = 0.0.obs;
   WebViewController ctr = WebViewController();
+  var idkecamatan = '';
+  var weight = '';
 
   final List<String> couriers = ['jne', 'pos', 'tiki'];
   final List<String> layanan = ['jne', 'pos', 'tiki'];
@@ -89,12 +92,11 @@ class CheckoutController extends GetxController {
   }
 
   void fetchServices() async {
-    final String apiUrl = "https://pro.rajaongkir.com/api/cost";
-    final String origin = "109";
-    final String originType = "city";
-    final String destination = "3577";
-    final String destinationType = "subdistrict";
-    final String weight = "1700";
+    String apiUrl = "https://pro.rajaongkir.com/api/cost";
+    String origin = "109";
+    String originType = "city";
+    String destinationType = "subdistrict";
+    String weight = "1";
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -104,7 +106,7 @@ class CheckoutController extends GetxController {
     final Map<String, dynamic> requestBody = {
       "origin": origin,
       "originType": originType,
-      "destination": destination,
+      "destination": idkecamatan,
       "destinationType": destinationType,
       "weight": weight,
       "courier": selectedCourier.value,

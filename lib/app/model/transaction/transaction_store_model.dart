@@ -3,12 +3,14 @@ class TransaksiStore {
   String? message;
   TransaksiData? data;
 
-  TransaksiStore({required this.code,required this.message,required this.data});
+  TransaksiStore(
+      {required this.code, required this.message, required this.data});
 
   TransaksiStore.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    data = (json['data'] != null ? TransaksiData.fromJson(json['data']) : null)!;
+    data =
+        (json['data'] != null ? TransaksiData.fromJson(json['data']) : null)!;
   }
 }
 
@@ -56,7 +58,8 @@ class TransaksiData {
     id = json['id'];
     paymentUrl = json['payment_url'];
     if (json['products'] != null) {
-      products = List<Product>.from(json['products'].map((product) => Product.fromJson(product)));
+      products = List<Product>.from(
+          json['products'].map((product) => Product.fromJson(product)));
     }
   }
 }
@@ -68,7 +71,12 @@ class Product {
   int? quantity;
   String? variant;
 
-  Product({required this.id,required this.productId,required this.price,required this.quantity,required this.variant});
+  Product(
+      {required this.id,
+      required this.productId,
+      required this.price,
+      required this.quantity,
+      required this.variant});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
