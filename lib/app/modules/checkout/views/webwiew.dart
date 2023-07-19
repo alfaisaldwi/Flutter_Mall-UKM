@@ -1,16 +1,43 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
+import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
+import 'package:mall_ukm/app/style/styles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MyHomePage extends StatelessWidget {
   final String url;
   MyHomePage({Key? key, required this.url}) : super(key: key);
   var contr = Get.put(CheckoutController());
+  var controllerNav = Get.put(NavbarPageController());
 
   @override
   Widget build(BuildContext context) {
-    WebViewController _controller;
-    return Scaffold(body: SafeArea(child: WebViewWidget(controller: contr.ctr)));
+    return Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.black),
+          backgroundColor: Colors.white,
+        ),
+        body: SafeArea(
+            child: WillPopScope(
+          onWillPop: () async {
+            if (await contr.ctr.canGoBack()) {
+              contr.ctr.goBack();
+              return false;
+            } else {
+              print('asdas');
+              Get.offAndToNamed('navbar-page');
+            }
+            controllerNav.tabController.index = 2;
+
+            Get.offAndToNamed('navbar-page');
+            return true;
+          },
+          child: WebViewWidget(
+              controller: contr.ctr, gestureRecognizers: const <
+                  Factory<OneSequenceGestureRecognizer>>{}),
+        )));
   }
 }

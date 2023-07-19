@@ -11,7 +11,10 @@ class Transaction {
   final String status;
   final String createdAt;
   final String updatedAt;
-  final List<DetailTransaction> detailTransactions;
+  final String productName;
+  final String productQty;
+  final String productVariant;
+  final String productPhoto;
 
   Transaction({
     required this.id,
@@ -26,12 +29,13 @@ class Transaction {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
-    required this.detailTransactions,
+    required this.productName,
+    required this.productQty,
+    required this.productVariant,
+    required this.productPhoto,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
-    List<dynamic> detailTransactionsJson = json['detail_transaction'];
-
     return Transaction(
       id: json['id'],
       userId: json['user_id'],
@@ -45,45 +49,12 @@ class Transaction {
       status: json['status'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
-      detailTransactions: List<DetailTransaction>.from(detailTransactionsJson.map((json) => DetailTransaction.fromJson(json))),
+      productName: json['product_name'],
+      productQty: json['product_qty'],
+      productVariant: json['product_variant'],
+      productPhoto: json['product_photo'],
     );
   }
-}
 
-class DetailTransaction {
-  final int id;
-  final String transactionId;
-  final String productId;
-  final String qty;
-  final String price;
-  final String variant;
-  final String subtotal;
-  final String createdAt;
-  final String updatedAt;
-
-  DetailTransaction({
-    required this.id,
-    required this.transactionId,
-    required this.productId,
-    required this.qty,
-    required this.price,
-    required this.variant,
-    required this.subtotal,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory DetailTransaction.fromJson(Map<String, dynamic> json) {
-    return DetailTransaction(
-      id: json['id'],
-      transactionId: json['transaction_id'],
-      productId: json['product_id'],
-      qty: json['qty'],
-      price: json['price'],
-      variant: json['variant'],
-      subtotal: json['subtotal'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-    );
-  }
+  where(bool Function(dynamic transaction) param0) {}
 }

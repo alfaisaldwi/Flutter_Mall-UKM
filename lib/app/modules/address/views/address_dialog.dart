@@ -73,7 +73,15 @@ class AddressSelectionDialog extends StatelessWidget {
                   return DropdownMenuItem<String>(
                     value: city['city_id']
                         as String, // Menggunakan city_id sebagai nilai unik
-                    child: Text(city['city_name'] as String),
+                    child: Row(
+                      children: [
+                        Text(city['type'] as String),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(city['city_name'] as String),
+                      ],
+                    ),
                   );
                 }).toList(),
               ),

@@ -209,8 +209,10 @@ class RecommendPageView extends GetView<RecommendPageController> {
                         physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: 8,
+                        itemCount: controller.recomend.length,
                         itemBuilder: (context, index) {
+                          var recomend = controller.recomend[index];
+
                           return GestureDetector(
                             onTap: () {
                               // Get.to(() => DetailKontentLokalView(),
@@ -237,7 +239,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                             borderRadius:
                                                 BorderRadius.circular(4),
                                             child: Image.network(
-                                              "https://paulkingart.com/wp-content/uploads/2019/07/Kurt-Cobain-1993_PWK.jpg",
+                                              recomend.photo.first,
                                               fit: BoxFit.cover,
                                               width: 140,
                                               height: 90,
@@ -251,7 +253,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0, vertical: 4.0),
                                           child: Text(
-                                            'Dataa Produk Art Kurt D. Cobain ',
+                                            recomend.title,
                                             textAlign: TextAlign.left,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,

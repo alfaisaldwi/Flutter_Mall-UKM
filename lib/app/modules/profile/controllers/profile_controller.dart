@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 
@@ -59,7 +59,7 @@ class ProfileController extends GetxController {
         GetStorage().write('token', token);
         cNav.tabController.index = 2;
         Timer(const Duration(seconds: 1),
-            () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
+            () =>Get.toNamed('navbar-page'));
         cemail.clear();
         cpw.clear();
       } else {

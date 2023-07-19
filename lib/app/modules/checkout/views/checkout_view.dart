@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
-import 'package:mall_ukm/app/model/cart/cart_model.dart';
-import 'package:mall_ukm/app/model/cart/kurir_model.dart';
+import 'dart:math';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
 import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
@@ -18,8 +17,9 @@ class CheckoutView extends GetView<CheckoutController> {
       Get.arguments[0] as List<SelectedCartItem>;
   var hargaBarang = Get.arguments[1];
   var subtot = 0.0.obs;
-  var qty = 0.obs;
 
+  var qty = 0.obs;
+  var weighttot = 0.obs;
   @override
   Widget build(BuildContext context) {
     var addressId = 0;
@@ -240,8 +240,10 @@ class CheckoutView extends GetView<CheckoutController> {
                     productId = int.parse(cart.cart.productId);
                     cartId = cart.cart.id;
                     priceProduct = cart.cart.price.toInt();
+                    // var w = int.parse(cart.cart.weight);
+                    // controller.weight2[index].value = w;
+                    // print(cart.cart.weight);
                     variantProduct = cart.cart.unitVariant;
-                    // controller.weight = cart.cart.
 
                     return Container(
                         color: const Color(0xfff2f2f2),
@@ -323,76 +325,88 @@ class CheckoutView extends GetView<CheckoutController> {
                 SizedBox(
                   height: 20,
                 ),
-                Obx(
-                  () => DropdownButtonFormField<String>(
-                    value: controller.selectedCourier.value.isNotEmpty
-                        ? controller.selectedCourier.value
-                        : null,
-                    decoration: InputDecoration(labelText: 'Kurir'),
-                    onChanged: (value) {
-                      if (controller.selectedCourier.value == '') {
-                        controller.selectedCourier.value = value!;
-                      } else {
-                        controller.selectedService.value = '';
-                      }
-                      controller.selectedCourier.value = value!;
-                      controller.fetchServices();
-                    },
-                    items: controller.couriers.map((courier) {
-                      return DropdownMenuItem<String>(
-                        value: courier,
-                        child: Text(courier.toUpperCase()),
-                      );
-                    }).toList(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Obx(
+                        () => DropdownButtonFormField<String>(
+                          value: controller.selectedCourier.value.isNotEmpty
+                              ? controller.selectedCourier.value
+                              : null,
+                          decoration: InputDecoration(labelText: 'Kurir'),
+                          onChanged: (value) {
+                            if (controller.selectedCourier.value == '') {
+                              controller.selectedCourier.value = value!;
+                            } else {
+                              controller.selectedService.value = '';
+                            }
+                            controller.selectedCourier.value = value!;
+                            controller.fetchServices();
+                          },
+                          items: controller.couriers.map((courier) {
+                            return DropdownMenuItem<String>(
+                              value: courier,
+                              child: Text(courier.toUpperCase()),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Obx(() => DropdownButtonFormField<String>(
+                            value: controller.selectedService.value.isNotEmpty
+                                ? controller.selectedService.value
+                                : null,
+                            decoration: InputDecoration(labelText: 'Service'),
+                            onChanged: (value) {
+                              controller.selectedService.value = value!;
+                              final selectedService = controller.services.value
+                                  .firstWhere(
+                                      (service) => service['service'] == value);
+                              final costValue = selectedService['cost'][0]
+                                      ['value']
+                                  .toString();
+                              controller.costValue.value =
+                                  double.parse(costValue);
+                              print(controller.weight2);
+                              ongkir.value =
+                                  double.parse(controller.costValue.toString());
+
+                              // *double.parse(controller.weight2.value)
+                              subtot.value = double.parse(
+                                      controller.costValue.toString()) +
+                                  (double.parse(hargaBarang.toString()));
+                              print(subtot.value);
+                            },
+                            items: controller.services.isNotEmpty
+                                ? controller.services.value
+                                    .map<DropdownMenuItem<String>>((service) {
+                                    final String serviceValue =
+                                        service['service'] as String;
+                                    final String description =
+                                        service['description'] as String;
+                                    final String costValue =
+                                        service['cost'][0]['value'].toString();
+
+                                    // Mengubah 'cost' menjadi 'description'
+                                    return DropdownMenuItem<String>(
+                                      value: serviceValue,
+                                      child: Row(
+                                        children: [
+                                          Text(description),
+                                          SizedBox(width: 10),
+                                          Text(': Rp.$costValue'),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList()
+                                : <
+                                    DropdownMenuItem<
+                                        String>>[], // Mengubah tipe data menjadi <DropdownMenuItem<String>>
+                          )),
+                    ],
                   ),
                 ),
-                Obx(() => DropdownButtonFormField<String>(
-                      value: controller.selectedService.value.isNotEmpty
-                          ? controller.selectedService.value
-                          : null,
-                      decoration: InputDecoration(labelText: 'Service'),
-                      onChanged: (value) {
-                        controller.selectedService.value = value!;
-                        final selectedService = controller.services.value
-                            .firstWhere(
-                                (service) => service['service'] == value);
-                        final costValue =
-                            selectedService['cost'][0]['value'].toString();
-                        controller.costValue.value = double.parse(costValue);
 
-                        ongkir.value =
-                            double.parse(controller.costValue.toString());
-                        subtot.value =
-                            double.parse(controller.costValue.toString()) +
-                                (double.parse(hargaBarang.toString()));
-                        print(subtot.value);
-                      },
-                      items: controller.services.isNotEmpty
-                          ? controller.services.value
-                              .map<DropdownMenuItem<String>>((service) {
-                              final String serviceValue =
-                                  service['service'] as String;
-                              final String description =
-                                  service['description'] as String;
-                              final String costValue =
-                                  service['cost'][0]['value'].toString();
-
-                              // Mengubah 'cost' menjadi 'description'
-                              return DropdownMenuItem<String>(
-                                value: serviceValue,
-                                child: Row(
-                                  children: [
-                                    Text(description),
-                                    SizedBox(width: 10),
-                                    Text(': Rp.$costValue'),
-                                  ],
-                                ),
-                              );
-                            }).toList()
-                          : <
-                              DropdownMenuItem<
-                                  String>>[], // Mengubah tipe data menjadi <DropdownMenuItem<String>>
-                    )),
                 const SizedBox(height: 20),
                 Container(
                   color: Colors.white,
@@ -406,18 +420,28 @@ class CheckoutView extends GetView<CheckoutController> {
                 const SizedBox(
                   height: 10,
                 ),
+                // Container(
+                //   color: Colors.white,
+                //   child: Row(children: [
+                //     Obx(() => Text(
+                //           'Berat : ${controller.weight.value}kg',
+                //           style: Styles.bodyStyle(),
+                //         )),
+                //   ]),
+                // ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Container(
                   color: Colors.white,
                   child: Row(children: [
                     Obx(() => Text(
-                          'Ongkir : ${ongkir.value}.',
+                          'Ongkir : ${controller.costValue.value}.',
                           style: Styles.bodyStyle(),
                         )),
                   ]),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+
                 // Container(
                 //   color: Colors.white,
                 //   child: Row(children: [

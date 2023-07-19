@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:mall_ukm/app/modules/transaction_page/views/transaction.dikemas_view%20copy.dart';
-import 'package:mall_ukm/app/modules/transaction_page/views/transaction.diproses_view.dart';
+import 'package:mall_ukm/app/modules/transaction_page/views/transaction.unpaid_view.dart';
+import 'package:mall_ukm/app/modules/transaction_page/views/transaction.paid_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.selesai_view%20.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.semua_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
@@ -29,14 +29,14 @@ class TransactionPageView extends GetView<TransactionPageController> {
               ),
               Tab(
                 child: Text(
-                  'Dikemas',
-                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
+                  'Sudah bayar',
+                  style: Styles.bodyStyle(size: 12, weight: FontWeight.w400),
                 ),
               ),
               Tab(
                 child: Text(
-                  'Diproses',
-                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
+                  'Belum Bayar',
+                  style: Styles.bodyStyle(size: 11, weight: FontWeight.w400),
                 ),
               ),
               Tab(
@@ -56,11 +56,11 @@ class TransactionPageView extends GetView<TransactionPageController> {
             ),
             GetBuilder<TransactionPageController>(
               init: TransactionPageController(),
-              builder: (controller) => TransactionDikemasView(),
+              builder: (controller) => TransactionPaidView(),
             ),
             GetBuilder<TransactionPageController>(
               init: TransactionPageController(),
-              builder: (controller) => TransactionDiprosesView(),
+              builder: (controller) => TransactionUnpaidView(),
             ),
             GetBuilder<TransactionPageController>(
               init: TransactionPageController(),

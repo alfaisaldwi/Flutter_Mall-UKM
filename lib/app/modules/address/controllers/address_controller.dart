@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:mall_ukm/app/model/address/address_index.dart';
 import 'package:mall_ukm/app/model/address/address_model.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 
 class AddressController extends GetxController {
   final TextEditingController nameController = TextEditingController();

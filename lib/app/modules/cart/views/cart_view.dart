@@ -11,8 +11,6 @@ import '../controllers/cart_controller.dart';
 class CartView extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
-    RxDouble totalHarga = 0.0.obs;
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -40,13 +38,18 @@ class CartView extends GetView<CartController> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, bottom: 8),
                     child: Obx(() {
-                      return Text(
-                        '${totalHarga}',
-                        style: Styles.bodyStyle(
-                          weight: FontWeight.w500,
-                          size: 15,
-                        ),
-                      );
+                      if (controller.totalHarga.value <= 0) {
+                        Text('-');
+                      } else {
+                        return Text(
+                          '${controller.totalHarga}',
+                          style: Styles.bodyStyle(
+                            weight: FontWeight.w500,
+                            size: 15,
+                          ),
+                        );
+                      }
+                      return (Text('-'));
                     }),
                   )
                 ],
@@ -55,14 +58,14 @@ class CartView extends GetView<CartController> {
                 child: GestureDetector(
                   onTap: () {
                     if (controller.selectedItems.isNotEmpty) {
-                      print(totalHarga.value);
+                      print(controller.totalHarga.value);
                       Get.toNamed('/checkout', arguments: [
                         controller.selectedItems,
-                        totalHarga.value
+                        controller.totalHarga.value
                       ]);
                     } else {
                       Fluttertoast.showToast(
-                        msg: 'Masukan barang ke keranjang ',
+                        msg: 'Pilih barang terlebih dahuluw ',
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
                         backgroundColor: Colors.grey[800],
@@ -116,11 +119,12 @@ class CartView extends GetView<CartController> {
                 return ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
-                  physics: ScrollPhysics(),
+                  physics: const ScrollPhysics(),
                   itemCount: controller.carts.length,
                   itemBuilder: (context, index) {
                     var cart = controller.carts[index];
-                    var counter = cart.qty.obs;
+                    controller.counter[index].value = cart.qty;
+                    controller.priceC[index].value = cart.price;
                     var isChecked = controller.isChecked(index).obs;
 
                     return Padding(
@@ -134,12 +138,16 @@ class CartView extends GetView<CartController> {
                                 onChanged: (bool? value) {
                                   isChecked.value = value ?? false;
                                   if (value == true) {
-                                    totalHarga.value += cart.price * cart.qty;
+                                    controller.totalHarga.value +=
+                                        controller.priceC[index].value *
+                                            controller.counter[index].value;
                                     controller.selectedItems.add(
                                         SelectedCartItem(
                                             isChecked: true, cart: cart));
                                   } else {
-                                    totalHarga.value -= cart.price * cart.qty;
+                                    controller.totalHarga.value -=
+                                        controller.priceC[index].value *
+                                            controller.counter[index].value;
                                     controller.selectedItems.removeWhere(
                                         (item) => item.cart == cart);
                                   }
@@ -196,7 +204,8 @@ class CartView extends GetView<CartController> {
                                             children: [
                                               Obx(() {
                                                 return CartStepperInt(
-                                                  value: counter.value,
+                                                  value: controller
+                                                      .counter[index].value,
                                                   size: 22,
                                                   style: CartStepperStyle(
                                                     foregroundColor:
@@ -215,24 +224,68 @@ class CartView extends GetView<CartController> {
                                                   ),
                                                   didChangeCount:
                                                       (count) async {
-                                                    if (count > counter.value) {
-                                                      totalHarga.value +=
-                                                          cart.price;
-                                                      counter.value++;
-                                                      CartItem cartItem =
-                                                          CartItem(
-                                                        product_id: int.parse(
-                                                            cart.productId),
-                                                        qty: 1,
-                                                        unit_variant:
-                                                            cart.unitVariant,
-                                                      );
-                                                      await controller
-                                                          .updateCart(cart.id,
-                                                              cartItem);
+                                                    if (isChecked.value ==
+                                                        true) {
+                                                      if (count >
+                                                          controller
+                                                              .counter[index]
+                                                              .value) {
+                                                        controller.counterPlus
+                                                            .value = true;
+
+                                                        CartItem cartItem =
+                                                            CartItem(
+                                                          product_id: int.parse(
+                                                              cart.productId),
+                                                          qty: 1,
+                                                          unit_variant:
+                                                              cart.unitVariant,
+                                                        );
+
+                                                        await controller
+                                                            .updateCart(
+                                                                cart.id,
+                                                                cartItem,
+                                                                index);
+                                                      } else if (count <
+                                                          controller
+                                                              .counter[index]
+                                                              .value) {
+                                                        if (controller
+                                                                .counter[index]
+                                                                .value <=
+                                                            1) {
+                                                          await controller
+                                                              .deleteCart(
+                                                            cart.id,
+                                                          );
+                                                        } else if (count <
+                                                            controller
+                                                                .counter[index]
+                                                                .value) {
+                                                          controller.counterPlus
+                                                              .value = false;
+
+                                                          CartItem cartItem =
+                                                              CartItem(
+                                                            product_id:
+                                                                int.parse(cart
+                                                                    .productId),
+                                                            qty: -1,
+                                                            unit_variant: cart
+                                                                .unitVariant,
+                                                          );
+                                                          await controller
+                                                              .updateCart(
+                                                                  cart.id,
+                                                                  cartItem,
+                                                                  index);
+                                                        }
+                                                      }
+                                                    } else {
                                                       Fluttertoast.showToast(
                                                         msg:
-                                                            'Berhasil menambahkan kuantitas',
+                                                            'Ceklis Produk yang ingin kamu hitung',
                                                         toastLength:
                                                             Toast.LENGTH_SHORT,
                                                         gravity:
@@ -242,75 +295,15 @@ class CartView extends GetView<CartController> {
                                                         textColor: Colors.white,
                                                         fontSize: 14.0,
                                                       );
-                                                    } else if (count <
-                                                        counter.value) {
-                                                      if (counter.value <= 1) {
-                                                        await controller
-                                                            .deleteCart(
-                                                                cart.id);
-                                                        Fluttertoast.showToast(
-                                                          msg:
-                                                              'Item dihapus dari keranjang',
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          gravity: ToastGravity
-                                                              .BOTTOM,
-                                                          backgroundColor:
-                                                              Colors.grey[800],
-                                                          textColor:
-                                                              Colors.white,
-                                                          fontSize: 14.0,
-                                                        );
-                                                      } else if (count <
-                                                          counter.value) {
-                                                        totalHarga.value -=
-                                                            cart.price;
-                                                        counter.value--;
-                                                        CartItem cartItem =
-                                                            CartItem(
-                                                          product_id: int.parse(
-                                                              cart.productId),
-                                                          qty: -1,
-                                                          unit_variant:
-                                                              cart.unitVariant,
-                                                        );
-                                                        await controller
-                                                            .updateCart(cart.id,
-                                                                cartItem);
-                                                        Fluttertoast.showToast(
-                                                          msg:
-                                                              'Berhasil mengurangi kuantitas',
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          gravity: ToastGravity
-                                                              .BOTTOM,
-                                                          backgroundColor:
-                                                              Colors.grey[800],
-                                                          textColor:
-                                                              Colors.white,
-                                                          fontSize: 14.0,
-                                                        );
-                                                      }
                                                     }
                                                   },
                                                 );
                                               }),
                                               GestureDetector(
                                                 onTap: () async {
-                                                  Fluttertoast.showToast(
-                                                    msg:
-                                                        'Berhasil menghapus barang dari keranjang',
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    gravity:
-                                                        ToastGravity.BOTTOM,
-                                                    backgroundColor:
-                                                        Colors.grey[800],
-                                                    textColor: Colors.white,
-                                                    fontSize: 14.0,
+                                                  await controller.deleteCart(
+                                                    cart.id,
                                                   );
-                                                  await controller
-                                                      .deleteCart(cart.id);
                                                 },
                                                 child: const Padding(
                                                   padding: EdgeInsets.symmetric(

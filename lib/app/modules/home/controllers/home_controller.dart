@@ -9,7 +9,7 @@ import 'package:mall_ukm/app/model/carousel/carousel_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 
 import '../../../model/category/category_model.dart';
 

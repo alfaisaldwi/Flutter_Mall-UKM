@@ -1,9 +1,5 @@
-import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:get/get.dart';
-import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -233,7 +229,7 @@ class AddressIndexView extends GetView<AddressController> {
                                             padding: const EdgeInsets.only(
                                                 right: 20.0),
                                             child: Icon(
-                                              PhosphorIcons.fill.notePencil,
+                                              PhosphorIcons.notePencil,
                                               color: Color.fromARGB(
                                                   255, 255, 129, 91),
                                               size: 20,

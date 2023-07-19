@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/model/product/reccomend_product_detail.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 
 class RecommendPageController extends GetxController {
@@ -14,15 +14,14 @@ class RecommendPageController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
+    fetchRecomend();
+    fetchRecomend2();
     super.onInit();
   }
 
   @override
   void onReady() {
-     fetchRecomend();
-    fetchRecomend2();
     super.onReady();
-   
   }
 
   @override

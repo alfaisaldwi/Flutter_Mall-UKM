@@ -10,6 +10,7 @@ class Cart {
   double price;
   double priceRetail;
   String title;
+  String weight;
 
   Cart({
     required this.id,
@@ -23,6 +24,7 @@ class Cart {
     required this.price,
     required this.priceRetail,
     required this.title,
+    required this.weight,
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class Cart {
       price: double.parse(json['price']),
       priceRetail: double.parse(json['price_retail']),
       title: json['title'],
+      weight: json['weight'],
     );
   }
 }

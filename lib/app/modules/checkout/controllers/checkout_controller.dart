@@ -9,11 +9,13 @@ import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CheckoutController extends GetxController {
+  var controllerNav = Get.put(NavbarPageController());
   TextEditingController selectedCourier1 = TextEditingController();
   var selectedCourier = ''.obs;
   var selectedCourierFirst = '';
@@ -22,7 +24,8 @@ class CheckoutController extends GetxController {
   final costValue = 0.0.obs;
   WebViewController ctr = WebViewController();
   var idkecamatan = '';
-  var weight = '';
+  var weight = ''.obs;
+  RxList<RxInt> weight2 = <RxInt>[].obs;
 
   final List<String> couriers = ['jne', 'pos', 'tiki'];
   final List<String> layanan = ['jne', 'pos', 'tiki'];
@@ -96,7 +99,6 @@ class CheckoutController extends GetxController {
     String origin = "109";
     String originType = "city";
     String destinationType = "subdistrict";
-    String weight = "1";
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -108,7 +110,7 @@ class CheckoutController extends GetxController {
       "originType": originType,
       "destination": idkecamatan,
       "destinationType": destinationType,
-      "weight": weight,
+      "weight": "1",
       "courier": selectedCourier.value,
     };
 
@@ -173,12 +175,13 @@ class CheckoutController extends GetxController {
 
   @override
   void onInit() {
-    fetchServices();
     super.onInit();
   }
 
   @override
   void onReady() {
+    fetchServices();
+
     super.onReady();
   }
 

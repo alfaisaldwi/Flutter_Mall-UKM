@@ -5,7 +5,7 @@ import 'package:mall_ukm/app/model/transaction/transaction_index_model.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
-class TransactionSemuaView extends GetView<TransactionPageController> {
+class TransactionPaidView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
@@ -23,8 +23,12 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
                 var trs = ctrT.transactionIndexList[index];
                 // var trsDetail =
                 //     ctrT.transactionIndexList.detailTransactions[index];
-                return TransactionCard(transaction: trs);
 
+                if (trs.status == 'paid') {
+                  return TransactionCard(transaction: trs);
+                } else {
+                  return Container(); // Jika status bukan "paid", tampilkan container kosong
+                }
               }),
         ),
       ),
