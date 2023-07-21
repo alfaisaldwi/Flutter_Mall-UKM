@@ -17,6 +17,10 @@ class AddressController extends GetxController {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController provinceController = TextEditingController();
   final TextEditingController addressDetail = TextEditingController();
+  var provinceId = ''.obs;
+  var cityId = ''.obs;
+  var districtId = ''.obs;
+
   var addressIndexList = <AddressIndex>[].obs;
 
   RxList<String> addressList = <String>[].obs;
@@ -26,6 +30,7 @@ class AddressController extends GetxController {
   var selectedSubdistrictId = ''.obs;
   var districts = [].obs;
   var addressName = ''.obs;
+  var alamatNameObs = ''.obs;
   var selectedProvinceName = ''.obs;
   var selectedCityName = ''.obs;
   var selectedDistrictName = ''.obs;
@@ -48,7 +53,11 @@ class AddressController extends GetxController {
     }
   }
 
+  String? lastSelectedProvinceId;
+  String? lastSelectedCityId;
+
   void fetchCities(String provinceId) async {
+    lastSelectedProvinceId = provinceId;
     final String apiUrl =
         "https://pro.rajaongkir.com/api/city?province=$provinceId";
     final String apiKey =
@@ -64,6 +73,7 @@ class AddressController extends GetxController {
   }
 
   void fetchSubdistricts(String cityId) async {
+    lastSelectedCityId = cityId;
     final String apiUrl =
         "https://pro.rajaongkir.com/api/subdistrict?city=$cityId";
     final String apiKey = "ef61419fa7acff0b3771ac86a6b6e349"; //
@@ -77,9 +87,9 @@ class AddressController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
-    super.onInit();
     fetchProvinces();
     getAddress();
+    super.onInit();
   }
 
   @override
@@ -154,6 +164,7 @@ class AddressController extends GetxController {
           textColor: Colors.white,
           fontSize: 14.0,
         );
+        getAddress();
         Get.offAndToNamed('/adress-index');
         print('Alamat berhasil ditambahkan');
       } else {
@@ -191,6 +202,42 @@ class AddressController extends GetxController {
           fontSize: 14.0,
         );
         print('Alamat berhasil dipilih');
+      } else {
+        print(
+            'Gagal menambahkan Alamat ${response.body} ||| ${jsonResponse['code']} || ${jsonResponse}');
+      }
+    }
+  }
+
+  Future<void> deleteAdress(int idAddress) async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    var url = Uri.parse(
+      ApiEndPoints.baseUrl +
+          ApiEndPoints.addressEndPoints.addressDelete +
+          '$idAddress',
+    );
+
+    http.Response response = await http.post(url, headers: headers);
+    print(' ||| ${response.body} ||| STATUS ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['code'] == "200") {
+        getAddress();
+
+        Fluttertoast.showToast(
+          msg: 'Berhasil mengahapus alamat',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
       } else {
         print(
             'Gagal menambahkan Alamat ${response.body} ||| ${jsonResponse['code']} || ${jsonResponse}');

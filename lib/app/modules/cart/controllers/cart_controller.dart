@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/cart/cart_model.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
@@ -29,6 +30,15 @@ class CartController extends GetxController {
   void onReady() {
     fetchCart();
     super.onReady();
+  }
+
+  String convertToIdr(dynamic number, int decimalDigit) {
+    NumberFormat currencyFormatter = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp ',
+      decimalDigits: decimalDigit,
+    );
+    return currencyFormatter.format(number);
   }
 
   bool? isChecked(int index) {
@@ -220,5 +230,4 @@ class CartController extends GetxController {
       print('Gagal mengupdate cart. Kode status: ${response.statusCode}');
     }
   }
-  
 }

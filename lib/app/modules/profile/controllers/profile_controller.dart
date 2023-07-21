@@ -30,9 +30,6 @@ class ProfileController extends GetxController {
     super.onInit();
     String? token = GetStorage().read('token');
     // GetStorage().remove('token');
-
-    print('print tokennn ---- $token');
-    print('print akuuubn ---- $accountData');
   }
 
   @override
@@ -58,8 +55,7 @@ class ProfileController extends GetxController {
         var token = json['data'];
         GetStorage().write('token', token);
         cNav.tabController.index = 2;
-        Timer(const Duration(seconds: 1),
-            () =>Get.toNamed('navbar-page'));
+        Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
         cemail.clear();
         cpw.clear();
       } else {
@@ -107,6 +103,10 @@ class ProfileController extends GetxController {
         throw 'Gagal logout: ${response.reasonPhrase}|| ${response.statusCode}';
       }
     } catch (error) {
+      GetStorage().remove('token');
+
+      print('print tokennn ---- $token');
+
       throw 'Terjadi kesalahan saat logout: $error ||||| $token';
     }
   }

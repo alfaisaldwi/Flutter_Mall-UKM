@@ -186,15 +186,14 @@ class HomeView extends GetView<HomeController> {
                                                 Align(
                                                   alignment: Alignment.center,
                                                   child: Image.network(
-                                                    "https://cdn.iconscout.com/icon/premium/png-512-thumb/clothes-20-185191.png",
+                                                    category.photo,
                                                     width: 28,
-                                                    height: 28,
+                                                    height: 30,
+                                                    color:
+                                                        Colors.deepOrange[600],
                                                     fit: BoxFit.fill,
                                                     alignment: Alignment.center,
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
                                                 ),
                                                 Expanded(
                                                   child: Align(

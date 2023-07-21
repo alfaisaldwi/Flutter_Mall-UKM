@@ -1,7 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
 import 'package:mall_ukm/app/modules/cart/views/checkbox.dart';
@@ -42,7 +45,7 @@ class CartView extends GetView<CartController> {
                         Text('-');
                       } else {
                         return Text(
-                          '${controller.totalHarga}',
+                          controller.convertToIdr(controller.totalHarga.value, 2),
                           style: Styles.bodyStyle(
                             weight: FontWeight.w500,
                             size: 15,
@@ -161,167 +164,157 @@ class CartView extends GetView<CartController> {
                             padding: EdgeInsets.all(5),
                             child: Row(
                               children: [
-                                Image.network(
-                                  '${cart.photo}',
-                                  width: 100,
-                                  height: 80,
-                                  fit: BoxFit.cover,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    '${cart.photo}',
+                                    width: 120,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
+                                SizedBox(width: 8),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0, right: 8.0, bottom: 4.0),
+                                    padding: const EdgeInsets.only(bottom: 4.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         SizedBox(height: 8),
                                         Text(
                                           cart.title,
-                                          textAlign: TextAlign.left,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
-                                          style: Styles.bodyStyle(),
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           'Varian: ${cart.unitVariant}',
-                                          textAlign: TextAlign.left,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
-                                          style: Styles.bodyStyle(),
+                                          style: TextStyle(fontSize: 14),
                                         ),
                                         Text(
-                                          'Rp${cart.price}',
-                                          style: Styles.bodyStyle(),
+                                          controller.convertToIdr(
+                                              cart.price, 2),
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Obx(() {
-                                                return CartStepperInt(
-                                                  value: controller
-                                                      .counter[index].value,
-                                                  size: 22,
-                                                  style: CartStepperStyle(
-                                                    foregroundColor:
-                                                        Colors.black87,
-                                                    activeForegroundColor:
-                                                        Colors.black87,
-                                                    activeBackgroundColor:
-                                                        Colors.white,
-                                                    border: Border.all(
-                                                        color: Colors.grey),
-                                                    radius:
-                                                        const Radius.circular(
-                                                            8),
-                                                    elevation: 0,
-                                                    buttonAspectRatio: 1.5,
-                                                  ),
-                                                  didChangeCount:
-                                                      (count) async {
-                                                    if (isChecked.value ==
-                                                        true) {
-                                                      if (count >
+                                        Spacer(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Obx(() {
+                                              return CartStepperInt(
+                                                value: controller
+                                                    .counter[index].value,
+                                                size: 22,
+                                                style: CartStepperStyle(
+                                                  foregroundColor:
+                                                      Colors.black87,
+                                                  activeForegroundColor:
+                                                      Colors.black87,
+                                                  activeBackgroundColor:
+                                                      Colors.white,
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                  radius:
+                                                      const Radius.circular(8),
+                                                  elevation: 0,
+                                                  buttonAspectRatio: 1.5,
+                                                ),
+                                                didChangeCount: (count) async {
+                                                  if (isChecked.value == true) {
+                                                    if (count >
+                                                        controller
+                                                            .counter[index]
+                                                            .value) {
+                                                      controller.counterPlus
+                                                          .value = true;
+                                                      CartItem cartItem =
+                                                          CartItem(
+                                                        product_id: int.parse(
+                                                            cart.productId),
+                                                        qty: 1,
+                                                        unit_variant:
+                                                            cart.unitVariant,
+                                                      );
+                                                      await controller
+                                                          .updateCart(cart.id,
+                                                              cartItem, index);
+                                                    } else if (count <
+                                                        controller
+                                                            .counter[index]
+                                                            .value) {
+                                                      if (controller
+                                                              .counter[index]
+                                                              .value <=
+                                                          1) {
+                                                        await controller
+                                                            .deleteCart(
+                                                                cart.id);
+                                                      } else if (count <
                                                           controller
                                                               .counter[index]
                                                               .value) {
                                                         controller.counterPlus
-                                                            .value = true;
-
+                                                            .value = false;
                                                         CartItem cartItem =
                                                             CartItem(
                                                           product_id: int.parse(
                                                               cart.productId),
-                                                          qty: 1,
+                                                          qty: -1,
                                                           unit_variant:
                                                               cart.unitVariant,
                                                         );
-
                                                         await controller
                                                             .updateCart(
                                                                 cart.id,
                                                                 cartItem,
                                                                 index);
-                                                      } else if (count <
-                                                          controller
-                                                              .counter[index]
-                                                              .value) {
-                                                        if (controller
-                                                                .counter[index]
-                                                                .value <=
-                                                            1) {
-                                                          await controller
-                                                              .deleteCart(
-                                                            cart.id,
-                                                          );
-                                                        } else if (count <
-                                                            controller
-                                                                .counter[index]
-                                                                .value) {
-                                                          controller.counterPlus
-                                                              .value = false;
-
-                                                          CartItem cartItem =
-                                                              CartItem(
-                                                            product_id:
-                                                                int.parse(cart
-                                                                    .productId),
-                                                            qty: -1,
-                                                            unit_variant: cart
-                                                                .unitVariant,
-                                                          );
-                                                          await controller
-                                                              .updateCart(
-                                                                  cart.id,
-                                                                  cartItem,
-                                                                  index);
-                                                        }
                                                       }
-                                                    } else {
-                                                      Fluttertoast.showToast(
-                                                        msg:
-                                                            'Ceklis Produk yang ingin kamu hitung',
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        gravity:
-                                                            ToastGravity.BOTTOM,
-                                                        backgroundColor:
-                                                            Colors.grey[800],
-                                                        textColor: Colors.white,
-                                                        fontSize: 14.0,
-                                                      );
                                                     }
-                                                  },
-                                                );
-                                              }),
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  await controller.deleteCart(
-                                                    cart.id,
-                                                  );
+                                                  } else {
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          'Ceklis Produk yang ingin kamu hitung',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      backgroundColor:
+                                                          Colors.grey[800],
+                                                      textColor: Colors.white,
+                                                      fontSize: 14.0,
+                                                    );
+                                                  }
                                                 },
-                                                child: const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                                  child: Icon(
-                                                    Icons
-                                                        .delete_outline_rounded,
-                                                    color: Colors.red,
-                                                  ),
+                                              );
+                                            }),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                await controller
+                                                    .deleteCart(cart.id);
+                                              },
+                                              child: const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                                child: Icon(
+                                                  Icons.delete_outline_rounded,
+                                                  color: Colors.red,
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                        )
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),

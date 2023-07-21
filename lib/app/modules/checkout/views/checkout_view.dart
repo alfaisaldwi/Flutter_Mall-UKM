@@ -61,7 +61,7 @@ class CheckoutView extends GetView<CheckoutController> {
                   Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8),
                       child: Obx(() => Text(
-                            '${subtot.value}',
+                            controller.convertToIdr(subtot.value, 2),
                             style: Styles.bodyStyle(
                               weight: FontWeight.w500,
                               size: 15,
@@ -122,12 +122,11 @@ class CheckoutView extends GetView<CheckoutController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(
-                        width: 20,
-                      ),
+                      const SizedBox(width: 20),
                       Text(
                         'Alamat Pengiriman',
-                        style: Styles.bodyStyle(size: 14),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -135,100 +134,80 @@ class CheckoutView extends GetView<CheckoutController> {
                         },
                         child: Text(
                           'Ubah Alamat',
-                          style: Styles.bodyStyle(color: Colors.blue[700]),
+                          style:
+                              TextStyle(fontSize: 14, color: Colors.blue[700]),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
                 Card(
+                  elevation: 2,
+                  margin: EdgeInsets.all(8),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, top: 8, bottom: 1),
-                            child: Icon(
-                              Icons.location_on_outlined,
-                              color: Colors.deepOrange[700],
-                            ),
-                          ),
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.deepOrange[700],
                         ),
-                        FutureBuilder<AddressSelect>(
-                          future: controller.getAddress(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              // Ketika sedang menunggu respons dari API
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              // Ketika terjadi kesalahan
-                              return Align(
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: FutureBuilder<AddressSelect>(
+                            future: controller.getAddress(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Align(
                                   alignment: Alignment.center,
-                                  child: Text('Kamu belum memilih alamat.'));
-                            } else if (snapshot.hasData) {
-                              // Ketika data berhasil diambil
-                              final addressData = snapshot.data!;
-                              addressId = addressData.id;
-                              controller.idkecamatan =
-                                  addressData.destinationId;
+                                  child: Text('Kamu belum memilih alamat.'),
+                                );
+                              } else if (snapshot.hasData) {
+                                final addressData = snapshot.data!;
+                                addressId = addressData.id;
+                                controller.idkecamatan =
+                                    addressData.destinationId;
 
-                              return Expanded(
-                                child: Column(
+                                return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, top: 2),
-                                      child: Container(
-                                        width: 150,
-                                        child: Text(
-                                          '${addressData.username} | ${addressData.phone}',
-                                          style: Styles.bodyStyle(size: 14),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
+                                    Text(
+                                      '${addressData.username} | ${addressData.phone}',
+                                      style: TextStyle(fontSize: 14),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, top: 2),
-                                      child: Text(
-                                        '${addressData.addressDetail}',
-                                        style: Styles.bodyStyle(size: 14),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      '${addressData.addressDetail}',
+                                      style: TextStyle(fontSize: 14),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, top: 2, bottom: 2),
-                                      child: Text(
-                                        '${addressData.address}',
-                                        textAlign: TextAlign.left,
-                                        maxLines: 5,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Styles.bodyStyle(),
-                                      ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      '${addressData.address}',
+                                      style: TextStyle(fontSize: 14),
+                                      maxLines: 5,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
-                                ),
-                              );
-                            } else {
-                              // Ketika tidak ada data yang ditemukan
-                              return Text('Kamu belum memilih alamat.');
-                            }
-                          },
-                        )
+                                );
+                              } else {
+                                return Text('Kamu belum memilih alamat.');
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
+
                 ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
@@ -288,7 +267,8 @@ class CheckoutView extends GetView<CheckoutController> {
                                           style: Styles.bodyStyle(size: 14),
                                         ),
                                         Text(
-                                          '${cart.cart.price.toStringAsFixed(2)}',
+                                          controller.convertToIdr(
+                                              cart.cart.price, 2),
                                           style: Styles.bodyStyle(size: 14),
                                         ),
                                       ],
@@ -316,130 +296,144 @@ class CheckoutView extends GetView<CheckoutController> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: TextFormField(
-                    decoration: InputDecoration(
-                      prefix: Text('Pesan : '),
+                    decoration: const InputDecoration(
+                      labelText: 'Pesan',
+                      prefixIcon: Icon(Icons.message),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Obx(
-                        () => DropdownButtonFormField<String>(
-                          value: controller.selectedCourier.value.isNotEmpty
-                              ? controller.selectedCourier.value
-                              : null,
-                          decoration: InputDecoration(labelText: 'Kurir'),
-                          onChanged: (value) {
-                            if (controller.selectedCourier.value == '') {
-                              controller.selectedCourier.value = value!;
-                            } else {
-                              controller.selectedService.value = '';
-                            }
-                            controller.selectedCourier.value = value!;
-                            controller.fetchServices();
-                          },
-                          items: controller.couriers.map((courier) {
-                            return DropdownMenuItem<String>(
-                              value: courier,
-                              child: Text(courier.toUpperCase()),
-                            );
-                          }).toList(),
+                const SizedBox(height: 20),
+                Card(
+                  margin: const EdgeInsets.all(8.0),
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Obx(
+                          () => ListTile(
+                            title: const Text('Kurir'),
+                            subtitle: DropdownButtonFormField<String>(
+                              value: controller.selectedCourier.value.isNotEmpty
+                                  ? controller.selectedCourier.value
+                                  : null,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.all(12.0)),
+                              onChanged: (value) {
+                                if (controller.selectedCourier.value == '') {
+                                  controller.selectedCourier.value = value!;
+                                } else {
+                                  controller.selectedService.value = '';
+                                }
+                                controller.selectedCourier.value = value!;
+                                controller.fetchServices();
+                              },
+                              items: controller.couriers.map((courier) {
+                                return DropdownMenuItem<String>(
+                                  value: courier,
+                                  child: Text(courier.toUpperCase()),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                         ),
-                      ),
-                      Obx(() => DropdownButtonFormField<String>(
-                            value: controller.selectedService.value.isNotEmpty
-                                ? controller.selectedService.value
-                                : null,
-                            decoration: InputDecoration(labelText: 'Service'),
-                            onChanged: (value) {
-                              controller.selectedService.value = value!;
-                              final selectedService = controller.services.value
-                                  .firstWhere(
-                                      (service) => service['service'] == value);
-                              final costValue = selectedService['cost'][0]
-                                      ['value']
-                                  .toString();
-                              controller.costValue.value =
-                                  double.parse(costValue);
-                              print(controller.weight2);
-                              ongkir.value =
-                                  double.parse(controller.costValue.toString());
-
-                              // *double.parse(controller.weight2.value)
-                              subtot.value = double.parse(
-                                      controller.costValue.toString()) +
-                                  (double.parse(hargaBarang.toString()));
-                              print(subtot.value);
-                            },
-                            items: controller.services.isNotEmpty
-                                ? controller.services.value
-                                    .map<DropdownMenuItem<String>>((service) {
-                                    final String serviceValue =
-                                        service['service'] as String;
-                                    final String description =
-                                        service['description'] as String;
-                                    final String costValue =
-                                        service['cost'][0]['value'].toString();
-
-                                    // Mengubah 'cost' menjadi 'description'
-                                    return DropdownMenuItem<String>(
-                                      value: serviceValue,
-                                      child: Row(
-                                        children: [
-                                          Text(description),
-                                          SizedBox(width: 10),
-                                          Text(': Rp.$costValue'),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList()
-                                : <
-                                    DropdownMenuItem<
-                                        String>>[], // Mengubah tipe data menjadi <DropdownMenuItem<String>>
-                          )),
-                    ],
+                        const SizedBox(height: 16),
+                        Obx(() => ListTile(
+                              title: const Text('Service'),
+                              subtitle: DropdownButtonFormField<String>(
+                                value:
+                                    controller.selectedService.value.isNotEmpty
+                                        ? controller.selectedService.value
+                                        : null,
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.all(12.0)),
+                                onChanged: (value) {
+                                  controller.selectedService.value = value!;
+                                  final selectedService = controller
+                                      .services.value
+                                      .firstWhere((service) =>
+                                          service['service'] == value);
+                                  final costValue = selectedService['cost'][0]
+                                          ['value']
+                                      .toString();
+                                  controller.costValue.value =
+                                      double.parse(costValue);
+                                  ongkir.value = double.parse(
+                                      controller.costValue.toString());
+                                  subtot.value = double.parse(
+                                          controller.costValue.toString()) +
+                                      double.parse(hargaBarang.toString());
+                                },
+                                items: controller.services.isNotEmpty
+                                    ? controller.services.value
+                                        .map<DropdownMenuItem<String>>(
+                                            (service) {
+                                        final String serviceValue =
+                                            service['service'] as String;
+                                        final String description =
+                                            service['description'] as String;
+                                        final String costValue = service['cost']
+                                                [0]['value']
+                                            .toString();
+                                        return DropdownMenuItem<String>(
+                                          value: serviceValue,
+                                          child: Text(
+                                              '$description: Rp.$costValue'),
+                                        );
+                                      }).toList()
+                                    : [],
+                              ),
+                            )),
+                      ],
+                    ),
                   ),
                 ),
 
                 const SizedBox(height: 20),
-                Container(
-                  color: Colors.white,
-                  child: Row(children: [
-                    Text(
-                      'Harga Barang : $hargaBarang',
-                      style: Styles.bodyStyle(),
+
+                Card(
+                  margin: const EdgeInsets.all(8.0),
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListTile(
+                      title: const Text(
+                        'Harga Barang',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                        controller.convertToIdr(hargaBarang, 2),
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                  ]),
+                  ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // Container(
-                //   color: Colors.white,
-                //   child: Row(children: [
-                //     Obx(() => Text(
-                //           'Berat : ${controller.weight.value}kg',
-                //           style: Styles.bodyStyle(),
-                //         )),
-                //   ]),
-                // ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Row(children: [
-                    Obx(() => Text(
-                          'Ongkir : ${controller.costValue.value}.',
-                          style: Styles.bodyStyle(),
-                        )),
-                  ]),
+
+                SizedBox(height: 10),
+
+                Card(
+                  margin: EdgeInsets.all(8.0),
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Obx(
+                      () => ListTile(
+                        title: Text(
+                          'Ongkir',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        trailing: Text(
+                          controller.convertToIdr(ongkir.value, 2),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
 
                 // Container(

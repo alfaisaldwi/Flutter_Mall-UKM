@@ -20,6 +20,7 @@ class _AddressEndPoints {
   final String addressAdd = '/api/auth/address/store';
   final String updateStatus = '/api/auth/address/update/';
   final String addressSelect = '/api/auth/address/selected';
+  final String addressDelete = '/api/auth/address/delete/';
 }
 
 class _RajaOngkirEndPoints {

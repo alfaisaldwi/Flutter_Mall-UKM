@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
@@ -189,5 +190,14 @@ class CheckoutController extends GetxController {
   void onClose() {
     Get.back(result: null);
     super.onClose();
+  }
+
+  String convertToIdr(dynamic number, int decimalDigit) {
+    NumberFormat currencyFormatter = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp ',
+      decimalDigits: decimalDigit,
+    );
+    return currencyFormatter.format(number);
   }
 }
