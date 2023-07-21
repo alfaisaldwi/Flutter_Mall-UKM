@@ -8,24 +8,35 @@ import 'package:mall_ukm/app/style/styles.dart';
 class TransactionSemuaView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
+    
     var ctrT = Get.put(TransactionPageController());
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-        child: Obx(
-          () => ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              physics: ScrollPhysics(),
-              itemCount: ctrT.transactionIndexList.length,
-              itemBuilder: (context, index) {
-                var trs = ctrT.transactionIndexList[index];
-                // var trsDetail =
-                //     ctrT.transactionIndexList.detailTransactions[index];
-                return TransactionCard(transaction: trs);
-
-              }),
+    return RefreshIndicator(
+      onRefresh: () async {
+        controller.callGettrs();
+      },
+      child: GestureDetector(
+        onVerticalDragDown: (details) {
+          
+          ctrT.callGettrs();
+        },
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+            child: Obx(
+              () => ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: ScrollPhysics(),
+                  itemCount: ctrT.transactionIndexList.length,
+                  itemBuilder: (context, index) {
+                    var trs = ctrT.transactionIndexList[index];
+                    // var trsDetail =
+                    //     ctrT.transactionIndexList.detailTransactions[index];
+                    return TransactionCard(transaction: trs);
+                  }),
+            ),
+          ),
         ),
       ),
     );
@@ -41,6 +52,8 @@ class TransactionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final createdAt = DateTime.parse(transaction.createdAt);
     final formattedDate = DateFormat('dd MMM yyyy').format(createdAt);
+    var ctrT = Get.put(TransactionPageController());
+
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Card(
@@ -57,7 +70,42 @@ class TransactionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('$formattedDate'),
-                    Text('${transaction.status}'),
+                    if (transaction.status == 'paid')
+                      Container(
+                          decoration: BoxDecoration(
+                            color: Colors.greenAccent[100],
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              'Sudah dibayar',
+                              style: TextStyle(
+                                color: Colors.green[
+                                    800], // Tetapkan warna teks yang diinginkan
+                                fontSize: 11,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          )),
+                    if (transaction.status == 'unpaid')
+                      Container(
+                          decoration: BoxDecoration(
+                            color: Colors.yellowAccent[100],
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              'Belum Bayar',
+                              style: TextStyle(
+                                color: Colors
+                                    .red, // Tetapkan warna teks yang diinginkan
+                                fontSize: 11,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          )),
                   ],
                 ),
               ),
@@ -78,7 +126,8 @@ class TransactionCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Kurir: ${transaction.courier}'),
-                    Text('Total: ${transaction.total}'),
+                    Text(
+                        'Total:  ${ctrT.convertToIdr(double.parse(transaction.total), 2)}'),
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward),

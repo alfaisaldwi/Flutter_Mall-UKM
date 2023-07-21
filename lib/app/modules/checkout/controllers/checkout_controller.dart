@@ -11,6 +11,7 @@ import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
+import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -199,5 +200,11 @@ class CheckoutController extends GetxController {
       decimalDigits: decimalDigit,
     );
     return currencyFormatter.format(number);
+  }
+
+  void callTransaksi() {
+    TransactionPageController transaksiController =
+        Get.find<TransactionPageController>();
+    transaksiController.callGettrs();
   }
 }

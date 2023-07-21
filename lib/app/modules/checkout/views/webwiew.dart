@@ -27,11 +27,10 @@ class MyHomePage extends StatelessWidget {
               contr.ctr.goBack();
               return false;
             } else {
-              print('asdas');
               Get.offAndToNamed('navbar-page');
             }
+            contr.callTransaksi();
             controllerNav.tabController.index = 2;
-
             Get.offAndToNamed('navbar-page');
             return true;
           },

@@ -13,7 +13,7 @@ class TransactionPageView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 10,
@@ -39,34 +39,39 @@ class TransactionPageView extends GetView<TransactionPageController> {
                   style: Styles.bodyStyle(size: 11, weight: FontWeight.w400),
                 ),
               ),
-              Tab(
-                child: Text(
-                  'Selesai',
-                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
-                ),
-              ),
+              // Tab(
+              //   child: Text(
+              //     'Selesai',
+              //     style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
+              //   ),
+              // ),
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            GetBuilder<TransactionPageController>(
-              init: TransactionPageController(),
-              builder: (controller) => TransactionSemuaView(),
-            ),
-            GetBuilder<TransactionPageController>(
-              init: TransactionPageController(),
-              builder: (controller) => TransactionPaidView(),
-            ),
-            GetBuilder<TransactionPageController>(
-              init: TransactionPageController(),
-              builder: (controller) => TransactionUnpaidView(),
-            ),
-            GetBuilder<TransactionPageController>(
-              init: TransactionPageController(),
-              builder: (controller) => TransactionSelesaiView(),
-            ),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            controller.callGettrs();
+          },
+          child: TabBarView(
+            children: [
+              GetBuilder<TransactionPageController>(
+                init: TransactionPageController(),
+                builder: (controller) => TransactionSemuaView(),
+              ),
+              GetBuilder<TransactionPageController>(
+                init: TransactionPageController(),
+                builder: (controller) => TransactionPaidView(),
+              ),
+              GetBuilder<TransactionPageController>(
+                init: TransactionPageController(),
+                builder: (controller) => TransactionUnpaidView(),
+              ),
+              // GetBuilder<TransactionPageController>(
+              //   init: TransactionPageController(),
+              //   builder: (controller) => TransactionSelesaiView(),
+              // ),
+            ],
+          ),
         ),
       ),
     );

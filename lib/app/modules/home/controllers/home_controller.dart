@@ -56,6 +56,12 @@ class HomeController extends GetxController {
     });
   }
 
+  void reFetch() {
+    fetchProduct();
+    fetchCategories();
+    getCarouselData();
+  }
+
   Future<void> getCarouselData() async {
     var headers = {
       'Accept': 'application/json',

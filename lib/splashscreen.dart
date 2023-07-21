@@ -44,24 +44,26 @@ class _SplashScreenState extends State<SplashScreen> {
                 const SizedBox(
                   height: 150,
                 ),
-                Center(
-                  child: Image.asset(
-                    "assets/images/logo2.png",
-                    height: 150.0,
-                    width: 250.0,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:80),
+                  child: Center(
+                    child: Image.asset(
+                      "assets/images/logo2.png",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ],
             ),
             Column(
-              children:const [
-                 SizedBox(
+              children: const [
+                SizedBox(
                   height: 90,
                 ),
-                 CircularProgressIndicator(
+                CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
                 ),
-              
+
                 // Container(
                 //   width: 220,
                 //   height: 45,
