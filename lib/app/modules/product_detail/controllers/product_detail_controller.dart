@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/model/product/reccomend_product_detail.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 
 class ProductDetailController extends GetxController {

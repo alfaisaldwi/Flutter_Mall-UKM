@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 
@@ -30,9 +30,6 @@ class ProfileController extends GetxController {
     super.onInit();
     String? token = GetStorage().read('token');
     // GetStorage().remove('token');
-
-    print('print tokennn ---- $token');
-    print('print akuuubn ---- $accountData');
   }
 
   @override
@@ -58,8 +55,7 @@ class ProfileController extends GetxController {
         var token = json['data'];
         GetStorage().write('token', token);
         cNav.tabController.index = 2;
-        Timer(const Duration(seconds: 1),
-            () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
+        Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
         cemail.clear();
         cpw.clear();
       } else {
@@ -107,6 +103,10 @@ class ProfileController extends GetxController {
         throw 'Gagal logout: ${response.reasonPhrase}|| ${response.statusCode}';
       }
     } catch (error) {
+      GetStorage().remove('token');
+
+      print('print tokennn ---- $token');
+
       throw 'Terjadi kesalahan saat logout: $error ||||| $token';
     }
   }

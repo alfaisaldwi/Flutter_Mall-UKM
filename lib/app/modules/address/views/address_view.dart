@@ -8,11 +8,7 @@ import '../controllers/address_controller.dart';
 
 class AddressView extends GetView<AddressController> {
   final AddressController address = Get.put(AddressController());
-  final RxString selectedProvinceName = ''.obs;
-  final RxString selectedCityName = ''.obs;
-  final RxString selectedDistrictName = ''.obs;
-  final RxString selectedSubdistrictId = ''.obs;
-  final RxString addressName = ''.obs;
+
   var provinceName = ''.obs;
   var cityName = ''.obs;
   var districtName = ''.obs;
@@ -35,35 +31,38 @@ class AddressView extends GetView<AddressController> {
           children: [
             TextField(
               controller: address.nameController,
-              decoration: InputDecoration(labelText: 'Nama Penerima'),
+              decoration: const InputDecoration(labelText: 'Nama Penerima'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: address.phoneController,
               keyboardType: TextInputType.phone,
-              decoration: InputDecoration(labelText: 'No. HP'),
+              decoration: const InputDecoration(labelText: 'No. HP'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             InkWell(
               onTap: () {
                 // Tampilkan popup untuk memilih kecamatan, kota, dan provinsi
-                Get.dialog(AddressSelectionDialog(
-                  cityName: selectedCityName,
-                  districtName: selectedDistrictName,
-                  provinceName: selectedProvinceName,
-                  districtController: address.districtController,
-                  cityController: address.cityController,
-                  provinceController: address.provinceController,
-                ));
+                Get.dialog(AddressSelectionDialog());
               },
               child: IgnorePointer(
-                child: TextField(
-                  controller: address.addressController,
-                  decoration: InputDecoration(labelText: 'Alamat'),
+                child: Align(
+                  child: Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Alamat')),
+                      Obx(() => TextField(
+                            controller: address.addressController,
+                            decoration: InputDecoration(
+                                labelText: address.addressName.value),
+                          )),
+                    ],
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: controller.addressDetail,
               decoration: InputDecoration(labelText: 'Alamat Lengkap'),
@@ -74,10 +73,7 @@ class AddressView extends GetView<AddressController> {
               onPressed: () async {
                 var idKecamatan =
                     int.parse(address.selectedSubdistrictId.value);
-                print(idKecamatan);
-                print(
-                  address.selectedSubdistrictId.value,
-                );
+
                 Address addressItem = Address(
                     username: address.nameController.text,
                     phone: address.phoneController.text,
@@ -85,7 +81,7 @@ class AddressView extends GetView<AddressController> {
                     addressDetail: address.addressDetail.text,
                     destinationId:
                         int.parse(address.selectedSubdistrictId.value),
-                    status: 'selected');
+                    status: 'unselected');
 
                 await address.addAdress(addressItem);
               },

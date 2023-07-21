@@ -589,15 +589,30 @@ void showOrderDialog(BuildContext context) {
                       onTap: () async {
                         String? token = GetStorage().read('token');
                         if (token != null) {
-                          CartItem cartItem = CartItem(
-                              product_id: product.id,
-                              qty: 1,
-                              unit_variant: controllerProductDetail
-                                  .selectedVariant.value);
-                          print(controllerProductDetail.selectedVariant.value);
-                          await ctrlCart.addToCart(cartItem);
+                          if (controllerProductDetail
+                              .selectedVariant.value.isNotEmpty) {
+                            CartItem cartItem = CartItem(
+                                product_id: product.id,
+                                qty: 1,
+                                unit_variant: controllerProductDetail
+                                    .selectedVariant.value);
+                            print(
+                                controllerProductDetail.selectedVariant.value);
+                            await ctrlCart.addToCart(cartItem);
 
-                          Get.toNamed(('/cart'),);
+                            Get.toNamed(
+                              ('/cart'),
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: 'Silahkan Pilih Varian',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.grey[800],
+                              textColor: Colors.white,
+                              fontSize: 14.0,
+                            );
+                          }
                         } else {
                           Fluttertoast.showToast(
                             msg: 'Silahkan Signin terlebih dahulu',

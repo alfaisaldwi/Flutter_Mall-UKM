@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart';
 
 class SigninView extends GetView<ProfileController> {
+  var ctrLogin = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,7 +52,7 @@ class SigninView extends GetView<ProfileController> {
             padding: EdgeInsets.all(10),
             child: TextFormField(
               keyboardType: TextInputType.emailAddress,
-              controller: controller.cemail,
+              controller: ctrLogin.cemail,
               decoration: InputDecoration(
                 hintText: 'Email',
                 focusColor: Colors.white,
@@ -65,7 +66,7 @@ class SigninView extends GetView<ProfileController> {
             padding: EdgeInsets.all(10),
             child: TextFormField(
               obscureText: true,
-              controller: controller.cpw,
+              controller: ctrLogin.cpw,
               decoration: InputDecoration(
                 hintText: 'Password',
                 focusColor: Colors.white,
@@ -93,7 +94,7 @@ class SigninView extends GetView<ProfileController> {
                 ),
               ),
               onPressed: () async {
-                await controller.loginWithEmail();
+                await ctrLogin.loginWithEmail();
               },
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart';
+import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
 class AccountView extends GetView<ProfileController> {
@@ -63,7 +64,7 @@ class AccountView extends GetView<ProfileController> {
                             Obx(() {
                               return Expanded(
                                 child: Text(
-                                  controller.accountData.value['name'] ??
+                                  controllerP.accountData.value['name'] ??
                                       'User',
                                   style: Styles.headerStyles(),
                                 ),
@@ -176,19 +177,26 @@ class AccountView extends GetView<ProfileController> {
                                 ),
                               ),
                               ListTile(
+                                onTap: () {
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => MyHomePage(),
+                                  //     ));
+                                },
                                 leading: const Icon(Icons.key_outlined),
                                 title: Text(
                                   'Ubah Kata Sandi',
                                   style: Styles.bodyStyle(),
                                 ),
                               ),
-                              ListTile(
-                                leading: const Icon(Icons.call_outlined),
-                                title: Text(
-                                  'Ubah No. Handphone',
-                                  style: Styles.bodyStyle(),
-                                ),
-                              ),
+                              // ListTile(
+                              //   leading: const Icon(Icons.call_outlined),
+                              //   title: Text(
+                              //     'Ubah No. Handphone',
+                              //     style: Styles.bodyStyle(),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

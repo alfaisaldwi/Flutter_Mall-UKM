@@ -9,7 +9,7 @@ import 'package:mall_ukm/app/model/carousel/carousel_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
-import 'package:mall_ukm/app/service/repository/users_repository.dart';
+import 'package:mall_ukm/app/service/api_service.dart';
 
 import '../../../model/category/category_model.dart';
 
@@ -29,9 +29,7 @@ class HomeController extends GetxController {
     startDataRefreshTimer();
     fetchCategories();
     getCarouselData();
-    print('fetchhhh $fetchCategories');
-    print('catergory $category');
-    print(PreferenceUtils.token);
+
     super.onInit();
   }
 
@@ -56,6 +54,12 @@ class HomeController extends GetxController {
       getCarouselData();
       fetchCategories();
     });
+  }
+
+  void reFetch() {
+    fetchProduct();
+    fetchCategories();
+    getCarouselData();
   }
 
   Future<void> getCarouselData() async {
@@ -98,7 +102,7 @@ class HomeController extends GetxController {
       );
       http.Response response = await http.get(url, headers: headers);
 
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['code'] == 200) {
@@ -128,7 +132,7 @@ class HomeController extends GetxController {
           ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.product);
       http.Response response = await http.get(url, headers: headers);
 
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse['code'] == 200) {

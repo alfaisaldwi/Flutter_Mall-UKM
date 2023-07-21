@@ -42,25 +42,23 @@ class HomeView extends GetView<HomeController> {
                   showSearch(
                     context: context,
                     delegate: SearchPage(
+                      barTheme: ThemeData.light(useMaterial3: true),
                       onQueryUpdate: print,
-                      items: people,
-                      searchLabel: 'Search people',
+                      items: controller.products,
+                      searchLabel: 'Cari..',
                       suggestion: const Center(
-                        child: Text('Filter people by name, surname or age'),
+                        child: Text('Cari produk yang kamu kebutuhan'),
                       ),
                       failure: const Center(
-                        child: Text('No person found :('),
+                        child: Text('Produk yang kamu cari tidak ada :('),
                       ),
-                      filter: (person) => [
-                        // person.name,
-                        // person.surname,
-                        // person.age.toString(),
+                      filter: (product) => [
+                        product.title,
                       ],
-                      sort: (a, b) => a.compareTo(b),
-                      builder: (person) => ListTile(
-                        title: Text(person.name),
-                        subtitle: Text(person.surname),
-                        trailing: Text('${person.age} yo'),
+                      builder: (product) => ListTile(
+                        title: Text(product.title),
+                        subtitle: Text(product.price),
+                        trailing: Text('${product.qty} '),
                       ),
                     ),
                   );
@@ -112,7 +110,7 @@ class HomeView extends GetView<HomeController> {
           ]),
       body: RefreshIndicator(
         onRefresh: () async {
-          await controller.fetchProduct();
+          controller.reFetch();
         },
         child: SingleChildScrollView(
           child: Container(
@@ -186,15 +184,14 @@ class HomeView extends GetView<HomeController> {
                                                 Align(
                                                   alignment: Alignment.center,
                                                   child: Image.network(
-                                                    "https://cdn.iconscout.com/icon/premium/png-512-thumb/clothes-20-185191.png",
+                                                    category.photo,
                                                     width: 28,
-                                                    height: 28,
+                                                    height: 30,
+                                                    color:
+                                                        Colors.deepOrange[600],
                                                     fit: BoxFit.fill,
                                                     alignment: Alignment.center,
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
                                                 ),
                                                 Expanded(
                                                   child: Align(
