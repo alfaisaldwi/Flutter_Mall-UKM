@@ -28,7 +28,7 @@ class CheckoutController extends GetxController {
   var idkecamatan = '';
   var weight = ''.obs;
   RxList<RxInt> weight2 = <RxInt>[].obs;
-
+  var totalWeight = Get.arguments[2];
   final List<String> couriers = ['jne', 'pos', 'tiki'];
   final List<String> layanan = ['jne', 'pos', 'tiki'];
 
@@ -46,6 +46,7 @@ class CheckoutController extends GetxController {
 
     // Buat body request sesuai dengan contoh yang kamu berikan
     final body = jsonEncode(checkoutData.toJson());
+    print(body);
 
     final response = await http.post(url, body: body, headers: headers);
 
@@ -112,7 +113,7 @@ class CheckoutController extends GetxController {
       "originType": originType,
       "destination": idkecamatan,
       "destinationType": destinationType,
-      "weight": "1",
+      "weight": totalWeight.toString(),
       "courier": selectedCourier.value,
     };
 
@@ -177,13 +178,12 @@ class CheckoutController extends GetxController {
 
   @override
   void onInit() {
+    print(totalWeight);
     super.onInit();
   }
 
   @override
   void onReady() {
-    fetchServices();
-
     super.onReady();
   }
 

@@ -187,8 +187,6 @@ class HomeView extends GetView<HomeController> {
                                                     category.photo,
                                                     width: 28,
                                                     height: 30,
-                                                    color:
-                                                        Colors.deepOrange[600],
                                                     fit: BoxFit.fill,
                                                     alignment: Alignment.center,
                                                   ),

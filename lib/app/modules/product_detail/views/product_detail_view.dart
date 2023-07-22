@@ -336,7 +336,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              'Berat Satuan : ${product.weight}kg',
+                              'Berat Satuan : ${product.weight}gram',
                               style: Styles.bodyStyle(
                                   color: Colors.black45, size: 15),
                             ),
@@ -598,6 +598,7 @@ void showOrderDialog(BuildContext context) {
                                     .selectedVariant.value);
                             print(
                                 controllerProductDetail.selectedVariant.value);
+                            // GetfetchCart();
                             await ctrlCart.addToCart(cartItem);
 
                             Get.toNamed(

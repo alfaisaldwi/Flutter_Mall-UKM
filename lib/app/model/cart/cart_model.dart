@@ -10,7 +10,7 @@ class Cart {
   double price;
   double priceRetail;
   String title;
-  String weight;
+  double weight;
 
   Cart({
     required this.id,
@@ -40,7 +40,7 @@ class Cart {
       price: double.parse(json['price']),
       priceRetail: double.parse(json['price_retail']),
       title: json['title'],
-      weight: json['weight'],
+      weight: double.parse(json['weight']),
     );
   }
 }

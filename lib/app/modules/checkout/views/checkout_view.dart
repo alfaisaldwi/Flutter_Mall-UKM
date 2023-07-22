@@ -26,13 +26,9 @@ class CheckoutView extends GetView<CheckoutController> {
     var productId = 0;
     var cartId = 0;
     var priceProduct = 0;
-    var variantProduct = '';
+    var unitVariant = '';
     var ongkir = 0.0.obs;
     RxString totalakhir = ''.obs;
-    // int subtotValue = int.parse(subtot.value.toString());
-    // NumberFormat formatter = NumberFormat.decimalPattern();
-    // String formattedValue = formatter.format(subtotValue);
-    // totalakhir.value = formattedValue;
 
     return Scaffold(
       appBar: AppBar(
@@ -72,20 +68,24 @@ class CheckoutView extends GetView<CheckoutController> {
               Center(
                 child: GestureDetector(
                   onTap: () {
+                    List<Map<String, dynamic>> productsList = [];
+                    for (int i = 0; i < dataCart.length; i++) {
+                      Map<String, dynamic> product = {
+                        "id": dataCart[i].cart.id,
+                        "product_id": dataCart[i].cart.productId,
+                        "price": dataCart[i].cart.price,
+                        "quantity": dataCart[i].cart.qty,
+                        "variant": dataCart[i].cart.unitVariant
+                      };
+                      productsList.add(product);
+                    }
+
                     CheckoutData checkoutData = CheckoutData(
                       addressId: addressId,
                       courier: controller.selectedCourier.value,
                       costCourier: ongkir.value.toInt(),
                       total: subtot.value.toInt(),
-                      products: [
-                        {
-                          "id": cartId,
-                          "product_id": productId,
-                          "price": priceProduct,
-                          "quantity": qty.value,
-                          "variant": variantProduct
-                        },
-                      ],
+                      products: productsList,
                     );
 
                     controller.tambahDataTransaksi(checkoutData);
@@ -215,14 +215,14 @@ class CheckoutView extends GetView<CheckoutController> {
                   itemCount: dataCart.length,
                   itemBuilder: (context, index) {
                     var cart = dataCart[index];
-                    qty.value = cart.cart.qty;
-                    productId = int.parse(cart.cart.productId);
-                    cartId = cart.cart.id;
-                    priceProduct = cart.cart.price.toInt();
+                    qty.value = dataCart[index].cart.qty;
+                    productId = int.parse(dataCart[index].cart.productId);
+                    cartId = dataCart[index].cart.id;
+                    priceProduct = dataCart[index].cart.price.toInt();
                     // var w = int.parse(cart.cart.weight);
                     // controller.weight2[index].value = w;
                     // print(cart.cart.weight);
-                    variantProduct = cart.cart.unitVariant;
+                    unitVariant = dataCart[index].cart.unitVariant;
 
                     return Container(
                         color: const Color(0xfff2f2f2),

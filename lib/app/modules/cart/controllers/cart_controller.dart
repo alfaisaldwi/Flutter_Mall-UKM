@@ -19,7 +19,10 @@ class CartController extends GetxController {
 
   RxBool counterPlus = false.obs;
   RxDouble totalHarga = 0.0.obs;
+
   RxList<RxDouble> priceC = <RxDouble>[].obs;
+  RxDouble totalWeight = 0.0.obs;
+  RxList<RxDouble> subWeightC = <RxDouble>[].obs;
 
   @override
   void onInit() {
