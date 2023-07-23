@@ -15,21 +15,41 @@ class TransactionPaidView extends GetView<TransactionPageController> {
       },
       child: Container(
         color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-          child: Obx(
-            () => ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: ctrT.transactionIndexPaid.length,
-                itemBuilder: (context, index) {
-                  var trs = ctrT.transactionIndexList[index];
-                  // var trsDetail =
-                  //     ctrT.transactionIndexList.detailTransactions[index];
-                  return TransactionCard(transaction: trs);
-                }),
-          ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+                child: Obx(
+                  () => ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: ctrT.transactionIndexList.length,
+                      itemBuilder: (context, index) {
+                        var trs = ctrT.transactionIndexList[index];
+                        // var trsDetail =
+                        //     ctrT.transactionIndexList.detailTransactions[index];
+                        if (trs.status == 'paid') {
+                          return TransactionCard(transaction: trs);
+                        } else {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 200.0),
+                            child: Container(
+                                color: Colors.white,
+                                child: const Align(
+                                  alignment: Alignment.center,
+                                  child: Text('Tidak ada transaksi'),
+                                )),
+                          ); 
+                        }
+                      }),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

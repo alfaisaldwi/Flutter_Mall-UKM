@@ -45,8 +45,9 @@ class AddressIndexView extends GetView<AddressController> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Center(
             child: GestureDetector(
-              onTap: () {
-                controller.updateStatus(idAddress.value);
+              onTap: () async {
+                await controller.updateStatus(idAddress.value);
+                controller.getAdrresNow();
               },
               child: Container(
                 height: 45,
@@ -120,7 +121,7 @@ class AddressIndexView extends GetView<AddressController> {
                                             controller.selectedAddress.value =
                                                 adr;
                                             idAddress.value = adr.id;
-                                            print(idAddress);
+                                          
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(

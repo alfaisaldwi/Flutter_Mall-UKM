@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/product/reccomend_product_detail.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
@@ -87,5 +88,14 @@ class ProductDetailController extends GetxController {
       // Handle error if there is an issue fetching the products
       print('Error fetching products: $error');
     }
+  }
+
+  String convertToIdr(dynamic number, int decimalDigit) {
+    NumberFormat currencyFormatter = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp ',
+      decimalDigits: decimalDigit,
+    );
+    return currencyFormatter.format(number);
   }
 }

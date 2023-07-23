@@ -45,7 +45,7 @@ class CartView extends GetView<CartController> {
                         Text('-');
                       } else {
                         return Text(
-                          '${controller.convertToIdr(controller.totalHarga.value, 2)}, ${controller.totalWeight.value}',
+                          '${controller.convertToIdr(controller.totalHarga.value, 2)}',
                           style: Styles.bodyStyle(
                             weight: FontWeight.w500,
                             size: 15,
@@ -65,7 +65,7 @@ class CartView extends GetView<CartController> {
                       Get.toNamed('/checkout', arguments: [
                         controller.selectedItems,
                         controller.totalHarga.value,
-                        controller.totalWeight
+                        controller.totalWeight.value,
                       ]);
                     } else {
                       Fluttertoast.showToast(
@@ -137,7 +137,7 @@ class CartView extends GetView<CartController> {
                               itemCount: controller.carts.length,
                               itemBuilder: (context, index) {
                                 var cart = controller.carts[index];
-                                controller.subWeightC.add(RxDouble(0.0));
+
                                 controller.counter[index].value = cart.qty;
                                 controller.subWeightC[index].value =
                                     cart.weight;
@@ -179,6 +179,12 @@ class CartView extends GetView<CartController> {
                                                             .value *
                                                         controller
                                                             .counter[index]
+                                                            .value;
+                                                controller.totalWeight.value +=
+                                                    controller.counter[index]
+                                                            .value *
+                                                        controller
+                                                            .subWeightC[index]
                                                             .value;
                                                 controller.selectedItems
                                                     .removeWhere((item) =>
@@ -227,7 +233,7 @@ class CartView extends GetView<CartController> {
                                                               FontWeight.bold),
                                                     ),
                                                     Text(
-                                                      'Varian: ${cart.unitVariant} Berat: ${controller.subWeightC}',
+                                                      'Varian: ${cart.unitVariant}',
                                                       maxLines: 2,
                                                       overflow:
                                                           TextOverflow.ellipsis,
@@ -289,6 +295,9 @@ class CartView extends GetView<CartController> {
                                                                   controller
                                                                       .counterPlus
                                                                       .value = true;
+                                                                  cart.qty++;
+                                                                  print(
+                                                                      cart.qty);
                                                                   CartItem
                                                                       cartItem =
                                                                       CartItem(

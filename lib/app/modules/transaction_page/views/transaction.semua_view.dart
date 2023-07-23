@@ -15,21 +15,28 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
       },
       child: Container(
         color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-          child: Obx(
-            () => ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: ctrT.transactionIndexList.length,
-                itemBuilder: (context, index) {
-                  var trs = ctrT.transactionIndexList[index];
-                  // var trsDetail =
-                  //     ctrT.transactionIndexList.detailTransactions[index];
-                  return TransactionCard(transaction: trs);
-                }),
-          ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+                child: Obx(
+                  () => ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: ctrT.transactionIndexList.length,
+                      itemBuilder: (context, index) {
+                        var trs = ctrT.transactionIndexList[index];
+                        // var trsDetail =
+                        //     ctrT.transactionIndexList.detailTransactions[index];
+                        return TransactionCard(transaction: trs);
+                      }),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

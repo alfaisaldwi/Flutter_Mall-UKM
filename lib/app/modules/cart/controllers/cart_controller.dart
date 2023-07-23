@@ -22,7 +22,7 @@ class CartController extends GetxController {
 
   RxList<RxDouble> priceC = <RxDouble>[].obs;
   RxDouble totalWeight = 0.0.obs;
-  RxList<RxDouble> subWeightC = <RxDouble>[].obs;
+  RxList<RxDouble> subWeightC = <RxDouble>[RxDouble(0.0)].obs;
 
   @override
   void onInit() {
@@ -194,6 +194,7 @@ class CartController extends GetxController {
         if (counterPlus.value == true) {
           counter[index].value++;
           totalHarga.value += priceC[index].value;
+          totalWeight.value += subWeightC[index].value;
           Fluttertoast.showToast(
             msg: 'Berhasil menambahkan kuantitas',
             toastLength: Toast.LENGTH_SHORT,
@@ -204,6 +205,7 @@ class CartController extends GetxController {
           );
         } else if (counterPlus.value == false) {
           counter[index].value--;
+          totalWeight.value -= subWeightC[index].value;
           totalHarga.value -= priceC[index].value;
           Fluttertoast.showToast(
             msg: 'Berhasil mengurangi kuantitas',

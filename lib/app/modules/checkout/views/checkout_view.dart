@@ -19,7 +19,6 @@ class CheckoutView extends GetView<CheckoutController> {
   var subtot = 0.0.obs;
 
   var qty = 0.obs;
-  var weighttot = 0.obs;
   @override
   Widget build(BuildContext context) {
     var addressId = 0;
@@ -28,7 +27,6 @@ class CheckoutView extends GetView<CheckoutController> {
     var priceProduct = 0;
     var unitVariant = '';
     var ongkir = 0.0.obs;
-    RxString totalakhir = ''.obs;
 
     return Scaffold(
       appBar: AppBar(
@@ -117,35 +115,37 @@ class CheckoutView extends GetView<CheckoutController> {
             color: Colors.white,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(width: 20),
-                      Text(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
                         'Alamat Pengiriman',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed('/address-index');
-                        },
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/address-index');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Ubah Alamat',
                           style:
                               TextStyle(fontSize: 14, color: Colors.blue[700]),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Card(
                   elevation: 2,
                   margin: EdgeInsets.all(8),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -195,6 +195,9 @@ class CheckoutView extends GetView<CheckoutController> {
                                       maxLines: 5,
                                       overflow: TextOverflow.ellipsis,
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                   ],
                                 );
                               } else {
@@ -207,7 +210,6 @@ class CheckoutView extends GetView<CheckoutController> {
                     ),
                   ),
                 ),
-
                 ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
@@ -391,14 +393,12 @@ class CheckoutView extends GetView<CheckoutController> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
                 Card(
                   margin: const EdgeInsets.all(8.0),
                   elevation: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(6.0),
                     child: ListTile(
                       title: const Text(
                         'Harga Barang',
@@ -412,14 +412,31 @@ class CheckoutView extends GetView<CheckoutController> {
                     ),
                   ),
                 ),
-
-                SizedBox(height: 10),
-
+                const SizedBox(height: 10),
+                Card(
+                  margin: const EdgeInsets.all(8.0),
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: ListTile(
+                      title: const Text(
+                        'Berat Total',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                        '${controller.totalWeight.toString()}gram',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Card(
                   margin: EdgeInsets.all(8.0),
                   elevation: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(6.0),
                     child: Obx(
                       () => ListTile(
                         title: Text(
@@ -435,17 +452,6 @@ class CheckoutView extends GetView<CheckoutController> {
                     ),
                   ),
                 ),
-
-                // Container(
-                //   color: Colors.white,
-                //   child: Row(children: [
-                //     Text(
-                //       'Subtotal',
-                //       style: Styles.bodyStyle(),
-                //     ),
-                //     Obx(() => Text('${subtot.value}')),
-                //   ]),
-                // ),
                 const SizedBox(height: 20),
               ],
             ),

@@ -18,15 +18,11 @@ class ProductDetailView extends GetView<ProductDetailController> {
   var controllerProductDetail = Get.put(ProductDetailController());
   var ctrlCart = CartController();
   var productDetails = Get.arguments as List<ProductDetail>;
+  final CarouselController controllerCaraousel = CarouselController();
 
   @override
   Widget build(BuildContext context) {
     var product = productDetails.first;
-    final originalPrice =
-        NumberFormat.decimalPattern().format(int.parse(product.price));
-    final discountedPrice =
-        NumberFormat.decimalPattern().format(int.parse(product.priceRetail));
-    final CarouselController controllerCaraousel = CarouselController();
 
     List people = [
       'Mike',
@@ -251,7 +247,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           padding: const EdgeInsets.only(left: 12.0, top: 15),
                           child: RichText(
                             text: TextSpan(
-                              text: 'Rp.$originalPrice',
+                              text: controllerProductDetail.convertToIdr(
+                                  double.parse(product.price), 2),
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.black,
@@ -263,7 +260,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: 'Rp.$discountedPrice',
+                                  text: controllerProductDetail.convertToIdr(
+                                      double.parse(product.priceRetail), 2),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.red,
@@ -453,7 +451,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                               child: Text(
                                                 recomend.title,
                                                 textAlign: TextAlign.left,
-                                                maxLines: 2,
+                                                maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: Styles.bodyStyle(
                                                     weight: FontWeight.w600),
@@ -465,7 +463,11 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                                       horizontal: 8.0,
                                                       vertical: 2.0),
                                               child: Text(
-                                                'Rp. 5.000.000',
+                                                controllerProductDetail
+                                                    .convertToIdr(
+                                                        double.parse(
+                                                            recomend.price),
+                                                        2),
                                                 textAlign: TextAlign.left,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
