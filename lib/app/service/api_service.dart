@@ -29,6 +29,7 @@ class _RajaOngkirEndPoints {
 
 class _TransactionEndPoints {
   final String index = '/api/auth/transaction';
+  final String show = '/api/auth/transaction/show';
   final String store = '/api/auth/transaction/store';
   final String unpaid = '/api/auth/transaction/unpaid';
   final String paid = '/api/auth/transaction/paid';
@@ -36,6 +37,7 @@ class _TransactionEndPoints {
 
 class _ProductEndPoints {
   final String category = '/api/category';
+  final String categoryshow = '/api/category/show';
   final String product = '/api/product/';
   final String show = '/api/product/show/';
   final String recomend = '/api/product/recomendation/';

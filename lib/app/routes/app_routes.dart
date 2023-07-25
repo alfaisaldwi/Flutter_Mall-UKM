@@ -10,6 +10,7 @@ abstract class Routes {
   static const NAVBAR_PAGE = _Paths.NAVBAR_PAGE;
   static const RECOMMEND_PAGE = _Paths.RECOMMEND_PAGE;
   static const TRANSACTION_PAGE = _Paths.TRANSACTION_PAGE;
+  static const TRANSACTION_DETAIL = _Paths.TRANSACTION_DETAIL;
   static const SURVEY_PAGE = _Paths.SURVEY_PAGE;
   static const CART = _Paths.CART;
   static const PRODUCT_DETAIL = _Paths.PRODUCT_DETAIL;
@@ -18,6 +19,7 @@ abstract class Routes {
   static const ADDRESS = _Paths.ADDRESS;
   static const ADDRESS_INDEX = _Paths.ADDRESS_INDEX;
   static const CHECKOUT = _Paths.CHECKOUT;
+  static const CATEGORY = _Paths.CATEGORY;
 }
 
 abstract class _Paths {
@@ -27,6 +29,7 @@ abstract class _Paths {
   static const NAVBAR_PAGE = '/navbar-page';
   static const RECOMMEND_PAGE = '/recommend-page';
   static const TRANSACTION_PAGE = '/transaction-page';
+  static const TRANSACTION_DETAIL = '/transaction-detail';
   static const SURVEY_PAGE = '/survey-page';
   static const CART = '/cart';
   static const PRODUCT_DETAIL = '/product-detail';
@@ -35,4 +38,5 @@ abstract class _Paths {
   static const ADDRESS = '/address';
   static const ADDRESS_INDEX = '/address-index';
   static const CHECKOUT = '/checkout';
+  static const CATEGORY = '/category';
 }

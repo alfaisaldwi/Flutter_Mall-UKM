@@ -137,7 +137,7 @@ class CartView extends GetView<CartController> {
                               itemCount: controller.carts.length,
                               itemBuilder: (context, index) {
                                 var cart = controller.carts[index];
-
+                                controller.subWeightC.add(RxDouble(0.0));
                                 controller.counter[index].value = cart.qty;
                                 controller.subWeightC[index].value =
                                     cart.weight;

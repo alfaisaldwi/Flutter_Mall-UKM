@@ -28,7 +28,7 @@ class CheckoutController extends GetxController {
   var idkecamatan = '';
   var weight = ''.obs;
   RxList<RxInt> weight2 = <RxInt>[].obs;
-  var totalWeight = Get.arguments[2];
+  var totalWeight = ''.obs;
   final List<String> couriers = ['jne', 'pos', 'tiki'];
   final List<String> layanan = ['jne', 'pos', 'tiki'];
 

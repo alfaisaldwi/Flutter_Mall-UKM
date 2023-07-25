@@ -9,6 +9,8 @@ class TransactionPaidView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
+    bool hasPaidTransactions = true;
+
     return RefreshIndicator(
       onRefresh: () async {
         controller.callGettrs();
@@ -29,26 +31,31 @@ class TransactionPaidView extends GetView<TransactionPageController> {
                       itemCount: ctrT.transactionIndexList.length,
                       itemBuilder: (context, index) {
                         var trs = ctrT.transactionIndexList[index];
+                        hasPaidTransactions = true;
                         // var trsDetail =
                         //     ctrT.transactionIndexList.detailTransactions[index];
                         if (trs.status == 'paid') {
                           return TransactionCard(transaction: trs);
                         } else {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 200.0),
-                            child: Container(
-                                color: Colors.white,
-                                child: const Align(
-                                  alignment: Alignment.center,
-                                  child: Text('Tidak ada transaksi'),
-                                )),
-                          ); 
+                          return const SizedBox.shrink();
                         }
                       }),
                 ),
               ),
             ),
+            if (hasPaidTransactions == false)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 200.0),
+                  child: Container(
+                    color: Colors.white,
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Text('Tidak ada transaksi'),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

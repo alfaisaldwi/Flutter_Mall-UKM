@@ -22,7 +22,7 @@ class CartController extends GetxController {
 
   RxList<RxDouble> priceC = <RxDouble>[].obs;
   RxDouble totalWeight = 0.0.obs;
-  RxList<RxDouble> subWeightC = <RxDouble>[RxDouble(0.0)].obs;
+  RxList<RxDouble> subWeightC = <RxDouble>[].obs;
 
   @override
   void onInit() {
@@ -33,6 +33,23 @@ class CartController extends GetxController {
   void onReady() {
     fetchCart();
     super.onReady();
+  }
+
+  void updateTotalValues() {
+    double totalHargaValue = 0;
+    double totalWeightValue = 0;
+
+    for (int index = 0; index < carts.length; index++) {
+      if (isChecked(index) == true) {
+        totalHargaValue +=
+            priceC[index].value * counter[index].value.toDouble();
+        totalWeightValue +=
+            subWeightC[index].value * counter[index].value.toDouble();
+      }
+    }
+
+    totalHarga.value = totalHargaValue;
+    // totalWeight.value = totalWeightValue;
   }
 
   String convertToIdr(dynamic number, int decimalDigit) {
@@ -194,7 +211,7 @@ class CartController extends GetxController {
         if (counterPlus.value == true) {
           counter[index].value++;
           totalHarga.value += priceC[index].value;
-          totalWeight.value += subWeightC[index].value;
+          // totalWeight.value += subWeightC[index].value;
           Fluttertoast.showToast(
             msg: 'Berhasil menambahkan kuantitas',
             toastLength: Toast.LENGTH_SHORT,
@@ -205,7 +222,7 @@ class CartController extends GetxController {
           );
         } else if (counterPlus.value == false) {
           counter[index].value--;
-          totalWeight.value -= subWeightC[index].value;
+          // totalWeight.value -= subWeightC[index].value;
           totalHarga.value -= priceC[index].value;
           Fluttertoast.showToast(
             msg: 'Berhasil mengurangi kuantitas',

@@ -15,12 +15,15 @@ class CheckoutView extends GetView<CheckoutController> {
   var address = Get.put(AddressController());
   final List<SelectedCartItem> dataCart =
       Get.arguments[0] as List<SelectedCartItem>;
+
   var hargaBarang = Get.arguments[1];
   var subtot = 0.0.obs;
 
   var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
+    controller.totalWeight.value = Get.arguments[2].toString();
+
     var addressId = 0;
     var productId = 0;
     var cartId = 0;

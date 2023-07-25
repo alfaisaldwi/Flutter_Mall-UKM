@@ -10,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
+import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 import '../controllers/product_detail_controller.dart';
@@ -19,6 +20,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
   var ctrlCart = CartController();
   var productDetails = Get.arguments as List<ProductDetail>;
   final CarouselController controllerCaraousel = CarouselController();
+  var homeC = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -408,9 +410,15 @@ class ProductDetailView extends GetView<ProductDetailController> {
                               var recomend = controller.recomend[index];
 
                               return GestureDetector(
-                                onTap: () {
-                                  // Get.to(() => DetailKontentLokalView(),
-                                  //     arguments: kontenData[index]);
+                                onTap: () async {
+                                  var productDetails = await homeC
+                                      .fetchProductDetails(recomend.id);
+                                  Get.to(() => ProductDetailView(),
+                                      arguments: [productDetails]);
+
+                                  // Get.toNamed('product-detail',
+                                  //     arguments: [productDetails]);
+                                  print(product.id);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 2.0),

@@ -5,6 +5,8 @@ import 'package:mall_ukm/app/modules/address/views/address_index_view.dart';
 import 'package:mall_ukm/app/modules/address/views/address_view.dart';
 import 'package:mall_ukm/app/modules/cart/bindings/cart_binding.dart';
 import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
+import 'package:mall_ukm/app/modules/category/bindings/category_binding.dart';
+import 'package:mall_ukm/app/modules/category/views/category_view.dart';
 import 'package:mall_ukm/app/modules/checkout/bindings/checkout_binding.dart';
 import 'package:mall_ukm/app/modules/checkout/views/checkout_view.dart';
 import 'package:mall_ukm/app/modules/home/bindings/home_binding.dart';
@@ -22,6 +24,7 @@ import 'package:mall_ukm/app/modules/recommend_page/views/recommend_page_view.da
 import 'package:mall_ukm/app/modules/survey_page/bindings/survey_page_binding.dart';
 import 'package:mall_ukm/app/modules/survey_page/views/survey_page_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/bindings/transaction_page_binding.dart';
+import 'package:mall_ukm/app/modules/transaction_page/views/transaction_detail.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction_page_view.dart';
 import 'package:mall_ukm/splash_binding.dart';
 import 'package:mall_ukm/splashscreen.dart';
@@ -94,7 +97,7 @@ class AppPages {
       page: () => AddressView(),
       binding: AddressBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.ADDRESS_INDEX,
       page: () => AddressIndexView(),
       binding: AddressBinding(),
@@ -103,6 +106,16 @@ class AppPages {
       name: _Paths.CHECKOUT,
       page: () => CheckoutView(),
       binding: CheckoutBinding(),
+    ),
+    GetPage(
+      name: _Paths.CATEGORY,
+      page: () => CategoryView(),
+      binding: CategoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.TRANSACTION_DETAIL,
+      page: () => TransactionDetailView(),
+      binding: TransactionPageBinding(),
     ),
   ];
 }
