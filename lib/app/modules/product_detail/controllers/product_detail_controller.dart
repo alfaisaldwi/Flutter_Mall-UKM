@@ -12,6 +12,7 @@ class ProductDetailController extends GetxController {
   var recomend = <RecommendProductDetail>[].obs;
   var quantity = 1.obs;
   var selectedVariant = ''.obs;
+  var counter = 1.obs;
 
   var currentIndex = 0.obs;
 
@@ -20,12 +21,12 @@ class ProductDetailController extends GetxController {
   }
 
   void incrementQuantity() {
-    quantity.value++;
+    counter.value++;
   }
 
   void decrementQuantity() {
-    if (quantity.value > 1) {
-      quantity.value--;
+ if (counter.value > 0) {
+      counter.value--;
     }
   }
 

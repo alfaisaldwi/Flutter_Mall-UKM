@@ -43,7 +43,7 @@ class TransactionPageController extends GetxController {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.index);
       http.Response response = await http.get(url, headers: headers);
-
+      print(response.body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         print('response getadress decode  ${response.statusCode}');

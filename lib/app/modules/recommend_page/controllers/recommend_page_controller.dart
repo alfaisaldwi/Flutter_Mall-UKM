@@ -2,20 +2,25 @@ import 'dart:convert';
 
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/product/reccomend_product_detail.dart';
+import 'package:mall_ukm/app/model/recomend/recomend_model.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 
 class RecommendPageController extends GetxController {
   //TODO: Implement RecommendPageController
   var recomend = <RecommendProductDetail>[].obs;
+  var recomends = List<Recomend>.empty().obs;
+
   var recomend2 = <RecommendProductDetail>[].obs;
 
   final count = 0.obs;
   @override
   void onInit() {
-    fetchRecomend();
-    fetchRecomend2();
+    // fetchRecomend();
+    recomendProduct();
+    // fetchRecomend2();
     super.onInit();
   }
 
@@ -64,7 +69,6 @@ class RecommendPageController extends GetxController {
     try {
       var fetchedProducts = await getRecomend();
       recomend.assignAll(fetchedProducts);
-      print(recomend);
     } catch (error) {
       // Handle error if there is an issue fetching the products
       print('Error fetching products: $error');
@@ -112,5 +116,37 @@ class RecommendPageController extends GetxController {
       // Handle error if there is an issue fetching the products
       print('Error fetching products: $error');
     }
+  }
+
+  Future<void> recomendProduct() async {
+     var headers = {
+      'Accept': 'application/json',
+    };
+
+      var url = Uri.parse(
+        ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.recomendshow,
+      );
+      http.Response response = await http.get(url, headers: headers);
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      print(data['code']);
+      List<Recomend> recomendList =
+          (data['data'] as List).map((e) => Recomend.fromJson(e)).toList();
+      recomends.value = recomendList;
+    } else {
+      // Handle error jika request gagal
+      print('Failed to load data');
+    }
+  }
+
+  String convertToIdr(dynamic number, int decimalDigit) {
+    NumberFormat currencyFormatter = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp ',
+      decimalDigits: decimalDigit,
+    );
+    return currencyFormatter.format(number);
   }
 }

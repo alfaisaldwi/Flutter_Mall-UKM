@@ -9,7 +9,7 @@ class ApiEndPoints {
 }
 
 class _AuthEndPoints {
-  final String registerEmail = '';
+  final String register = '/api/auth/register';
   final String loginEmail = '/api/auth/login';
   final String logout = '/api/auth/logout';
   final String me = '/api/auth/me';
@@ -42,6 +42,8 @@ class _ProductEndPoints {
   final String show = '/api/product/show/';
   final String recomend = '/api/product/recomendation/';
   final String carousel = '/api/carousel/';
+  final String recomendshow = '/api/category/recomendation';
+
 }
 
 class _CartEndPoints {

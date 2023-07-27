@@ -45,7 +45,7 @@ class CartView extends GetView<CartController> {
                         Text('-');
                       } else {
                         return Text(
-                          '${controller.convertToIdr(controller.totalHarga.value, 2)}',
+                          '${controller.convertToIdr(controller.totalHarga.value, 2)} ${controller.totalWeight}',
                           style: Styles.bodyStyle(
                             weight: FontWeight.w500,
                             size: 15,
@@ -180,7 +180,7 @@ class CartView extends GetView<CartController> {
                                                         controller
                                                             .counter[index]
                                                             .value;
-                                                controller.totalWeight.value +=
+                                                controller.totalWeight.value -=
                                                     controller.counter[index]
                                                             .value *
                                                         controller

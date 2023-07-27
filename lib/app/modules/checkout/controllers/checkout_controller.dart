@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
+import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
@@ -206,5 +207,10 @@ class CheckoutController extends GetxController {
     TransactionPageController transaksiController =
         Get.find<TransactionPageController>();
     transaksiController.callGettrs();
+  }
+  void callAdress() {
+    AddressController addressController =
+        Get.find<AddressController>();
+    addressController.getAddress();
   }
 }

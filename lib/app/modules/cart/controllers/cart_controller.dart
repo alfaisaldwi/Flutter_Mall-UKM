@@ -43,8 +43,7 @@ class CartController extends GetxController {
       if (isChecked(index) == true) {
         totalHargaValue +=
             priceC[index].value * counter[index].value.toDouble();
-        totalWeightValue +=
-            subWeightC[index].value * counter[index].value.toDouble();
+        totalWeight.value += counter[index].value * subWeightC[index].value;
       }
     }
 
@@ -211,7 +210,7 @@ class CartController extends GetxController {
         if (counterPlus.value == true) {
           counter[index].value++;
           totalHarga.value += priceC[index].value;
-          // totalWeight.value += subWeightC[index].value;
+          totalWeight.value += subWeightC[index].value;
           Fluttertoast.showToast(
             msg: 'Berhasil menambahkan kuantitas',
             toastLength: Toast.LENGTH_SHORT,
@@ -222,8 +221,9 @@ class CartController extends GetxController {
           );
         } else if (counterPlus.value == false) {
           counter[index].value--;
-          // totalWeight.value -= subWeightC[index].value;
           totalHarga.value -= priceC[index].value;
+          totalWeight.value -= subWeightC[index].value;
+
           Fluttertoast.showToast(
             msg: 'Berhasil mengurangi kuantitas',
             toastLength: Toast.LENGTH_SHORT,

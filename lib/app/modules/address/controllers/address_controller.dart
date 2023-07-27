@@ -116,10 +116,10 @@ class AddressController extends GetxController {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.addressEndPoints.addressIndex);
       http.Response response = await http.get(url, headers: headers);
-      print('response getadress ${response.statusCode}');
+      // print('response getadress ${response.statusCode}');
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        print('response getadress decode  ${response.statusCode}');
+        // print('response getadress decode  ${response.statusCode}');
 
         if (jsonResponse['code'] == "200") {
           final addressData = jsonResponse['data'] as List<dynamic>;
@@ -129,7 +129,7 @@ class AddressController extends GetxController {
             addressListData.add(address);
           }
           addressIndexList.assignAll(addressListData);
-          print(addressList);
+          // print(addressList);
         } else {
           throw jsonResponse['message'];
         }

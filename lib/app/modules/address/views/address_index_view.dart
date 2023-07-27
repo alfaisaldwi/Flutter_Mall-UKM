@@ -271,19 +271,19 @@ class AddressIndexView extends GetView<AddressController> {
                                                           right: 20.0),
                                                   child: Row(
                                                     children: [
-                                                      GestureDetector(
-                                                        onTap: () {},
-                                                        child: const Icon(
-                                                          PhosphorIcons
-                                                              .notePencil,
-                                                          color:
-                                                              Colors.deepOrange,
-                                                          size: 20,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
+                                                      // GestureDetector(
+                                                      //   onTap: () {},
+                                                      //   child: const Icon(
+                                                      //     PhosphorIcons
+                                                      //         .notePencil,
+                                                      //     color:
+                                                      //         Colors.deepOrange,
+                                                      //     size: 20,
+                                                      //   ),
+                                                      // ),
+                                                      // const SizedBox(
+                                                      //   width: 5,
+                                                      // ),
                                                       GestureDetector(
                                                         onTap: () {
                                                           controller
