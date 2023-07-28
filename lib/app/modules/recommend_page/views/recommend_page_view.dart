@@ -134,543 +134,152 @@ class RecommendPageView extends GetView<RecommendPageController> {
                           itemBuilder: (context, index) {
                             var recomend = controller.recomends[index];
 
-                            if (recomend.title == 'Konsol Game') {
-                              // Jika kategori adalah 'Pakaian', 'Tas', atau 'Konsol Game', tampilkan dalam GridView
-                              return GestureDetector(
-                                onTap: () {
-                                  // Get.to(() => DetailKontentLokalView(),
-                                  //     arguments: kontenData[index]);
-                                },
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 2.0),
+                              child: Container(
+                                width: 140,
+                                padding: const EdgeInsets.all(5),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 0.0),
-                                  child: Card(
-                                    child: Container(
-                                      width: 140,
-                                      padding: const EdgeInsets.all(5),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 5.0,
-                                            left: 0.0,
-                                            right: 0.0,
-                                            bottom: 0.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 4,
-                                                      horizontal: 0),
-                                              child: Text(
-                                                recomend.title!,
-                                                style: Styles.headerStyles(),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            MasonryGridView.count(
-                                              crossAxisCount: 2,
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              mainAxisSpacing: 16,
-                                              crossAxisSpacing: 18,
-                                              itemCount:
-                                                  recomend.products?.length,
-                                              itemBuilder: (context, index) {
-                                                var product =
-                                                    recomend.products![index];
-                                                return GestureDetector(
-                                                  onTap: () async {
-                                                    var productDetails =
-                                                        await productDetail
-                                                            .fetchProductDetails(
-                                                                product.id!);
-                                                    Get.toNamed(
-                                                        'product-detail',
-                                                        arguments: [
-                                                          productDetails
-                                                        ]);
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        color: Colors.white),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10.0),
-                                                          ),
-                                                          child: Image.network(
-                                                              product.photo!),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal: 2,
-                                                                  vertical: 5),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      product
-                                                                          .title!,
-                                                                      maxLines:
-                                                                          2,
-                                                                      style: const TextStyle(
-                                                                          overflow: TextOverflow
-                                                                              .fade,
-                                                                          fontWeight: FontWeight
-                                                                              .w500,
-                                                                          fontSize:
-                                                                              16,
-                                                                          color: Color.fromRGBO(
-                                                                              74,
-                                                                              74,
-                                                                              74,
-                                                                              1)),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 4,
-                                                              ),
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        2.0),
-                                                                child: Column(
-                                                                  children: [
-                                                                    Text(
-                                                                      controller.convertToIdr(
-                                                                          product
-                                                                              .price,
-                                                                          2),
-                                                                      style: const TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          color: Color.fromRGBO(
-                                                                              133,
-                                                                              133,
-                                                                              133,
-                                                                              1)),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 2,
-                                                                    ),
-                                                                    Text(
-                                                                      controller.convertToIdr(
-                                                                          product
-                                                                              .priceRetail,
-                                                                          2),
-                                                                      style: const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color: Colors
-                                                                              .red,
-                                                                          decoration:
-                                                                              TextDecoration.lineThrough),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ],
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 0.0,
+                                      right: 8.0,
+                                      bottom: 0.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 0),
+                                        child: Text(
+                                          recomend.title!,
+                                          style: Styles.headerStyles(),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            } else if (recomend.title == 'Pakaian' ||
-                                recomend.title == 'Tas') {
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 2.0),
-                                child: Container(
-                                  width: 140,
-                                  padding: const EdgeInsets.all(5),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 5.0,
-                                        left: 0.0,
-                                        right: 8.0,
-                                        bottom: 0.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 0),
-                                          child: Text(
-                                            recomend.title!,
-                                            style: Styles.headerStyles(),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height:
-                                              180, // Atur tinggi untuk menampilkan beberapa produk dalam satu kategori
-                                          child: ListView.builder(
-                                            physics:
-                                                const ClampingScrollPhysics(),
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount:
-                                                recomend.products?.length,
-                                            itemBuilder: (context, index) {
-                                              var product =
-                                                  recomend.products![index];
-                                              return GestureDetector(
-                                                onTap: () async {
-                                                  var productDetails =
-                                                      await productDetail
-                                                          .fetchProductDetails(
-                                                              product.id!);
-                                                  Get.toNamed('product-detail',
-                                                      arguments: [
-                                                        productDetails
-                                                      ]);
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 2.0),
-                                                  child: Card(
-                                                    child: Container(
-                                                      width: 140,
+                                      SizedBox(
+                                        height:
+                                            180, // Atur tinggi untuk menampilkan beberapa produk dalam satu kategori
+                                        child: ListView.builder(
+                                          physics:
+                                              const ClampingScrollPhysics(),
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: recomend.products?.length,
+                                          itemBuilder: (context, index) {
+                                            var product =
+                                                recomend.products![index];
+                                            return GestureDetector(
+                                              onTap: () async {
+                                                var productDetails =
+                                                    await productDetail
+                                                        .fetchProductDetails(
+                                                            product.id!);
+                                                Get.toNamed('product-detail',
+                                                    arguments: [
+                                                      productDetails
+                                                    ]);
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 2.0),
+                                                child: Card(
+                                                  child: Container(
+                                                    width: 140,
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    child: Padding(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 5.0,
-                                                                left: 8.0,
-                                                                right: 8.0,
-                                                                bottom: 0.0),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            SizedBox(
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            4),
-                                                                child: Image
-                                                                    .network(
-                                                                  product
-                                                                      .photo!,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  width: 140,
-                                                                  height: 90,
-                                                                ),
+                                                          const EdgeInsets.only(
+                                                              top: 5.0,
+                                                              left: 8.0,
+                                                              right: 8.0,
+                                                              bottom: 0.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          SizedBox(
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
+                                                              child:
+                                                                  Image.network(
+                                                                product.photo!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                width: 140,
+                                                                height: 90,
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            Padding(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      8.0,
-                                                                  vertical:
-                                                                      4.0),
-                                                              child: Text(
-                                                                product.title!,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
-                                                              ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        8.0,
+                                                                    vertical:
+                                                                        4.0),
+                                                            child: Text(
+                                                              product.title!,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
                                                             ),
-                                                            Padding(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      8.0,
-                                                                  vertical:
-                                                                      2.0),
-                                                              child: Text(
-                                                                'Rp. ${product.price}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12),
-                                                              ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        8.0,
+                                                                    vertical:
+                                                                        2.0),
+                                                            child: Text(
+                                                              'Rp. ${product.price}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                  fontSize: 12),
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
+                              ),
+                            );
                           }),
                     ),
-                    // Padding(
-                    //   padding:
-                    //       const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                    //   child: Text(
-                    //     'Makanan khas daerah',
-                    //     style: Styles.headerStyles(),
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 10.0),
-                    //   child: SizedBox(
-                    //     height: MediaQuery.of(context).size.height * .3 - 45,
-                    //     width: double.infinity,
-                    //     child: ListView.builder(
-                    //         physics: const ClampingScrollPhysics(),
-                    //         shrinkWrap: true,
-                    //         scrollDirection: Axis.horizontal,
-                    //         itemCount: controller.recomend.length,
-                    //         itemBuilder: (context, index) {
-                    //           var recomend = controller.recomend[index];
-
-                    //           return GestureDetector(
-                    //             onTap: () {
-                    //               // Get.to(() => DetailKontentLokalView(),
-                    //               //     arguments: kontenData[index]);
-                    //             },
-                    //             child: Padding(
-                    //               padding: const EdgeInsets.only(left: 2.0),
-                    //               child: Card(
-                    //                 child: Container(
-                    //                   width: 140,
-                    //                   padding: const EdgeInsets.all(5),
-                    //                   child: Padding(
-                    //                     padding: const EdgeInsets.only(
-                    //                         top: 5.0,
-                    //                         left: 8.0,
-                    //                         right: 8.0,
-                    //                         bottom: 0.0),
-                    //                     child: Column(
-                    //                       crossAxisAlignment:
-                    //                           CrossAxisAlignment.start,
-                    //                       children: [
-                    //                         SizedBox(
-                    //                           child: ClipRRect(
-                    //                             borderRadius:
-                    //                                 BorderRadius.circular(4),
-                    //                             child: Image.network(
-                    //                               recomend.photo.first,
-                    //                               fit: BoxFit.cover,
-                    //                               width: 140,
-                    //                               height: 90,
-                    //                             ),
-                    //                           ),
-                    //                         ),
-                    //                         const SizedBox(
-                    //                           height: 10,
-                    //                         ),
-                    //                         Padding(
-                    //                           padding: const EdgeInsets.symmetric(
-                    //                               horizontal: 8.0, vertical: 4.0),
-                    //                           child: Text(
-                    //                             recomend.title,
-                    //                             textAlign: TextAlign.left,
-                    //                             maxLines: 2,
-                    //                             overflow: TextOverflow.ellipsis,
-                    //                             style: Styles.bodyStyle(
-                    //                                 weight: FontWeight.w600),
-                    //                           ),
-                    //                         ),
-                    //                         Padding(
-                    //                           padding: const EdgeInsets.symmetric(
-                    //                               horizontal: 8.0, vertical: 2.0),
-                    //                           child: Text(
-                    //                             'Rp. 5.000.000',
-                    //                             textAlign: TextAlign.left,
-                    //                             maxLines: 1,
-                    //                             overflow: TextOverflow.ellipsis,
-                    //                             style: Styles.bodyStyle(size: 12),
-                    //                           ),
-                    //                         ),
-                    //                       ],
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           );
-                    //         }),
-                    //   ),
-                    // ),
-
-                    //////////////////////
-                    //       Padding(
-                    //         padding: const EdgeInsets.symmetric(
-                    //             vertical: 15.0, horizontal: 10.0),
-                    //         child: Align(
-                    //           alignment: Alignment.centerLeft,
-                    //           child: Text(
-                    //             'Rekomendasi lainnya',
-                    //             style: Styles.headerStyles(),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       GridView.builder(
-                    //           padding: EdgeInsets.zero,
-                    //           shrinkWrap: true,
-                    //           physics: const NeverScrollableScrollPhysics(),
-                    //           gridDelegate:
-                    //               const SliverGridDelegateWithFixedCrossAxisCount(
-                    //                   crossAxisCount: 2,
-                    //                   crossAxisSpacing: 1,
-                    //                   mainAxisSpacing: 2),
-                    //           itemCount: controller.recomend2.length,
-                    //           itemBuilder: (BuildContext ctx, index) {
-                    //             var recomend = controller.recomend[index];
-                    //             final originalPrice = NumberFormat.decimalPattern()
-                    //                 .format(int.parse(recomend.price));
-                    //             final discountedPrice = NumberFormat.decimalPattern()
-                    //                 .format(int.parse(recomend.priceRetail));
-
-                    //             return GestureDetector(
-                    //               onTap: () {
-                    //                 // Get.to(() => DetailKontentLokalView(),
-                    //                 //     arguments: kontenData[index]);
-                    //               },
-                    //               child: Padding(
-                    //                 padding: const EdgeInsets.all(4.0),
-                    //                 child: Card(
-                    //                   child: Container(
-                    //                     margin: const EdgeInsets.all(2),
-                    //                     padding: const EdgeInsets.all(5),
-                    //                     child: Padding(
-                    //                       padding: const EdgeInsets.only(
-                    //                           left: 8.0, right: 8.0, bottom: 4.0),
-                    //                       child: Column(
-                    //                         crossAxisAlignment: CrossAxisAlignment.start,
-                    //                         children: [
-                    //                           Align(
-                    //                             alignment: Alignment.center,
-                    //                             child: AspectRatio(
-                    //                               aspectRatio: 16 / 9,
-                    //                               child: ClipRRect(
-                    //                                 borderRadius:
-                    //                                     BorderRadius.circular(4),
-                    //                                 child: Image.network(
-                    //                                   recomend.photo.first,
-                    //                                   fit: BoxFit.cover,
-                    //                                 ),
-                    //                               ),
-                    //                             ),
-                    //                           ),
-                    //                           Padding(
-                    //                             padding: const EdgeInsets.symmetric(
-                    //                                 horizontal: 8.0, vertical: 8.0),
-                    //                             child: Text(
-                    //                               recomend.title,
-                    //                               textAlign: TextAlign.left,
-                    //                               maxLines: 3,
-                    //                               overflow: TextOverflow.ellipsis,
-                    //                               style: Styles.bodyStyle(
-                    //                                   weight: FontWeight.w600),
-                    //                             ),
-                    //                           ),
-                    //                           Padding(
-                    //                               padding: const EdgeInsets.symmetric(
-                    //                                   horizontal: 8.0, vertical: 2.0),
-                    //                               child: RichText(
-                    //                                 softWrap: true,
-                    //                                 text: TextSpan(
-                    //                                   text: 'Rp.$originalPrice',
-                    //                                   style: const TextStyle(
-                    //                                     fontSize: 13,
-                    //                                     color: Colors.black,
-                    //                                   ),
-                    //                                   children: [
-                    //                                     WidgetSpan(
-                    //                                       child: Container(
-                    //                                         width:
-                    //                                             8, // Adjust the width as needed
-                    //                                       ),
-                    //                                     ),
-                    //                                     TextSpan(
-                    //                                       text: '$discountedPrice',
-                    //                                       style: const TextStyle(
-                    //                                         fontSize: 12,
-                    //                                         color: Colors.red,
-                    //                                         decoration: TextDecoration
-                    //                                             .lineThrough,
-                    //                                       ),
-                    //                                     ),
-                    //                                   ],
-                    //                                 ),
-                    //                               )),
-                    //                         ],
-                    //                       ),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ),
-                    //             );
-                    //           })
+                  
                   ],
                 ),
               ),

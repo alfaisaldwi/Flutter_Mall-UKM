@@ -38,6 +38,10 @@ class CheckoutView extends GetView<CheckoutController> {
           'Checkout',
           style: Styles.headerStyles(weight: FontWeight.w500, size: 16),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => controller.goToCartAndRefresh(),
+        ),
         backgroundColor: Colors.white,
       ),
       bottomNavigationBar: Container(
@@ -114,7 +118,7 @@ class CheckoutView extends GetView<CheckoutController> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          controller.getAddress();
+          controller.refreshAddress();
         },
         child: SafeArea(
           child: SingleChildScrollView(
@@ -164,62 +168,63 @@ class CheckoutView extends GetView<CheckoutController> {
                           ),
                           SizedBox(width: 8),
                           Expanded(
-                            child: FutureBuilder<AddressSelect>(
-                              future: controller.getAddress(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const SizedBox(
-                                    width: 50,
-                                    height: 50,
-                                    // child: const CircularProgressIndicator(
-                                    //   value: 0.1,)
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return const Align(
-                                    alignment: Alignment.center,
-                                    child: Text('Kamu belum memilih alamat.'),
-                                  );
-                                } else if (snapshot.hasData) {
-                                  final addressData = snapshot.data!;
-                                  addressId = addressData.id;
-                                  controller.idkecamatan =
-                                      addressData.destinationId;
+                            child: Obx(() => FutureBuilder<AddressSelect>(
+                                  future: controller.futureAddress!.value,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        // child: const CircularProgressIndicator(
+                                        //   value: 0.1,)
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return const Align(
+                                        alignment: Alignment.center,
+                                        child:
+                                            Text('Kamu belum memilih alamat.'),
+                                      );
+                                    } else if (snapshot.hasData) {
+                                      final addressData = snapshot.data!;
+                                      addressId = addressData.id;
+                                      controller.idkecamatan =
+                                          addressData.destinationId;
 
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${addressData.username} | ${addressData.phone}',
-                                        style: TextStyle(fontSize: 14),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                        '${addressData.addressDetail}',
-                                        style: TextStyle(fontSize: 14),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                        '${addressData.address}',
-                                        style: TextStyle(fontSize: 14),
-                                        maxLines: 5,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  );
-                                } else {
-                                  return Text('Kamu belum memilih alamat.');
-                                }
-                              },
-                            ),
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${addressData.username} | ${addressData.phone}',
+                                            style: TextStyle(fontSize: 14),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '${addressData.addressDetail}',
+                                            style: TextStyle(fontSize: 14),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '${addressData.address}',
+                                            style: TextStyle(fontSize: 14),
+                                            maxLines: 5,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return Text('Kamu belum memilih alamat.');
+                                    }
+                                  },
+                                )),
                           ),
                         ],
                       ),
@@ -441,7 +446,7 @@ class CheckoutView extends GetView<CheckoutController> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         trailing: Text(
-                          '${controller.totalWeight.toString()}gram',
+                          '${double.parse(controller.totalWeight.value).toStringAsFixed(2)}gram',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),

@@ -10,6 +10,7 @@ import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
 import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
+import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
@@ -32,6 +33,7 @@ class CheckoutController extends GetxController {
   var totalWeight = ''.obs;
   final List<String> couriers = ['jne', 'pos', 'tiki'];
   final List<String> layanan = ['jne', 'pos', 'tiki'];
+  Rx<Future<AddressSelect>>? futureAddress;
 
   Future<TransaksiStore> tambahDataTransaksi(CheckoutData checkoutData) async {
     String? token = GetStorage().read('token');
@@ -149,6 +151,10 @@ class CheckoutController extends GetxController {
     }
   }
 
+  void refreshAddress() {
+    futureAddress!.value = getAddress();
+  }
+
   Future<void> addToCart(cartItem) async {
     String? token = GetStorage().read('token');
     var headers = {
@@ -179,6 +185,7 @@ class CheckoutController extends GetxController {
 
   @override
   void onInit() {
+    futureAddress = Rx<Future<AddressSelect>>(getAddress());
     print(totalWeight);
     super.onInit();
   }
@@ -190,7 +197,7 @@ class CheckoutController extends GetxController {
 
   @override
   void onClose() {
-    Get.back(result: null);
+    // Get.back(result: null);
     super.onClose();
   }
 
@@ -208,9 +215,14 @@ class CheckoutController extends GetxController {
         Get.find<TransactionPageController>();
     transaksiController.callGettrs();
   }
+
   void callAdress() {
-    AddressController addressController =
-        Get.find<AddressController>();
+    AddressController addressController = Get.find<AddressController>();
     addressController.getAddress();
+  }
+
+  void goToCartAndRefresh() {
+    Get.back(); // Kembali ke halaman cart
+    Get.find<CartController>().refreshCartData(); // Refresh controller cart
   }
 }

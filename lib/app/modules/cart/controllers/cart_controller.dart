@@ -252,4 +252,11 @@ class CartController extends GetxController {
       print('Gagal mengupdate cart. Kode status: ${response.statusCode}');
     }
   }
+
+  void refreshCartData() {
+    selectedItems.clear();
+    totalHarga.value = 0.0;
+    isCheckedList.clear();
+    totalWeight.value = 0;
+  }
 }

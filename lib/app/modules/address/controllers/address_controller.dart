@@ -103,7 +103,7 @@ class AddressController extends GetxController {
 
   void getAdrresNow() {
     CheckoutController checkoutController = Get.find<CheckoutController>();
-    checkoutController.getAddress();
+    checkoutController.refreshAddress();
   }
 
   Future<void> getAddress() async {

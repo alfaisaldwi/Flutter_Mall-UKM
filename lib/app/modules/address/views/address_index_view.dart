@@ -12,6 +12,13 @@ class AddressIndexView extends GetView<AddressController> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              controller.getAdrresNow();
+              
+              Get.back();
+            }),
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Alamat',
@@ -22,7 +29,6 @@ class AddressIndexView extends GetView<AddressController> {
           GestureDetector(
               onTap: () {
                 controller.fetchProvinces();
-
                 Get.toNamed('/address');
               },
               child: Padding(
@@ -47,7 +53,7 @@ class AddressIndexView extends GetView<AddressController> {
             child: GestureDetector(
               onTap: () async {
                 await controller.updateStatus(idAddress.value);
-                controller.getAdrresNow();
+                controller.getAddress();
               },
               child: Container(
                 height: 45,
@@ -121,7 +127,6 @@ class AddressIndexView extends GetView<AddressController> {
                                             controller.selectedAddress.value =
                                                 adr;
                                             idAddress.value = adr.id;
-                                          
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(

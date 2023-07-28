@@ -46,7 +46,6 @@ class TransactionPageController extends GetxController {
       print(response.body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        print('response getadress decode  ${response.statusCode}');
 
         if (jsonResponse['code'] == 200) {
           final addressData = jsonResponse['data'] as List<dynamic>;

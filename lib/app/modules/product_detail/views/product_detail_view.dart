@@ -617,7 +617,18 @@ void showOrderDialog(BuildContext context) {
                       ),
                       didChangeCount: (count) async {
                         // if (count > controllerProductDetail.counter.value) {
-                        controllerProductDetail.counter.value = count;
+                        if (count < int.parse(product.qty)) {
+                          controllerProductDetail.counter.value = count;
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Melebihi Stok Produk',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[800],
+                            textColor: Colors.white,
+                            fontSize: 14.0,
+                          );
+                        }
                         print(controllerProductDetail.counter.value = count);
 
                         // } else if (count <
@@ -641,19 +652,33 @@ void showOrderDialog(BuildContext context) {
                         if (token != null) {
                           if (controllerProductDetail
                               .selectedVariant.value.isNotEmpty) {
-                            CartItem cartItem = CartItem(
-                                product_id: product.id,
-                                qty: controllerProductDetail.counter.value,
-                                unit_variant: controllerProductDetail
-                                    .selectedVariant.value);
-                            print(
-                                controllerProductDetail.selectedVariant.value);
-                            // GetfetchCart();
-                            await ctrlCart.addToCart(cartItem);
-
-                            Get.toNamed(
-                              ('/cart'),
-                            );
+                            if (int.parse(product.qty) >
+                                controllerProductDetail.counter.value) {
+                              CartItem cartItem = CartItem(
+                                  product_id: product.id,
+                                  qty: controllerProductDetail.counter.value,
+                                  unit_variant: controllerProductDetail
+                                      .selectedVariant.value);
+                              print(controllerProductDetail
+                                  .selectedVariant.value);
+                              // GetfetchCart();
+                              await ctrlCart.addToCart(cartItem);
+                              controllerProductDetail.counter.value = 1;
+                              controllerProductDetail.selectedVariant.value =
+                                  '';
+                              Get.toNamed(
+                                ('/cart'),
+                              );
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: 'Melebihi Stok Produk',
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey[800],
+                                textColor: Colors.white,
+                                fontSize: 14.0,
+                              );
+                            }
                           } else {
                             Fluttertoast.showToast(
                               msg: 'Silahkan Pilih Varian',
