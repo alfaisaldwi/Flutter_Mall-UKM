@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,6 +11,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
+import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
+import 'package:mall_ukm/app/modules/home/views/search_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 import '../controllers/product_detail_controller.dart';
@@ -18,15 +21,12 @@ class ProductDetailView extends GetView<ProductDetailController> {
   var controllerProductDetail = Get.put(ProductDetailController());
   var ctrlCart = CartController();
   var productDetails = Get.arguments as List<ProductDetail>;
+  final CarouselController controllerCaraousel = CarouselController();
+  var homeC = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     var product = productDetails.first;
-    final originalPrice =
-        NumberFormat.decimalPattern().format(int.parse(product.price));
-    final discountedPrice =
-        NumberFormat.decimalPattern().format(int.parse(product.priceRetail));
-    final CarouselController controllerCaraousel = CarouselController();
 
     List people = [
       'Mike',
@@ -35,51 +35,49 @@ class ProductDetailView extends GetView<ProductDetailController> {
     ];
     return Scaffold(
       appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
           title: Container(
             width: double.infinity,
             height: 40,
-            color: const Color(0xfff7f7f7),
+            color: Color(0xfff7f7f7),
             child: Center(
               child: GestureDetector(
                 onTap: () {
                   showSearch(
                     context: context,
                     delegate: SearchPage(
+                      barTheme: ThemeData.light(useMaterial3: true),
                       onQueryUpdate: print,
-                      items: people,
-                      searchLabel: 'Search people',
+                      items: homeC.products,
+                      searchLabel: 'Cari..',
                       suggestion: const Center(
-                        child: Text('Filter people by name, surname or age'),
+                        child: Text('Cari produk yang kamu kebutuhan'),
                       ),
                       failure: const Center(
-                        child: Text('No person found :('),
+                        child: Text('Produk yang kamu cari tidak ada :('),
                       ),
-                      filter: (person) => [
-                        // person.name,
-                        // person.surname,
-                        // person.age.toString(),
+                      filter: (product) => [
+                        product.title,
                       ],
-                      sort: (a, b) => a.compareTo(b),
-                      builder: (person) => ListTile(
-                        title: Text(person.name),
-                        subtitle: Text(person.surname),
-                        trailing: Text('${person.age} yo'),
+                      builder: (product) => SearchView(
+                        products: product,
                       ),
                     ),
                   );
                 },
-                child: TextField(
-                  enabled: false,
-                  textAlign: TextAlign.justify,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                child: Center(
+                  child: TextField(
+                    enabled: false,
+                    textAlign: TextAlign.justify,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      hintText: 'Cari Produk',
+                      prefixIcon: const Icon(Icons.search),
                     ),
-                    hintText: 'Cari Produk',
-                    prefixIcon: const Icon(Icons.search),
                   ),
                 ),
               ),
@@ -88,7 +86,22 @@ class ProductDetailView extends GetView<ProductDetailController> {
           actions: [
             IconButton(
               icon: GestureDetector(
-                onTap: () => (Get.toNamed('/cart')),
+                onTap: () {
+                  String? token = GetStorage().read('token');
+                  if (token != null) {
+                    Get.toNamed('/cart');
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'Silahkan Signin terlebih dahulu',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[800],
+                      textColor: Colors.white,
+                      fontSize: 14.0,
+                    );
+                    Get.toNamed('/profile');
+                  }
+                },
                 child: const Icon(
                   Icons.shopping_cart,
                   color: Colors.black,
@@ -251,7 +264,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           padding: const EdgeInsets.only(left: 12.0, top: 15),
                           child: RichText(
                             text: TextSpan(
-                              text: 'Rp.$originalPrice',
+                              text: controllerProductDetail.convertToIdr(
+                                  double.parse(product.price), 2),
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.black,
@@ -263,7 +277,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: 'Rp.$discountedPrice',
+                                  text: controllerProductDetail.convertToIdr(
+                                      double.parse(product.priceRetail), 2),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.red,
@@ -336,7 +351,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              'Berat Satuan : ${product.weight}kg',
+                              'Berat Satuan : ${product.weight}gram',
                               style: Styles.bodyStyle(
                                   color: Colors.black45, size: 15),
                             ),
@@ -410,9 +425,16 @@ class ProductDetailView extends GetView<ProductDetailController> {
                               var recomend = controller.recomend[index];
 
                               return GestureDetector(
-                                onTap: () {
-                                  // Get.to(() => DetailKontentLokalView(),
-                                  //     arguments: kontenData[index]);
+                                onTap: () async {
+                                  // homeC.fetchProductDetails(recomend.id);
+                                  var productDetails = await homeC
+                                      .fetchProductDetails(recomend.id);
+                                  Get.offAndToNamed('/product-detail',
+                                      arguments: [productDetails]);
+
+                                  // Get.toNamed('product-detail',
+                                  //     arguments: [productDetails]);
+                              
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 2.0),
@@ -453,7 +475,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                               child: Text(
                                                 recomend.title,
                                                 textAlign: TextAlign.left,
-                                                maxLines: 2,
+                                                maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: Styles.bodyStyle(
                                                     weight: FontWeight.w600),
@@ -465,7 +487,11 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                                       horizontal: 8.0,
                                                       vertical: 2.0),
                                               child: Text(
-                                                'Rp. 5.000.000',
+                                                controllerProductDetail
+                                                    .convertToIdr(
+                                                        double.parse(
+                                                            recomend.price),
+                                                        2),
                                                 textAlign: TextAlign.left,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -575,7 +601,43 @@ void showOrderDialog(BuildContext context) {
                       );
                     }).toList(),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Obx(() => CartStepperInt(
+                      value: controllerProductDetail.counter.value,
+                      size: 22,
+                      style: CartStepperStyle(
+                        foregroundColor: Colors.black87,
+                        activeForegroundColor: Colors.black87,
+                        activeBackgroundColor: Colors.white,
+                        border: Border.all(color: Colors.grey),
+                        radius: const Radius.circular(8),
+                        elevation: 0,
+                        buttonAspectRatio: 1.5,
+                      ),
+                      didChangeCount: (count) async {
+                        // if (count > controllerProductDetail.counter.value) {
+                        if (count < int.parse(product.qty)) {
+                          controllerProductDetail.counter.value = count;
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Melebihi Stok Produk',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[800],
+                            textColor: Colors.white,
+                            fontSize: 14.0,
+                          );
+                        }
+                        print(controllerProductDetail.counter.value = count);
+
+                        // } else if (count <
+                        //     controllerProductDetail.counter.value) {
+                        //   controllerProductDetail.decrementQuantity();
+                        // }
+                      })),
+                  const SizedBox(height: 16),
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -591,18 +653,33 @@ void showOrderDialog(BuildContext context) {
                         if (token != null) {
                           if (controllerProductDetail
                               .selectedVariant.value.isNotEmpty) {
-                            CartItem cartItem = CartItem(
-                                product_id: product.id,
-                                qty: 1,
-                                unit_variant: controllerProductDetail
-                                    .selectedVariant.value);
-                            print(
-                                controllerProductDetail.selectedVariant.value);
-                            await ctrlCart.addToCart(cartItem);
-
-                            Get.toNamed(
-                              ('/cart'),
-                            );
+                            if (int.parse(product.qty) >
+                                controllerProductDetail.counter.value) {
+                              CartItem cartItem = CartItem(
+                                  product_id: product.id,
+                                  qty: controllerProductDetail.counter.value,
+                                  unit_variant: controllerProductDetail
+                                      .selectedVariant.value);
+                              print(controllerProductDetail
+                                  .selectedVariant.value);
+                              // GetfetchCart();
+                              await ctrlCart.addToCart(cartItem);
+                              controllerProductDetail.counter.value = 1;
+                              controllerProductDetail.selectedVariant.value =
+                                  '';
+                              Get.toNamed(
+                                ('/cart'),
+                              );
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: 'Melebihi Stok Produk',
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey[800],
+                                textColor: Colors.white,
+                                fontSize: 14.0,
+                              );
+                            }
                           } else {
                             Fluttertoast.showToast(
                               msg: 'Silahkan Pilih Varian',

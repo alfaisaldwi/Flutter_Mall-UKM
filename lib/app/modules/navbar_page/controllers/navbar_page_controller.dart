@@ -14,12 +14,13 @@ class NavbarPageController extends GetxController {
     TransactionPageController transaksiController =
         Get.find<TransactionPageController>();
     transaksiController.getTransaction();
-    transaksiController.getUnpaid();
-    transaksiController.paid();
+
     RecommendPageController recommendPageController =
         Get.find<RecommendPageController>();
-    recommendPageController.fetchRecomend();
-    recommendPageController.fetchRecomend2();
+    // recommendPageController.fetchRecomend();
+    recommendPageController.recomendProduct();
+
+    // recommendPageController.fetchRecomend2();
     ProfileController profileController = Get.find<ProfileController>();
     profileController.getUsers();
   }

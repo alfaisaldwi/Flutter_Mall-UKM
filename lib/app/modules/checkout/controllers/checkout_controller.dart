@@ -9,6 +9,9 @@ import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
+import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
+import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
+import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
@@ -28,9 +31,10 @@ class CheckoutController extends GetxController {
   var idkecamatan = '';
   var weight = ''.obs;
   RxList<RxInt> weight2 = <RxInt>[].obs;
-
+  var totalWeight = ''.obs;
   final List<String> couriers = ['jne', 'pos', 'tiki'];
   final List<String> layanan = ['jne', 'pos', 'tiki'];
+  Rx<Future<AddressSelect>>? futureAddress;
 
   Future<TransaksiStore> tambahDataTransaksi(CheckoutData checkoutData) async {
     String? token = GetStorage().read('token');
@@ -46,6 +50,7 @@ class CheckoutController extends GetxController {
 
     // Buat body request sesuai dengan contoh yang kamu berikan
     final body = jsonEncode(checkoutData.toJson());
+    print(body);
 
     final response = await http.post(url, body: body, headers: headers);
 
@@ -112,7 +117,7 @@ class CheckoutController extends GetxController {
       "originType": originType,
       "destination": idkecamatan,
       "destinationType": destinationType,
-      "weight": "1",
+      "weight": totalWeight.toString(),
       "courier": selectedCourier.value,
     };
 
@@ -147,6 +152,10 @@ class CheckoutController extends GetxController {
     }
   }
 
+  void refreshAddress() {
+    futureAddress!.value = getAddress();
+  }
+
   Future<void> addToCart(cartItem) async {
     String? token = GetStorage().read('token');
     var headers = {
@@ -177,19 +186,19 @@ class CheckoutController extends GetxController {
 
   @override
   void onInit() {
+    futureAddress = Rx<Future<AddressSelect>>(getAddress());
+    print(totalWeight);
     super.onInit();
   }
 
   @override
   void onReady() {
-    fetchServices();
-
     super.onReady();
   }
 
   @override
   void onClose() {
-    Get.back(result: null);
+    // Get.back(result: null);
     super.onClose();
   }
 
@@ -206,5 +215,19 @@ class CheckoutController extends GetxController {
     TransactionPageController transaksiController =
         Get.find<TransactionPageController>();
     transaksiController.callGettrs();
+  }
+
+  void callAdress() {
+    AddressController addressController = Get.find<AddressController>();
+    addressController.getAddress();
+  }
+
+  void goToCartAndRefresh() {
+    Get.off(() => CartView()); // Kembali ke halaman cart
+    Get.find<CartController>().refreshCartData();
+    Get.find<CartController>().fetchCart();
+    Get.find<CartController>().totalHarga.value = 0.0;
+    // Refresh controller cart
+    // Refresh controller cart
   }
 }

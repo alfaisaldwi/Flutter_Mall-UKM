@@ -27,16 +27,17 @@ class TransactionPageView extends GetView<TransactionPageController> {
                   style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
                 ),
               ),
-              Tab(
-                child: Text(
-                  'Sudah bayar',
-                  style: Styles.bodyStyle(size: 12, weight: FontWeight.w400),
-                ),
-              ),
+
               Tab(
                 child: Text(
                   'Belum Bayar',
                   style: Styles.bodyStyle(size: 11, weight: FontWeight.w400),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Sudah bayar',
+                  style: Styles.bodyStyle(size: 12, weight: FontWeight.w400),
                 ),
               ),
               // Tab(
@@ -60,12 +61,13 @@ class TransactionPageView extends GetView<TransactionPageController> {
               ),
               GetBuilder<TransactionPageController>(
                 init: TransactionPageController(),
-                builder: (controller) => TransactionPaidView(),
+                builder: (controller) => TransactionUnpaidView(),
               ),
               GetBuilder<TransactionPageController>(
                 init: TransactionPageController(),
-                builder: (controller) => TransactionUnpaidView(),
+                builder: (controller) => TransactionPaidView(),
               ),
+
               // GetBuilder<TransactionPageController>(
               //   init: TransactionPageController(),
               //   builder: (controller) => TransactionSelesaiView(),

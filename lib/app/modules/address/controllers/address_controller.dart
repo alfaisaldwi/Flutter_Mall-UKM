@@ -7,9 +7,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:mall_ukm/app/model/address/address_index.dart';
 import 'package:mall_ukm/app/model/address/address_model.dart';
+import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 
 class AddressController extends GetxController {
+  var checkoutC = Get.put(CheckoutController());
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
@@ -99,7 +101,10 @@ class AddressController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+
+  void getAdrresNow() {
+    checkoutC.refreshAddress();
+  }
 
   Future<void> getAddress() async {
     String? token = GetStorage().read('token');
@@ -111,10 +116,10 @@ class AddressController extends GetxController {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.addressEndPoints.addressIndex);
       http.Response response = await http.get(url, headers: headers);
-      print('response getadress ${response.statusCode}');
+      // print('response getadress ${response.statusCode}');
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        print('response getadress decode  ${response.statusCode}');
+        // print('response getadress decode  ${response.statusCode}');
 
         if (jsonResponse['code'] == "200") {
           final addressData = jsonResponse['data'] as List<dynamic>;
@@ -124,7 +129,7 @@ class AddressController extends GetxController {
             addressListData.add(address);
           }
           addressIndexList.assignAll(addressListData);
-          print(addressList);
+          // print(addressList);
         } else {
           throw jsonResponse['message'];
         }

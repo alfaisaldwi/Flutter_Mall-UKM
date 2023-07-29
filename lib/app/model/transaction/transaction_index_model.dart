@@ -23,7 +23,7 @@ class Transaction {
     required this.orderId,
     required this.courier,
     required this.costCourier,
-    required this.receiptNumber,
+    this.receiptNumber,
     required this.total,
     required this.paymentUrl,
     required this.status,

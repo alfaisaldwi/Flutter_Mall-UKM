@@ -12,6 +12,13 @@ class AddressIndexView extends GetView<AddressController> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              controller.getAdrresNow();
+              
+              Get.back();
+            }),
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Alamat',
@@ -22,7 +29,6 @@ class AddressIndexView extends GetView<AddressController> {
           GestureDetector(
               onTap: () {
                 controller.fetchProvinces();
-
                 Get.toNamed('/address');
               },
               child: Padding(
@@ -45,8 +51,9 @@ class AddressIndexView extends GetView<AddressController> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Center(
             child: GestureDetector(
-              onTap: () {
-                controller.updateStatus(idAddress.value);
+              onTap: () async {
+                await controller.updateStatus(idAddress.value);
+                controller.getAddress();
               },
               child: Container(
                 height: 45,
@@ -120,7 +127,6 @@ class AddressIndexView extends GetView<AddressController> {
                                             controller.selectedAddress.value =
                                                 adr;
                                             idAddress.value = adr.id;
-                                            print(idAddress);
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -270,19 +276,19 @@ class AddressIndexView extends GetView<AddressController> {
                                                           right: 20.0),
                                                   child: Row(
                                                     children: [
-                                                      GestureDetector(
-                                                        onTap: () {},
-                                                        child: const Icon(
-                                                          PhosphorIcons
-                                                              .notePencil,
-                                                          color:
-                                                              Colors.deepOrange,
-                                                          size: 20,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
+                                                      // GestureDetector(
+                                                      //   onTap: () {},
+                                                      //   child: const Icon(
+                                                      //     PhosphorIcons
+                                                      //         .notePencil,
+                                                      //     color:
+                                                      //         Colors.deepOrange,
+                                                      //     size: 20,
+                                                      //   ),
+                                                      // ),
+                                                      // const SizedBox(
+                                                      //   width: 5,
+                                                      // ),
                                                       GestureDetector(
                                                         onTap: () {
                                                           controller

@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/carousel/carousel_model.dart';
+import 'package:mall_ukm/app/model/category/category_show.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
@@ -15,11 +16,13 @@ import '../../../model/category/category_model.dart';
 
 class HomeController extends GetxController {
   TextEditingController cSearch = TextEditingController();
+  var categoryData = <CategoryShow>[].obs;
 
   final count = 0.obs;
   var category = <Category>[].obs;
   var products = <Product>[].obs;
-  RxBool isLoading = false.obs;
+  var isLoading = true.obs;
+
   var carouselList = <CarouselIndex>[].obs;
   Timer? _timer;
 
@@ -185,37 +188,6 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<ProductDetail> fetchProductDetail(int productId) async {
-    var headers = {
-      'Accept': 'application/json',
-    };
-    try {
-      var url = Uri.parse(
-        ApiEndPoints.baseUrl +
-            ApiEndPoints.productEndPoints.show +
-            '$productId',
-      );
-      http.Response response = await http.get(url, headers: headers);
-
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        if (jsonResponse['code'] == 200) {
-          final data = jsonResponse['data'];
-          final productDetail = ProductDetail.fromJson(data);
-          return productDetail;
-        } else {
-          throw Exception(
-              'Failed to fetch product details: ${jsonResponse['message']}');
-        }
-      } else {
-        throw Exception(
-            'Failed to fetch product details. Status Code: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error occurred while fetching product details: $e');
-    }
-  }
-
   Future<void> fetchCategories() async {
     try {
       var fetchedCategories = await getCategories();
@@ -234,5 +206,33 @@ class HomeController extends GetxController {
       // Handle error if there is an issue fetching the products
       print('Error fetching products: $error');
     }
+  }
+
+  Future<CategoryShow> categotyDetail(int categoryId) async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+
+    var url = Uri.parse(
+      ApiEndPoints.baseUrl +
+          ApiEndPoints.productEndPoints.categoryshow +
+          '/$categoryId',
+    );
+    http.Response response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = jsonDecode(response.body);
+      return CategoryShow.fromJson(jsonData);
+    } else {
+      throw Exception('Failed to load category data');
+    }
+  }
+
+  String convertToIdr(dynamic number, int decimalDigit) {
+    NumberFormat currencyFormatter = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp ',
+      decimalDigits: decimalDigit,
+    );
+    return currencyFormatter.format(number);
   }
 }

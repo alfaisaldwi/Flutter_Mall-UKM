@@ -2,10 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:mall_ukm/app/modules/category/views/category_view.dart';
+import 'package:mall_ukm/app/modules/home/views/search_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
@@ -55,10 +58,8 @@ class HomeView extends GetView<HomeController> {
                       filter: (product) => [
                         product.title,
                       ],
-                      builder: (product) => ListTile(
-                        title: Text(product.title),
-                        subtitle: Text(product.price),
-                        trailing: Text('${product.qty} '),
+                      builder: (product) => SearchView(
+                        products: product,
                       ),
                     ),
                   );
@@ -152,7 +153,7 @@ class HomeView extends GetView<HomeController> {
                           ),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * .1 + 20,
+                          height: MediaQuery.of(context).size.height * .1 + 3,
                           width: MediaQuery.of(context).size.width * .9,
                           child: Obx(() => ListView.builder(
                               physics: const ClampingScrollPhysics(),
@@ -162,16 +163,21 @@ class HomeView extends GetView<HomeController> {
                               itemBuilder: (context, index) {
                                 var category = controller.category[index];
                                 return GestureDetector(
-                                  onTap: () {
-                                    Get.to(
-                                      () => ProductDetailView(),
-                                    );
+                                  onTap: () async {
+                                    var categoryDetail = await controller
+                                        .categotyDetail(category.id);
+                                    print(category.id);
+
+                                    Get.toNamed('category', arguments: [
+                                      categoryDetail,
+                                      category.title
+                                    ]);
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.all(0),
                                     child: Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8.0, bottom: 4.0),
+                                          left: 8.0, right: 8.0, bottom: 0.0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -188,7 +194,7 @@ class HomeView extends GetView<HomeController> {
                                                     width: 28,
                                                     height: 30,
                                                     color:
-                                                        Colors.deepOrange[600],
+                                                        Colors.deepOrange[400],
                                                     fit: BoxFit.fill,
                                                     alignment: Alignment.center,
                                                   ),
@@ -248,110 +254,119 @@ class HomeView extends GetView<HomeController> {
                         ),
                       );
                     } else {
-                      return GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 2,
-                          mainAxisSpacing: 4,
-                        ),
-                        itemCount: controller.products.length,
-                        itemBuilder: (BuildContext ctx, index) {
-                          var product = controller.products[index];
-                          final originalPrice = NumberFormat.decimalPattern()
-                              .format(int.parse(product.price));
-                          final discountedPrice = NumberFormat.decimalPattern()
-                              .format(int.parse(product.priceRetail));
+                      return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12.0, vertical: 12),
+                          child: MasonryGridView.count(
+                              crossAxisCount: 2,
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 18,
+                              itemCount: controller.products.length,
+                              itemBuilder: (context, index) {
+                                var product = controller.products[index];
 
-                          return GestureDetector(
-                            onTap: () async {
-                              var productDetails = await controller
-                                  .fetchProductDetails(product.id);
-                              Get.toNamed('product-detail',
-                                  arguments: [productDetails]);
-                            },
-                            child: Card(
-                              child: Container(
-                                margin: const EdgeInsets.all(2),
-                                padding: const EdgeInsets.all(5),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8.0, bottom: 4.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: AspectRatio(
-                                          aspectRatio: 4 / 3,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            child: Image.network(
-                                              product.photo.first,
-                                              fit: BoxFit.cover,
-                                            ),
+                                return GestureDetector(
+                                  onTap: () async {
+                                    var productDetails = await controller
+                                        .fetchProductDetails(product.id);
+                                    Get.toNamed('product-detail',
+                                        arguments: [productDetails]);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        color: Colors.white),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(10.0),
+                                            topRight: Radius.circular(10.0),
                                           ),
+                                          child: Image.network(
+                                              product.photo.first),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 6.0),
-                                        child: Text(
-                                          product.title,
-                                          textAlign: TextAlign.left,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Styles.bodyStyle(
-                                              weight: FontWeight.w600),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0,
-                                              right: 8,
-                                              top: 2.0,
-                                              bottom: 2),
-                                          child: RichText(
-                                            softWrap: true,
-                                            text: TextSpan(
-                                              text: 'Rp.$originalPrice',
-                                              style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black,
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 2, vertical: 5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      product.title,
+                                                      maxLines: 2,
+                                                      style: const TextStyle(
+                                                          overflow:
+                                                              TextOverflow.fade,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 16,
+                                                          color: Color.fromRGBO(
+                                                              74, 74, 74, 1)),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              children: [
-                                                WidgetSpan(
-                                                  child: Container(
-                                                    width: 8,
-                                                  ),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.0),
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      controller.convertToIdr(
+                                                          double.parse(
+                                                              product.price),
+                                                          2),
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color: Color.fromRGBO(
+                                                              133,
+                                                              133,
+                                                              133,
+                                                              1)),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 2,
+                                                    ),
+                                                    Text(
+                                                      controller.convertToIdr(
+                                                          double.parse(product
+                                                              .priceRetail),
+                                                          2),
+                                                      style: const TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.red,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .lineThrough),
+                                                    )
+                                                  ],
                                                 ),
-                                                TextSpan(
-                                                  text: discountedPrice,
-                                                  style: const TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.red,
-                                                    decoration: TextDecoration
-                                                        .lineThrough,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ),
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
+                                );
+                              }));
                     }
                   }),
                   SizedBox(

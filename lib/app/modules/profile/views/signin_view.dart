@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart';
+import 'package:mall_ukm/app/modules/profile/views/signup_view.dart';
 
 class SigninView extends GetView<ProfileController> {
   var ctrLogin = Get.put(ProfileController());
@@ -65,11 +66,21 @@ class SigninView extends GetView<ProfileController> {
           Padding(
             padding: EdgeInsets.all(10),
             child: TextFormField(
-              obscureText: true,
+              obscureText: !controller.isPasswordVisible.value,
               controller: ctrLogin.cpw,
               decoration: InputDecoration(
                 hintText: 'Password',
                 focusColor: Colors.white,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    controller.togglePasswordVisibility();
+                  },
+                  icon: Icon(
+                    controller.isPasswordVisible.value
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50.0),
                 ),
@@ -80,7 +91,7 @@ class SigninView extends GetView<ProfileController> {
             height: 30,
           ),
           Container(
-            width: 80,
+            width: 180,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xff5EE8D1),
@@ -98,14 +109,14 @@ class SigninView extends GetView<ProfileController> {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           Text(
             'Belum mempunyai akun?',
             style: GoogleFonts.inter(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Container(
@@ -113,8 +124,8 @@ class SigninView extends GetView<ProfileController> {
             height: 30,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffF8C800),
-                shape: StadiumBorder(),
+                backgroundColor: const Color(0xffF8C800),
+                shape: const  StadiumBorder(),
               ),
               child: Text(
                 'Buat akun',
@@ -124,7 +135,11 @@ class SigninView extends GetView<ProfileController> {
                 ),
               ),
               onPressed: () async {
-                Get.toNamed('signup');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SignupPageView(),
+                    ));
               },
             ),
           ),

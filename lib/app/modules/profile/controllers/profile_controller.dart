@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
@@ -16,7 +17,7 @@ class ProfileController extends GetxController {
   TextEditingController cusername = TextEditingController();
   TextEditingController cnohp = TextEditingController();
   var cNav = NavbarPageController();
-
+  var isPasswordVisible = false.obs;
   var isLoading = true.obs;
   var isError = false.obs;
   var errmsg = "".obs;
@@ -29,6 +30,7 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     String? token = GetStorage().read('token');
+    print(token);
     // GetStorage().remove('token');
   }
 
@@ -58,20 +60,126 @@ class ProfileController extends GetxController {
         Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
         cemail.clear();
         cpw.clear();
+        Fluttertoast.showToast(
+          msg: 'Login Berhasil',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
       } else {
-        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+        Fluttertoast.showToast(
+          msg: 'Periksa kembali email dan password',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
       }
     } catch (error) {
-      Get.back();
-      showDialog(
-          context: Get.context!,
-          builder: (context) {
-            return SimpleDialog(
-              title: Text('Error'),
-              contentPadding: EdgeInsets.all(20),
-              children: [Text(error.toString())],
-            );
-          });
+      Fluttertoast.showToast(
+        msg: 'Periksa kembali email dan password',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.grey[800],
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
+    }
+  }
+
+  Future<void> signUp() async {
+    var headers = {'Content-Type': 'application/json'};
+    try {
+      var url =
+          Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
+      Map body = {
+        'name': cnamalengkap.text,
+        'email': cemail.text.trim(),
+        'password': cpw.text
+      };
+      http.Response response =
+          await http.post(url, body: jsonEncode(body), headers: headers);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        if (json['code'] == 200) {
+          cNav.tabController.index = 2;
+          Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
+          cemail.clear();
+          cpw.clear();
+          Fluttertoast.showToast(
+            msg: 'Register Berhasil',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.grey[800],
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: 'Periksa kembali nama, email dan password',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.grey[800],
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Periksa kembali nama, email dan password',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
+      }
+    } catch (error) {
+      Fluttertoast.showToast(
+        msg: 'Periksa kembali nama, email dan password',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.grey[800],
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
+    }
+  }
+
+  Future<void> me() async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.me);
+      http.Response response = await http.post(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        if (responseData['code'] == '200') {
+          print(responseData['message']);
+          GetStorage().remove('token');
+
+          // Lakukan tindakan yang diperlukan setelah logout berhasil
+        } else {
+          throw 'Gagal : ${responseData['message']}';
+        }
+      } else {
+        throw 'Gagal : ${response.reasonPhrase}|| ${response.statusCode}';
+      }
+    } catch (error) {
+      GetStorage().remove('token');
+
+      print('print tokennn ---- $token');
+
+      throw 'Terjadi kesalahan saat logout: $error ||||| $token';
     }
   }
 
@@ -92,6 +200,14 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
+          Fluttertoast.showToast(
+            msg: 'Logout Berhasil',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.grey[800],
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
           Timer(const Duration(seconds: 1),
               () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
 
@@ -126,6 +242,10 @@ class ProfileController extends GetxController {
       final jsonData = jsonDecode(response.body);
       accountData.value = RxMap<String, dynamic>(jsonData['data']);
     }
+  }
+
+  void togglePasswordVisibility() {
+    isPasswordVisible.value = !isPasswordVisible.value;
   }
 
   // Future<void> fetchUsers() async {

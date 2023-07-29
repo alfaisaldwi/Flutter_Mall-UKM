@@ -19,7 +19,10 @@ class CartController extends GetxController {
 
   RxBool counterPlus = false.obs;
   RxDouble totalHarga = 0.0.obs;
+  RxBool? isCheckedBox;
   RxList<RxDouble> priceC = <RxDouble>[].obs;
+  RxDouble totalWeight = 0.0.obs;
+  RxList<RxDouble> subWeightC = <RxDouble>[].obs;
 
   @override
   void onInit() {
@@ -30,6 +33,22 @@ class CartController extends GetxController {
   void onReady() {
     fetchCart();
     super.onReady();
+  }
+
+  void updateTotalValues() {
+    double totalHargaValue = 0;
+    double totalWeightValue = 0;
+
+    for (int index = 0; index < carts.length; index++) {
+      if (isChecked(index) == true) {
+        totalHargaValue +=
+            priceC[index].value * counter[index].value.toDouble();
+        totalWeight.value += counter[index].value * subWeightC[index].value;
+      }
+    }
+
+    totalHarga.value = totalHargaValue;
+    // totalWeight.value = totalWeightValue;
   }
 
   String convertToIdr(dynamic number, int decimalDigit) {
@@ -191,25 +210,28 @@ class CartController extends GetxController {
         if (counterPlus.value == true) {
           counter[index].value++;
           totalHarga.value += priceC[index].value;
-          Fluttertoast.showToast(
-            msg: 'Berhasil menambahkan kuantitas',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.grey[800],
-            textColor: Colors.white,
-            fontSize: 14.0,
-          );
+          totalWeight.value += subWeightC[index].value;
+          // Fluttertoast.showToast(
+          //   msg: 'Berhasil menambahkan kuantitas',
+          //   toastLength: Toast.LENGTH_SHORT,
+          //   gravity: ToastGravity.BOTTOM,
+          //   backgroundColor: Colors.grey[800],
+          //   textColor: Colors.white,
+          //   fontSize: 14.0,
+          // );
         } else if (counterPlus.value == false) {
           counter[index].value--;
           totalHarga.value -= priceC[index].value;
-          Fluttertoast.showToast(
-            msg: 'Berhasil mengurangi kuantitas',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.grey[800],
-            textColor: Colors.white,
-            fontSize: 14.0,
-          );
+          totalWeight.value -= subWeightC[index].value;
+
+          // Fluttertoast.showToast(
+          //   msg: 'Berhasil mengurangi kuantitas',
+          //   toastLength: Toast.LENGTH_SHORT,
+          //   gravity: ToastGravity.BOTTOM,
+          //   backgroundColor: Colors.grey[800],
+          //   textColor: Colors.white,
+          //   fontSize: 14.0,
+          // );
         }
         print('Item berhasil diupdate');
       } else if (jsonResponse['code'] == 400) {
@@ -229,5 +251,14 @@ class CartController extends GetxController {
     } else {
       print('Gagal mengupdate cart. Kode status: ${response.statusCode}');
     }
+  }
+
+  void refreshCartData() {
+    selectedItems.clear();
+    Get.put(CartController());
+    // update();
+    // totalHarga.value = 0.0;
+    // isCheckedList.clear();
+    // totalWeight.value = 0;
   }
 }
