@@ -39,9 +39,11 @@ class CheckoutView extends GetView<CheckoutController> {
           style: Styles.headerStyles(weight: FontWeight.w500, size: 16),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => controller.goToCartAndRefresh(),
-        ),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Get.back(); 
+              controller.goToCartAndRefresh();
+            }),
         backgroundColor: Colors.white,
       ),
       bottomNavigationBar: Container(

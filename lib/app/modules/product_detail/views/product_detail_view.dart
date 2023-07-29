@@ -426,14 +426,15 @@ class ProductDetailView extends GetView<ProductDetailController> {
 
                               return GestureDetector(
                                 onTap: () async {
+                                  // homeC.fetchProductDetails(recomend.id);
                                   var productDetails = await homeC
                                       .fetchProductDetails(recomend.id);
-                                  Get.to(() => ProductDetailView(),
+                                  Get.offAndToNamed('/product-detail',
                                       arguments: [productDetails]);
 
                                   // Get.toNamed('product-detail',
                                   //     arguments: [productDetails]);
-                                  print(product.id);
+                              
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 2.0),

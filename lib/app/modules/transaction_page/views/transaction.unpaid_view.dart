@@ -9,6 +9,8 @@ class TransactionUnpaidView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
+    bool hasUnpaidTransactions = false;
+
     return RefreshIndicator(
       onRefresh: () async {
         controller.callGettrs();
@@ -23,35 +25,38 @@ class TransactionUnpaidView extends GetView<TransactionPageController> {
                     const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
                 child: Obx(
                   () => ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: ctrT.transactionIndexList.length,
-                      itemBuilder: (context, index) {
-                        var trs = ctrT.transactionIndexList[index];
-                        // var trsDetail =
-                        //     ctrT.transactionIndexList.detailTransactions[index];
-                        if (trs.status == 'unpaid') {
-                          return TransactionCard(transaction: trs);
-                        } else {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 200.0),
-                            child: Container(
-                                color: Colors.white,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Tidak ada transaksi',
-                                    style: Styles.headerStyles(),
-                                  ),
-                                )),
-                          );
-                        }
-                      }),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: ctrT.transactionIndexList.length,
+                    itemBuilder: (context, index) {
+                      var trs = ctrT.transactionIndexList[index];
+                      // Check if there are any unpaid transactions
+                      if (trs.status == 'unpaid') {
+                        hasUnpaidTransactions = true;
+                        return TransactionCard(transaction: trs);
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
+            // Check if there are no unpaid transactions to show the message
+            if (!hasUnpaidTransactions)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 300.0),
+                child: Container(
+                  color: Colors.white,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Tidak ada transaksi',
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

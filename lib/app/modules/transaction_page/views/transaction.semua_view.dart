@@ -17,26 +17,36 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
         color: Colors.white,
         child: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                child: Obx(
-                  () => ListView.builder(
+            if (ctrT.transactionIndexList.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 300.0),
+                child: Container(
+                  color: Colors.white,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text('Tidak ada transaksi'),
+                  ),
+                ),
+              )
+            else
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+                  child: Obx(
+                    () => ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: ctrT.transactionIndexList.length,
                       itemBuilder: (context, index) {
                         var trs = ctrT.transactionIndexList[index];
-
-                        return GestureDetector(
-                            onTap: () {},
-                            child: TransactionCard(transaction: trs));
-                      }),
+                        return TransactionCard(transaction: trs);
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
@@ -60,7 +70,8 @@ class TransactionCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           var trsDetail = await ctrT.fetchDetailTransaction(transaction.id);
-          print(transaction.id);
+
+
           Get.toNamed('/transaction-detail', arguments: trsDetail);
         },
         child: Card(

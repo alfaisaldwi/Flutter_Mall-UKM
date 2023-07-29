@@ -11,6 +11,7 @@ import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
 import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
 import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
+import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
@@ -222,7 +223,11 @@ class CheckoutController extends GetxController {
   }
 
   void goToCartAndRefresh() {
-    Get.back(); // Kembali ke halaman cart
-    Get.find<CartController>().refreshCartData(); // Refresh controller cart
+    Get.off(() => CartView()); // Kembali ke halaman cart
+    Get.find<CartController>().refreshCartData();
+    Get.find<CartController>().fetchCart();
+    Get.find<CartController>().totalHarga.value = 0.0;
+    // Refresh controller cart
+    // Refresh controller cart
   }
 }

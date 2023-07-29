@@ -14,7 +14,7 @@ class TransactionPageController extends GetxController {
   var transactionIndexPaid = <Transaction>[].obs;
   var transactionIndexUnpaid = <Transaction>[].obs;
   var isLoading = true.obs;
-  var transactionDetail = TransactionShow().obs;
+  var transactionDetail = Rx<TransactionShow>(TransactionShow());
 
   final count = 0.obs;
   @override
@@ -68,22 +68,28 @@ class TransactionPageController extends GetxController {
   }
 
   Future<TransactionShow> fetchDetailTransaction(int transactionId) async {
-    String? token = GetStorage().read('token');
-    var headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+    try {
+      String? token = GetStorage().read('token');
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
 
-    var url = Uri.parse(
-      ApiEndPoints.baseUrl +
-          ApiEndPoints.transactionEndPoints.show +
-          '/$transactionId',
-    );
-    http.Response response = await http.get(url, headers: headers);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonData = jsonDecode(response.body);
-      return TransactionShow.fromJson(jsonData);
-    } else {
+      var url = Uri.parse(
+        ApiEndPoints.baseUrl +
+            ApiEndPoints.transactionEndPoints.show +
+            '/$transactionId',
+      );
+      http.Response response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        var transactionShow = TransactionShow.fromJson(jsonData['data']);
+        return transactionShow;
+      } else {
+        throw Exception('Failed to load category data');
+      }
+    } catch (e) {
+      print(e);
       throw Exception('Failed to load category data');
     }
   }

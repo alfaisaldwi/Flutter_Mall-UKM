@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import 'package:mall_ukm/app/modules/address/bindings/address_binding.dart';
 import 'package:mall_ukm/app/modules/address/views/address_index_view.dart';
 import 'package:mall_ukm/app/modules/address/views/address_view.dart';

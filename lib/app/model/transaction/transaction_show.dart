@@ -1,22 +1,22 @@
 class TransactionShow {
-  final int? id;
-  final String? userId;
-  final String? addressId;
-  final String? orderId;
-  final String? courier;
-  final String? costCourier;
-  final String? receiptNumber;
-  final String? total;
-  final String? paymentUrl;
-  final String? status;
-  final String? createdAt;
-  final String? updatedAt;
-  final String? userUsernameSender;
-  final String? addressUsername;
-  final String? addressPhone;
-  final String? addressInAddress;
-  final String? addressAddressDetail;
-  final List<DetailTransaction>? detailTransaction;
+  int? id;
+  String? userId;
+  String? addressId;
+  String? orderId;
+  String? courier;
+  String? costCourier;
+  String? receiptNumber;
+  String? total;
+  String? paymentUrl;
+  String? status;
+  String? createdAt;
+  String? updatedAt;
+  String? userUsernameSender;
+  String? addressUsername;
+  String? addressPhone;
+  String? addressInAddress;
+  String? addressAddressDetail;
+  List<DetailTransaction>? detailTransaction;
 
   TransactionShow({
     this.id,
@@ -40,7 +40,7 @@ class TransactionShow {
   });
 
   factory TransactionShow.fromJson(Map<String, dynamic> json) {
-    var detailTransactions = json['data']['detail_transaction'] as List;
+    var detailTransactions = json['detail_transaction'] as List;
     List<DetailTransaction> transactions = detailTransactions
         .map((detailJson) => DetailTransaction.fromJson(detailJson))
         .toList();

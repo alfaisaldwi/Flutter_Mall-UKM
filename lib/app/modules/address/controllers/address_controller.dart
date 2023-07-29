@@ -11,6 +11,7 @@ import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.da
 import 'package:mall_ukm/app/service/api_service.dart';
 
 class AddressController extends GetxController {
+  var checkoutC = Get.put(CheckoutController());
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
@@ -102,8 +103,7 @@ class AddressController extends GetxController {
   void onClose() {}
 
   void getAdrresNow() {
-    CheckoutController checkoutController = Get.find<CheckoutController>();
-    checkoutController.refreshAddress();
+    checkoutC.refreshAddress();
   }
 
   Future<void> getAddress() async {

@@ -9,7 +9,7 @@ class TransactionPaidView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
-    bool hasPaidTransactions = true;
+    bool hasPaidTransactions = false;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -25,34 +25,32 @@ class TransactionPaidView extends GetView<TransactionPageController> {
                     const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
                 child: Obx(
                   () => ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: ctrT.transactionIndexList.length,
-                      itemBuilder: (context, index) {
-                        var trs = ctrT.transactionIndexList[index];
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: ctrT.transactionIndexList.length,
+                    itemBuilder: (context, index) {
+                      var trs = ctrT.transactionIndexList[index];
+                      if (trs.status == 'paid') {
                         hasPaidTransactions = true;
-                        // var trsDetail =
-                        //     ctrT.transactionIndexList.detailTransactions[index];
-                        if (trs.status == 'paid') {
-                          return TransactionCard(transaction: trs);
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      }),
+                        return TransactionCard(transaction: trs);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
-            if (hasPaidTransactions == false)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 200.0),
-                  child: Container(
-                    color: Colors.white,
-                    child: const Align(
-                      alignment: Alignment.center,
-                      child: Text('Tidak ada transaksi'),
-                    ),
+            // Check if there are no paid transactions to show the message
+            if (!hasPaidTransactions)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 300.0),
+                child: Container(
+                  color: Colors.white,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text('Tidak ada transaksi'),
                   ),
                 ),
               ),
