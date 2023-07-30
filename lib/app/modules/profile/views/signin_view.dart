@@ -65,27 +65,27 @@ class SigninView extends GetView<ProfileController> {
           ),
           Padding(
             padding: EdgeInsets.all(10),
-            child: TextFormField(
-              obscureText: !controller.isPasswordVisible.value,
-              controller: ctrLogin.cpw,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                focusColor: Colors.white,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    controller.togglePasswordVisibility();
-                  },
-                  icon: Icon(
-                    controller.isPasswordVisible.value
-                        ? Icons.visibility
-                        : Icons.visibility_off,
+            child: Obx(() => TextFormField(
+                  obscureText: !controller.isPasswordVisible.value,
+                  controller: ctrLogin.cpw,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    focusColor: Colors.white,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        controller.togglePasswordVisibility();
+                      },
+                      icon: Icon(
+                        controller.isPasswordVisible.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
                   ),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-              ),
-            ),
+                )),
           ),
           SizedBox(
             height: 30,
@@ -125,7 +125,7 @@ class SigninView extends GetView<ProfileController> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xffF8C800),
-                shape: const  StadiumBorder(),
+                shape: const StadiumBorder(),
               ),
               child: Text(
                 'Buat akun',
@@ -135,11 +135,13 @@ class SigninView extends GetView<ProfileController> {
                 ),
               ),
               onPressed: () async {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SignupPageView(),
-                    ));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => SignupPageView(),
+                //     ));
+
+                Get.toNamed('signup');
               },
             ),
           ),

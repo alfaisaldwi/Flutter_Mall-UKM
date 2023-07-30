@@ -49,7 +49,8 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                         maxLines: 2,
                         // overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.justify,
-                        style: TextStyle(fontSize: 13),
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                         height: 15,
@@ -206,7 +207,9 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                 ),
               if (trsDetail.status == 'unpaid')
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    controller.bayar(trsDetail.paymentUrl!);
+                  },
                   child: Container(
                     height: 45,
                     width: double.infinity,

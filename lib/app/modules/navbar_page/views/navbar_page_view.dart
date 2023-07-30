@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/modules/home/views/home_view.dart';
+import 'package:mall_ukm/app/modules/profile/views/account_view.dart';
 import 'package:mall_ukm/app/modules/profile/views/profile_view.dart';
+import 'package:mall_ukm/app/modules/profile/views/signin_view.dart';
 import 'package:mall_ukm/app/modules/recommend_page/views/recommend_page_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction_page_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -15,16 +18,20 @@ class NavbarPageView extends GetView<NavbarPageController> {
       color: Colors.white.withOpacity(0.5),
       fontWeight: FontWeight.w500,
       fontSize: 12);
+    String? token = GetStorage().read('token');
+
 
   final TextStyle selectedLabelStyle =
       TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12);
 
   List<Widget> _buildScreen() {
+
+    RxString tokenRx = RxString(token ?? '');
     return [
       HomeView(),
       RecommendPageView(),
       TransactionPageView(),
-      ProfileView(),
+      token != null ?  AccountView() : SigninView()
     ];
   }
 

@@ -434,7 +434,6 @@ class ProductDetailView extends GetView<ProductDetailController> {
 
                                   // Get.toNamed('product-detail',
                                   //     arguments: [productDetails]);
-                              
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 2.0),
@@ -618,7 +617,7 @@ void showOrderDialog(BuildContext context) {
                       ),
                       didChangeCount: (count) async {
                         // if (count > controllerProductDetail.counter.value) {
-                        if (count < int.parse(product.qty)) {
+                        if (count <= int.parse(product.qty)) {
                           controllerProductDetail.counter.value = count;
                         } else {
                           Fluttertoast.showToast(
@@ -653,7 +652,7 @@ void showOrderDialog(BuildContext context) {
                         if (token != null) {
                           if (controllerProductDetail
                               .selectedVariant.value.isNotEmpty) {
-                            if (int.parse(product.qty) >
+                            if (int.parse(product.qty) >=
                                 controllerProductDetail.counter.value) {
                               CartItem cartItem = CartItem(
                                   product_id: product.id,

@@ -34,7 +34,7 @@ class WebviewCheckout extends GetView<TransactionPageController> {
             return true;
           },
           child: WebViewWidget(
-              controller: contr.ctr, gestureRecognizers: const <
+              controller: controller.ctr, gestureRecognizers: const <
                   Factory<OneSequenceGestureRecognizer>>{}),
         )));
   }
