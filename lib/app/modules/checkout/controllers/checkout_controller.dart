@@ -32,8 +32,8 @@ class CheckoutController extends GetxController {
   var weight = ''.obs;
   RxList<RxInt> weight2 = <RxInt>[].obs;
   var totalWeight = ''.obs;
-  final List<String> couriers = ['jne', 'pos', 'tiki'];
-  final List<String> layanan = ['jne', 'pos', 'tiki'];
+  final List<String> couriers = ['jne', 'pos', 'tiki', 'sicepat', 'jnt'];
+  final List<String> layanan = ['jne', 'pos', 'tiki', 'sicepat', 'jnt'];
   Rx<Future<AddressSelect>>? futureAddress;
 
   Future<TransaksiStore> tambahDataTransaksi(CheckoutData checkoutData) async {
@@ -50,7 +50,6 @@ class CheckoutController extends GetxController {
 
     // Buat body request sesuai dengan contoh yang kamu berikan
     final body = jsonEncode(checkoutData.toJson());
-    print(body);
 
     final response = await http.post(url, body: body, headers: headers);
 
@@ -83,13 +82,14 @@ class CheckoutController extends GetxController {
           )
           ..loadRequest(Uri.parse(paymentUrl));
 
-        Navigator.push(
-            Get.context!,
-            MaterialPageRoute(
-              builder: (context) => MyHomePage(
-                url: paymentUrl,
-              ),
-            ));
+        Get.offAll((WebviewCheckout()), arguments: url);
+        // Navigator.push(
+        //     Get.context!,
+        //     MaterialPageRoute(
+        //       builder: (context) => MyHomePage(
+        //         url: paymentUrl,
+        //       ),
+        //     ));
         print(paymentUrl);
       }
 

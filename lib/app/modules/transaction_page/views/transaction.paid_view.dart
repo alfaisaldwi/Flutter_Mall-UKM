@@ -9,7 +9,7 @@ class TransactionPaidView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
-    bool hasPaidTransactions = false;
+    bool hasPaidTransactions;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -42,8 +42,7 @@ class TransactionPaidView extends GetView<TransactionPageController> {
                 ),
               ),
             ),
-            // Check if there are no paid transactions to show the message
-            if (!hasPaidTransactions)
+            if (hasPaidTransactions = false)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 300.0),
                 child: Container(
@@ -143,14 +142,19 @@ class TransactionCard extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Kurir: ${transaction.courier}'),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                         'Total:  ${ctrT.convertToIdr(double.parse(transaction.total), 2)}'),
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward),
-                onTap: () {
-                  // Tambahkan logika untuk menavigasi ke halaman rincian transaksi
+                onTap: () async {
+                  var trsDetail =
+                      await ctrT.fetchDetailTransaction(transaction.id);
+
+                  Get.toNamed('/transaction-detail', arguments: trsDetail);
                 },
               ),
             ],

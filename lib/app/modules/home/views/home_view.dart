@@ -125,12 +125,14 @@ class HomeView extends GetView<HomeController> {
                   Card(
                     child: Column(
                       children: [
-                        Center(
+                        Container(
+                          width: double.infinity,
                           child: Obx(() => CarouselSlider(
                                 options: CarouselOptions(
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
                                     autoPlay: true,
-                                    viewportFraction: 1,
-                                    aspectRatio: 16 / 9),
+                                    viewportFraction: 0.9,
+                                    aspectRatio: 16 / 8),
                                 items: controller.carouselList.map((carousel) {
                                   return Container(
                                     child: Image.network(
@@ -269,6 +271,8 @@ class HomeView extends GetView<HomeController> {
 
                                 return GestureDetector(
                                   onTap: () async {
+                                    controller.getCurrentLocation();
+                                    controller.postCurrentLocation();
                                     var productDetails = await controller
                                         .fetchProductDetails(product.id);
                                     Get.toNamed('product-detail',

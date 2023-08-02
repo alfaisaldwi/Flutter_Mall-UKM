@@ -323,9 +323,9 @@ class CartView extends GetView<CartController> {
                                                                               index]
                                                                           .value <=
                                                                       1) {
-                                                                    await controller
-                                                                        .deleteCart(
-                                                                            cart.id);
+                                                                    // await controller
+                                                                    //     .deleteCart(
+                                                                    //         cart.id);
                                                                   } else if (count <
                                                                       controller
                                                                           .counter[
@@ -375,9 +375,32 @@ class CartView extends GetView<CartController> {
                                                         }),
                                                         GestureDetector(
                                                           onTap: () async {
-                                                            await controller
-                                                                .deleteCart(
-                                                                    cart.id);
+                                                            if (controller
+                                                                    .selectedItems
+                                                                    .length <=
+                                                                1) {
+                                                              await controller
+                                                                  .deleteCart(
+                                                                      cart.id);
+                                                            } else {
+                                                              Fluttertoast
+                                                                  .showToast(
+                                                                msg:
+                                                                    'Hanya bisa ceklis 1 produk',
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT,
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .BOTTOM,
+                                                                backgroundColor:
+                                                                    Colors.grey[
+                                                                        800],
+                                                                textColor:
+                                                                    Colors
+                                                                        .white,
+                                                                fontSize: 14.0,
+                                                              );
+                                                            }
                                                           },
                                                           child: const Padding(
                                                             padding: EdgeInsets

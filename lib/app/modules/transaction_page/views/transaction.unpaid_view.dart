@@ -9,7 +9,7 @@ class TransactionUnpaidView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
-    bool hasUnpaidTransactions = false;
+    bool hasUnpaidTransactions;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -44,7 +44,7 @@ class TransactionUnpaidView extends GetView<TransactionPageController> {
               ),
             ),
             // Check if there are no unpaid transactions to show the message
-            if (!hasUnpaidTransactions)
+            if (hasUnpaidTransactions = false)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 300.0),
                 child: Container(
@@ -145,15 +145,19 @@ class TransactionCard extends StatelessWidget {
                 title: Text(transaction.productName),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Kurir: ${transaction.courier}'),
+                  children: [  const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                         'Total:  ${ctrT.convertToIdr(double.parse(transaction.total), 2)}'),
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward),
-                onTap: () {
-                  // Tambahkan logika untuk menavigasi ke halaman rincian transaksi
+                onTap: () async {
+                  var trsDetail =
+                      await ctrT.fetchDetailTransaction(transaction.id);
+
+                  Get.toNamed('/transaction-detail', arguments: trsDetail);
                 },
               ),
             ],

@@ -160,12 +160,12 @@ class SignupPageView extends GetView<ProfileController> {
                   ),
                 ),
                 onPressed: () async {
-                  // Get.toNamed('/profile');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfileView(),
-                      ));
+                  Get.toNamed('/profile');
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => ProfileView(),
+                  //     ));
                 },
               ),
             ),

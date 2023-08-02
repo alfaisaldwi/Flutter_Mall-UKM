@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
@@ -22,6 +24,9 @@ class HomeController extends GetxController {
   var category = <Category>[].obs;
   var products = <Product>[].obs;
   var isLoading = true.obs;
+  RxDouble latitude = 0.0.obs;
+  RxDouble longitude = 0.0.obs;
+  double? radius;
 
   var carouselList = <CarouselIndex>[].obs;
   Timer? _timer;
@@ -224,6 +229,78 @@ class HomeController extends GetxController {
       return CategoryShow.fromJson(jsonData);
     } else {
       throw Exception('Failed to load category data');
+    }
+  }
+
+  void getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      latitude.value = position.latitude;
+      longitude.value = position.longitude;
+
+      Map<String, dynamic> requestBody = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      return getCurrentLocation();
+    } catch (e) {
+      print("Terjadi kesalahan saat mengambil lokasi: $e");
+    }
+  }
+
+  void postCurrentLocation() async {
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
+    try {
+      Map<String, dynamic> requestBody = {
+        "latitude": latitude.value,
+        "longitude":     longitude.value,
+      };
+
+      var url =
+          Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.checkHaversine.check);
+
+      http.Response response =
+          await http.post(url, body: jsonEncode(requestBody), headers: headers);
+      print('body $requestBody ||| ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        var radiusData = jsonResponse['data'];
+        radius = radiusData;
+
+        print(' www ${radius}');
+        Fluttertoast.showToast(
+          msg: 'Berhasil, Kamu berada diradius Mall UKM',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
+      } else {
+        final jsonResponse = jsonDecode(response.body);
+
+        var radiusData = jsonResponse['data'];
+        radius = radiusData;
+        Fluttertoast.showToast(
+          msg: 'Gagal, Kamu tidak berada diradius Mall UKM',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
+      }
+    } catch (e) {
+      print("Terjadi kesalahan: $e");
     }
   }
 

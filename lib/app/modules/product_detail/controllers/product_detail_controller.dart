@@ -25,7 +25,7 @@ class ProductDetailController extends GetxController {
   }
 
   void decrementQuantity() {
- if (counter.value > 0) {
+    if (counter.value > 0) {
       counter.value--;
     }
   }
@@ -36,6 +36,7 @@ class ProductDetailController extends GetxController {
 
   @override
   void onInit() {
+    
     super.onInit();
   }
 
@@ -46,7 +47,9 @@ class ProductDetailController extends GetxController {
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+    selectedVariant.close;
+  }
 
   Future<List<RecommendProductDetail>> getRecomend() async {
     var headers = {

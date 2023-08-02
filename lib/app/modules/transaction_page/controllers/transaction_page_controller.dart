@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_index_model.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
+import 'package:mall_ukm/app/modules/checkout/views/webwiew_checkout%20.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
 
 class TransactionPageController extends GetxController {
   final iconSize = 350.0.obs;
@@ -15,6 +18,7 @@ class TransactionPageController extends GetxController {
   var transactionIndexUnpaid = <Transaction>[].obs;
   var isLoading = true.obs;
   var transactionDetail = Rx<TransactionShow>(TransactionShow());
+  WebViewController ctr = WebViewController();
 
   final count = 0.obs;
   @override
@@ -105,5 +109,39 @@ class TransactionPageController extends GetxController {
 
   void callGettrs() {
     getTransaction();
+  }
+
+  void bayar(String url) {
+    ctr = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(url));
+
+    Get.offAll((WebviewCheckout()), arguments: url);
+
+    // Navigator.push(
+    //     Get.context!,
+    //     MaterialPageRoute(
+    //       builder: (context) => MyHomePage(
+    //         url: paymentUrl,
+    //       ),
+    //     ));
+    print(url);
   }
 }

@@ -20,6 +20,7 @@ abstract class Routes {
   static const ADDRESS_INDEX = _Paths.ADDRESS_INDEX;
   static const CHECKOUT = _Paths.CHECKOUT;
   static const CATEGORY = _Paths.CATEGORY;
+  static const PROFILE_COMPANY = _Paths.PROFILE_COMPANY;
 }
 
 abstract class _Paths {
@@ -39,4 +40,5 @@ abstract class _Paths {
   static const ADDRESS_INDEX = '/address-index';
   static const CHECKOUT = '/checkout';
   static const CATEGORY = '/category';
+  static const PROFILE_COMPANY = '/profile-company';
 }
