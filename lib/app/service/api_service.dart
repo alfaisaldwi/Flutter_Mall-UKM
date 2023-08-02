@@ -7,6 +7,7 @@ class ApiEndPoints {
   static _RajaOngkirEndPoints rajaOngkirEndPoints = _RajaOngkirEndPoints();
   static _TransactionEndPoints transactionEndPoints = _TransactionEndPoints();
   static _ProfileCompany profileCompany = _ProfileCompany();
+  static _CheckHaversine checkHaversine = _CheckHaversine();
 }
 
 class _AuthEndPoints {
@@ -18,6 +19,10 @@ class _AuthEndPoints {
 
 class _ProfileCompany {
   final String index = '/api/profile/company';
+}
+
+class _CheckHaversine {
+  final String check = '/api/check/haverinse';
 }
 
 class _AddressEndPoints {

@@ -136,7 +136,9 @@ class TransactionCard extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Kurir: ${transaction.courier}'),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                         'Total:  ${ctrT.convertToIdr(double.parse(transaction.total), 2)}'),
                   ],

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
+import 'package:mall_ukm/app/modules/navbar_page/views/navbar_page_view.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +57,7 @@ class ProfileController extends GetxController {
         final json = jsonDecode(response.body);
         var token = json['data'];
         GetStorage().write('token', token);
-        cNav.tabController.index = 2;
+        // cNav.tabController.index = 2;
         Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
         cemail.clear();
         cpw.clear();
@@ -189,6 +190,7 @@ class ProfileController extends GetxController {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     };
+    GetStorage().remove('token');
 
     try {
       var url =
@@ -208,8 +210,8 @@ class ProfileController extends GetxController {
             textColor: Colors.white,
             fontSize: 14.0,
           );
-          Timer(const Duration(seconds: 1),
-              () => Get.offAndToNamed(Routes.NAVBAR_PAGE));
+          Timer(
+              const Duration(seconds: 1), () => Get.offAll((NavbarPageView())));
 
           // Lakukan tindakan yang diperlukan setelah logout berhasil
         } else {

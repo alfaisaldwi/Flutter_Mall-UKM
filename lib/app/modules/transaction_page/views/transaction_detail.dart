@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
@@ -89,7 +91,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Biaya Kirim:'),
+                          Text('Ongkos Kirim:'),
                           Text(
                             ' ${controller.convertToIdr(int.parse(trsDetail.costCourier!), 2)}',
                             style: TextStyle(
@@ -137,16 +139,32 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                       padding: const EdgeInsets.all(8),
                       child: ListTile(
                         leading: Image.network(detail!.productPhoto,
-                            width: 70, height: 70),
-                        title: Text(detail.productName),
+                            width: 80, height: 70),
+                        title: Text('${detail.productName} - *${detail.qty}'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(
+                              height: 4,
+                            ),
                             Text(
-                                'Harga:  ${controller.convertToIdr(int.parse(detail.price), 2)}'),
-                            Text('Jumlah: ${detail.qty}'),
+                              'Varian: ${detail.variant}',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
                             Text(
-                                'Subtotal:  ${controller.convertToIdr(int.parse(detail.subtotal), 2)}'),
+                              'Harga:  ${controller.convertToIdr(int.parse(detail.price), 2)}',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              'Total:  ${controller.convertToIdr(int.parse(detail.subtotal), 2)}',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                       ),

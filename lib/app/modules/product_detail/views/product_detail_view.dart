@@ -129,14 +129,13 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    //WA
-                    Get.toNamed('/profile-page');
+                    homeC.postCurrentLocation();
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Center(
-                      child: Text('Chat',
+                      child: Text('Beli Langsung',
                           textAlign: TextAlign.center,
                           style: Styles.bodyStyle(
                               color: const Color.fromRGBO(36, 54, 101, 1.0),
@@ -357,6 +356,30 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             ),
                           ),
                         ),
+                        if (homeC.radius == null)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                'Tidak dapat menemukan Lokasi',
+                                style: Styles.bodyStyle(
+                                    color: Colors.black45, size: 15),
+                              ),
+                            ),
+                          ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(2)} m dari lokasi',
+                              style: Styles.bodyStyle(
+                                  color: Colors.black45, size: 15),
+                            ),
+                          ),
+                        ),
                       ]),
                 ),
               ),
@@ -380,13 +403,17 @@ class ProductDetailView extends GetView<ProductDetailController> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Text(
-                          '${product.description}',
+                          product.description,
                           style: Styles.bodyStyle(
                             size: 14,
                           ),
                         ),
                       ),
                     ),
+                    const Text('Long'),
+                    Obx(() => Text(homeC.longitude.value.toString())),
+                    const Text('Latt'),
+                    Obx(() => Text(homeC.latitude.value.toString())),
                     const SizedBox(
                       height: 20,
                     ),
@@ -431,9 +458,6 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                       .fetchProductDetails(recomend.id);
                                   Get.offAndToNamed('/product-detail',
                                       arguments: [productDetails]);
-
-                                  // Get.toNamed('product-detail',
-                                  //     arguments: [productDetails]);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 2.0),

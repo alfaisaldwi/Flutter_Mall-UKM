@@ -2,7 +2,7 @@ class ProfileCompany {
    int? id;
    String? phone;
    String? terms;
-   String? conditions;
+   String? provision;
    String? latitude;
    String? longitude;
    int? radius;
@@ -13,7 +13,7 @@ class ProfileCompany {
      this.id,
      this.phone,
      this.terms,
-     this.conditions,
+     this.provision,
      this.latitude,
      this.longitude,
      this.radius,
@@ -26,7 +26,7 @@ class ProfileCompany {
       id: json['id'],
       phone: json['phone'],
       terms: json['terms'],
-      conditions: json['conditions'],
+      provision: json['provision'],
       latitude: json['latitude'],
       longitude: json['longitude'],
       radius: int.parse(json['radius']),

@@ -145,15 +145,19 @@ class TransactionCard extends StatelessWidget {
                 title: Text(transaction.productName),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Kurir: ${transaction.courier}'),
+                  children: [  const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                         'Total:  ${ctrT.convertToIdr(double.parse(transaction.total), 2)}'),
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward),
-                onTap: () {
-                  // Tambahkan logika untuk menavigasi ke halaman rincian transaksi
+                onTap: () async {
+                  var trsDetail =
+                      await ctrT.fetchDetailTransaction(transaction.id);
+
+                  Get.toNamed('/transaction-detail', arguments: trsDetail);
                 },
               ),
             ],

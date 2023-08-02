@@ -30,7 +30,7 @@ class NavbarPageView extends GetView<NavbarPageController> {
     return [
       HomeView(),
       RecommendPageView(),
-      TransactionPageView(),
+      token != null ?  TransactionPageView() : SigninView(),
       token != null ?  AccountView() : SigninView()
     ];
   }

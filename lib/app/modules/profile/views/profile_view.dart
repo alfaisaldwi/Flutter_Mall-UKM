@@ -13,11 +13,11 @@ class ProfileView extends GetView<ProfileController> {
     String? token = GetStorage().read('token');
     RxString tokenRx = RxString(token ?? '');
     return Obx(() => Scaffold(
-          body: RefreshIndicator(
+          body: SafeArea(
+            child:RefreshIndicator(
             onRefresh: () async {
               controller.getUsers();
             },
-            child: SafeArea(
               child: SingleChildScrollView(
                 child: Container(
                   color: Colors.white,

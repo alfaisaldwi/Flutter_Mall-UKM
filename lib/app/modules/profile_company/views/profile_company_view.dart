@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -19,73 +21,72 @@ class ProfileCompanyView extends GetView<ProfileCompanyController> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: Container(
-        color: Colors.white, // Tambahkan background putih
-        child: Obx(
-          () => _profileController.profileCompany.value.id != null
-              ? Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Syarat dan Ketentuan:',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(color: Colors.grey),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Text(
-                            _profileController.profileCompany.value.terms!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                      Text(
-                        'Kondisi Penggunaan:',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(color: Colors.grey),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Text(
-                            _profileController.profileCompany.value.conditions!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: Container(
+            color: Colors.white, // Tambahkan background putih
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Syarat dan Ketentuan:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                )
-              : Center(child: CircularProgressIndicator()),
-        ),
+                  SizedBox(height: 8),
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(color: Colors.grey),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text(
+                        _profileController.profileCompany.value.terms!,
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  Text(
+                    'Kondisi Penggunaan:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(color: Colors.grey),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text(
+                        _profileController.profileCompany.value.provision!,
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
       ),
     );
   }
