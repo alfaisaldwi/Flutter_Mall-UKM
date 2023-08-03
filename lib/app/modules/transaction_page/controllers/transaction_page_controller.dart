@@ -27,8 +27,7 @@ class TransactionPageController extends GetxController {
 
   void startCountdown(String createdAt) {
     DateTime parsedCreatedAt = DateTime.parse(createdAt);
-    _endTime =
-        parsedCreatedAt.add(Duration(days: 1)); // Add 24 hours to createdAt
+    _endTime = parsedCreatedAt.add(Duration(days: 1));
 
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
       _calculateRemainingTime();
@@ -40,7 +39,7 @@ class TransactionPageController extends GetxController {
     Duration remainingDuration = _endTime.difference(now);
 
     if (remainingDuration.isNegative) {
-      remainingTime.value = '00:00:00'; // Countdown is finished
+      remainingTime.value = '00:00:00 | Dibatalkan';
       _timer.cancel();
     } else {
       String twoDigits(int n) => n.toString().padLeft(2, '0');

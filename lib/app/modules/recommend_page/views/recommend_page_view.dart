@@ -128,177 +128,194 @@ class RecommendPageView extends GetView<RecommendPageController> {
               onPressed: () {},
             ),
           ]),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          controller.recomendProduct();
-        },
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0),
-                      child: ListView.builder(
-                          physics: const ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: controller.recomends.length,
-                          itemBuilder: (context, index) {
-                            var recomend = controller.recomends[index];
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 10),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                controller.recomendProduct();
+              },
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 0.0),
+                            child: ListView.builder(
+                                physics: const ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: controller.recomends.length,
+                                itemBuilder: (context, index) {
+                                  var recomend = controller.recomends[index];
 
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 2.0),
-                              child: Container(
-                                width: 140,
-                                padding: const EdgeInsets.all(5),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 5.0,
-                                      left: 0.0,
-                                      right: 8.0,
-                                      bottom: 0.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2, horizontal: 0),
-                                        child: Text(
-                                          recomend.title!,
-                                          style: Styles.headerStyles(),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height:
-                                            180, // Atur tinggi untuk menampilkan beberapa produk dalam satu kategori
-                                        child: ListView.builder(
-                                          physics:
-                                              const ClampingScrollPhysics(),
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: recomend.products?.length,
-                                          itemBuilder: (context, index) {
-                                            var product =
-                                                recomend.products![index];
-                                            return GestureDetector(
-                                              onTap: () async {
-                                                var productDetails =
-                                                    await productDetail
-                                                        .fetchProductDetails(
-                                                            product.id!);
-                                                Get.toNamed('product-detail',
-                                                    arguments: [
-                                                      productDetails
-                                                    ]);
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 2.0),
-                                                child: Card(
-                                                  child: Container(
-                                                    width: 140,
-                                                    padding:
-                                                        const EdgeInsets.all(5),
+                                  return Padding(
+                                    padding: const EdgeInsets.only(left: 2.0),
+                                    child: Container(
+                                      width: 140,
+                                      padding: const EdgeInsets.all(5),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5.0,
+                                            left: 0.0,
+                                            right: 8.0,
+                                            bottom: 0.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 2,
+                                                      horizontal: 0),
+                                              child: Text(
+                                                recomend.title!,
+                                                style: Styles.headerStyles(),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height:
+                                                  180, // Atur tinggi untuk menampilkan beberapa produk dalam satu kategori
+                                              child: ListView.builder(
+                                                physics:
+                                                    const ClampingScrollPhysics(),
+                                                shrinkWrap: true,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount:
+                                                    recomend.products?.length,
+                                                itemBuilder: (context, index) {
+                                                  var product =
+                                                      recomend.products![index];
+                                                  return GestureDetector(
+                                                    onTap: () async {
+                                                      var productDetails =
+                                                          await productDetail
+                                                              .fetchProductDetails(
+                                                                  product.id!);
+                                                      Get.toNamed(
+                                                          'product-detail',
+                                                          arguments: [
+                                                            productDetails
+                                                          ]);
+                                                    },
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              top: 5.0,
-                                                              left: 8.0,
-                                                              right: 8.0,
-                                                              bottom: 0.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          SizedBox(
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          4),
-                                                              child:
-                                                                  Image.network(
-                                                                product.photo!,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                width: 140,
-                                                                height: 90,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 10),
-                                                          Padding(
+                                                              left: 2.0),
+                                                      child: Card(
+                                                        child: Container(
+                                                          width: 140,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(5),
+                                                          child: Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        8.0,
-                                                                    vertical:
-                                                                        4.0),
-                                                            child: Text(
-                                                              product.title!,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600),
+                                                                        .only(
+                                                                    top: 5.0,
+                                                                    left: 8.0,
+                                                                    right: 8.0,
+                                                                    bottom:
+                                                                        0.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                SizedBox(
+                                                                  child:
+                                                                      ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(4),
+                                                                    child: Image
+                                                                        .network(
+                                                                      product
+                                                                          .photo!,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      width:
+                                                                          140,
+                                                                      height:
+                                                                          90,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          8.0,
+                                                                      vertical:
+                                                                          4.0),
+                                                                  child: Text(
+                                                                    product
+                                                                        .title!,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.w600),
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          8.0,
+                                                                      vertical:
+                                                                          2.0),
+                                                                  child: Text(
+                                                                    'Rp. ${product.price}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        8.0,
-                                                                    vertical:
-                                                                        2.0),
-                                                            child: Text(
-                                                              'Rp. ${product.price}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  fontSize: 12),
-                                                            ),
-                                                          ),
-                                                        ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
+                                                  );
+                                                },
                                               ),
-                                            );
-                                          },
+                                            )
+                                          ],
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

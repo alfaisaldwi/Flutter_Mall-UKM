@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/modules/transaction_page/views/transaction.canceled_view.dart';
+import 'package:mall_ukm/app/modules/transaction_page/views/transaction.delivered_view.dart';
+import 'package:mall_ukm/app/modules/transaction_page/views/transaction.sending_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.unpaid_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.paid_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.selesai_view%20.dart';
@@ -13,12 +16,13 @@ class TransactionPageView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 10,
           backgroundColor: Colors.white,
           bottom: TabBar(
+            isScrollable: true,
             indicatorPadding: EdgeInsets.zero,
             tabs: [
               Tab(
@@ -27,7 +31,6 @@ class TransactionPageView extends GetView<TransactionPageController> {
                   style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
                 ),
               ),
-
               Tab(
                 child: Text(
                   'Belum Bayar',
@@ -40,12 +43,24 @@ class TransactionPageView extends GetView<TransactionPageController> {
                   style: Styles.bodyStyle(size: 12, weight: FontWeight.w400),
                 ),
               ),
-              // Tab(
-              //   child: Text(
-              //     'Selesai',
-              //     style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
-              //   ),
-              // ),
+              Tab(
+                child: Text(
+                  'Sedang dikirim',
+                  style: Styles.bodyStyle(size: 12, weight: FontWeight.w400),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Selesai',
+                  style: Styles.bodyStyle(size: 12, weight: FontWeight.w400),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Dibatalkan',
+                  style: Styles.bodyStyle(size: 14, weight: FontWeight.w400),
+                ),
+              ),
             ],
           ),
         ),
@@ -67,11 +82,18 @@ class TransactionPageView extends GetView<TransactionPageController> {
                 init: TransactionPageController(),
                 builder: (controller) => TransactionPaidView(),
               ),
-
-              // GetBuilder<TransactionPageController>(
-              //   init: TransactionPageController(),
-              //   builder: (controller) => TransactionSelesaiView(),
-              // ),
+              GetBuilder<TransactionPageController>(
+                init: TransactionPageController(),
+                builder: (controller) => TransactionSendingView(),
+              ),
+              GetBuilder<TransactionPageController>(
+                init: TransactionPageController(),
+                builder: (controller) => TransactionDeliveredView(),
+              ),
+              GetBuilder<TransactionPageController>(
+                init: TransactionPageController(),
+                builder: (controller) => TransactionCanceledView(),
+              ),
             ],
           ),
         ),
