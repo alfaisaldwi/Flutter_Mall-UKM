@@ -23,7 +23,8 @@ class HomeController extends GetxController {
   final count = 0.obs;
   var category = <Category>[].obs;
   var products = <Product>[].obs;
-  var isLoading = true.obs;
+  var isLoadingProduct = true.obs;
+  var isLoadingCategory = true.obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
   double? radius;
@@ -101,6 +102,7 @@ class HomeController extends GetxController {
   }
 
   Future<List<Category>> getCategories() async {
+    // isLoadingCategory.value = true;
     var headers = {
       'Accept': 'application/json',
     };
@@ -110,7 +112,6 @@ class HomeController extends GetxController {
       );
       http.Response response = await http.get(url, headers: headers);
 
-      // print(response.body);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['code'] == 200) {
@@ -119,6 +120,8 @@ class HomeController extends GetxController {
             var category = Category.fromJson(data);
             categories.add(category);
           }
+          // isLoadingCategory.value = false;
+
           return categories;
         } else {
           throw jsonDecode(response.body)['message'];
@@ -194,16 +197,21 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchCategories() async {
+    isLoadingCategory.value = true;
+
     try {
       var fetchedCategories = await getCategories();
       category.assignAll(fetchedCategories);
     } catch (error) {
-      // Handle error jika terjadi kesalahan dalam mengambil kategori
       print('Terjadi kesalahan: $error');
     }
+    await Future.delayed(Duration(seconds: 1));
+    isLoadingCategory.value = false;
   }
 
   Future<void> fetchProduct() async {
+    isLoadingProduct.value = true;
+
     try {
       var fetchedProducts = await getProduct();
       products.assignAll(fetchedProducts);
@@ -211,6 +219,8 @@ class HomeController extends GetxController {
       // Handle error if there is an issue fetching the products
       print('Error fetching products: $error');
     }
+    await Future.delayed(Duration(seconds: 1));
+    isLoadingProduct.value = false;
   }
 
   Future<CategoryShow> categotyDetail(int categoryId) async {
@@ -260,7 +270,7 @@ class HomeController extends GetxController {
     try {
       Map<String, dynamic> requestBody = {
         "latitude": latitude.value,
-        "longitude":     longitude.value,
+        "longitude": longitude.value,
       };
 
       var url =

@@ -12,17 +12,14 @@ import 'package:mall_ukm/app/modules/home/views/search_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    List people = [
-      'Mike',
-      'Barron',
-      64,
-    ];
+ 
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     const int count = 16;
@@ -38,7 +35,7 @@ class HomeView extends GetView<HomeController> {
           title: Container(
             width: double.infinity,
             height: 40,
-            color: Color(0xfff7f7f7),
+            color: Colors.white,
             child: Center(
               child: GestureDetector(
                 onTap: () {
@@ -64,19 +61,42 @@ class HomeView extends GetView<HomeController> {
                     ),
                   );
                 },
-                child: Center(
-                  child: TextField(
-                    enabled: false,
-                    textAlign: TextAlign.justify,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      hintText: 'Cari Produk',
-                      prefixIcon: const Icon(Icons.search),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/logoMall.png',
+                      width: 45,
+                      height: 45,
                     ),
-                  ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      width: 240,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: const TextField(
+                        enabled: false,
+                        textAlign: TextAlign.justify,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                          border: InputBorder
+                              .none, // Hapus border pada input decoration TextField
+                          hintText: 'Cari Produk di Mall UKM',
+                          hintStyle: const TextStyle(fontSize: 12),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -103,7 +123,7 @@ class HomeView extends GetView<HomeController> {
                 child: const Icon(
                   Icons.shopping_cart,
                   color: Colors.black,
-                  size: 32,
+                  size: 22,
                 ),
               ),
               onPressed: () {},
@@ -164,6 +184,7 @@ class HomeView extends GetView<HomeController> {
                               itemCount: controller.category.length,
                               itemBuilder: (context, index) {
                                 var category = controller.category[index];
+
                                 return GestureDetector(
                                   onTap: () async {
                                     var categoryDetail = await controller
@@ -187,37 +208,60 @@ class HomeView extends GetView<HomeController> {
                                           SizedBox(
                                             height: 80,
                                             width: 50,
-                                            child: Column(
-                                              children: [
-                                                Align(
-                                                  alignment: Alignment.center,
-                                                  child: Image.network(
-                                                    category.photo,
-                                                    width: 28,
-                                                    height: 30,
-                                                    color:
-                                                        Colors.deepOrange[400],
-                                                    fit: BoxFit.fill,
-                                                    alignment: Alignment.center,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Align(
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      category.title,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: Styles.bodyStyle(
-                                                          size: 10),
+                                            child: Obx(() => Column(
+                                                  children: [
+                                                    controller.isLoadingCategory
+                                                            .value
+                                                        ? Shimmer.fromColors(
+                                                            baseColor: Colors
+                                                                .grey.shade300,
+                                                            highlightColor:
+                                                                Colors.grey
+                                                                    .shade100,
+                                                            child: Container(
+                                                              width: 40,
+                                                              height: 30,
+                                                              color: Colors
+                                                                      .deepOrange[
+                                                                  400],
+                                                            ),
+                                                          )
+                                                        : Align(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child:
+                                                                Image.network(
+                                                              category.photo,
+                                                              width: 28,
+                                                              height: 30,
+                                                              color: Colors
+                                                                      .deepOrange[
+                                                                  400],
+                                                              fit: BoxFit.fill,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                    Expanded(
+                                                      child: Align(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          category.title,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              Styles.bodyStyle(
+                                                                  size: 10),
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                                  ],
+                                                )),
                                           ),
                                         ],
                                       ),
@@ -287,14 +331,29 @@ class HomeView extends GetView<HomeController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10.0),
-                                            topRight: Radius.circular(10.0),
-                                          ),
-                                          child: Image.network(
-                                              product.photo.first),
-                                        ),
+                                        Obx(() => ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(10.0),
+                                                topRight: Radius.circular(10.0),
+                                              ),
+                                              child: controller
+                                                      .isLoadingProduct.value
+                                                  ? Shimmer.fromColors(
+                                                      baseColor:
+                                                          Colors.grey.shade300,
+                                                      highlightColor:
+                                                          Colors.grey.shade100,
+                                                      child: Container(
+                                                        width: 200,
+                                                        height: 100,
+                                                        color: Colors
+                                                            .deepOrange[400],
+                                                      ),
+                                                    )
+                                                  : Image.network(
+                                                      product.photo.first),
+                                            )),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 2, vertical: 5),

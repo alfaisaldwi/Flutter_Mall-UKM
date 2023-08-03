@@ -2,6 +2,7 @@ class CheckoutData {
   int addressId;
   String courier;
   int costCourier;
+  String statusPayment;
   int total;
   List<Map<String, dynamic>> products;
 
@@ -9,6 +10,7 @@ class CheckoutData {
     required this.addressId,
     required this.courier,
     required this.costCourier,
+    required this.statusPayment,
     required this.total,
     required this.products,
   });
@@ -17,6 +19,7 @@ class CheckoutData {
       "address_id": addressId,
       "courier": courier,
       "cost_courier": costCourier,
+      "status_payment": statusPayment,
       "total": total,
       "products": products,
     };

@@ -249,6 +249,19 @@ class AccountView extends GetView<ProfileController> {
                                   children: [
                                     ListTile(
                                       onTap: () async {
+                                        await profileCompany
+                                            .fetchProfileCompany();
+                                        Get.toNamed('survey-page');
+                                      },
+                                      leading:
+                                          const Icon(Icons.file_copy_outlined),
+                                      title: Text(
+                                        'Kuesioner Kepuasan Pengguna Mall UKM Kota Cirebon',
+                                        style: Styles.bodyStyle(),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      onTap: () async {
                                         var wa = profileCompany
                                             .profileCompany.value.phone;
                                         try {

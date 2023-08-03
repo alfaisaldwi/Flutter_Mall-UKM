@@ -1,16 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class TransactionDetailView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var trsDetail = Get.arguments as TransactionShow;
-
+    controller.startCountdown(trsDetail.createdAt!);
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -113,6 +119,49 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                               color: trsDetail.status == 'paid'
                                   ? Colors.green
                                   : Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      if (trsDetail.status == 'paid')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Nomor Resi:'),
+                            Text(
+                              trsDetail.receiptNumber != null
+                                  ? '${trsDetail.receiptNumber}'
+                                  : 'Belum Dikirim',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (trsDetail.status == 'unpaid')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Sisa waktu pembayaran:'),
+                            Obx(() => Text(
+                                  controller.remainingTime.value,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Jenis Pembayaran :'),
+                          Text(
+                            trsDetail.statusPayment!.toUpperCase(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],

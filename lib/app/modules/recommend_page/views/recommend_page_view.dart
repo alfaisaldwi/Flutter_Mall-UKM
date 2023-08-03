@@ -19,11 +19,6 @@ class RecommendPageView extends GetView<RecommendPageController> {
   var productDetail = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
-    List people = [
-      'Mike',
-      'Barron',
-      64,
-    ];
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     const int count = 16;
@@ -39,7 +34,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
           title: Container(
             width: double.infinity,
             height: 40,
-            color: Color(0xfff7f7f7),
+            color: Colors.white,
             child: Center(
               child: GestureDetector(
                 onTap: () {
@@ -65,19 +60,42 @@ class RecommendPageView extends GetView<RecommendPageController> {
                     ),
                   );
                 },
-                child: Center(
-                  child: TextField(
-                    enabled: false,
-                    textAlign: TextAlign.justify,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      hintText: 'Cari Produk',
-                      prefixIcon: const Icon(Icons.search),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/logoMall.png',
+                      width: 45,
+                      height: 45,
                     ),
-                  ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      width: 240,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: const TextField(
+                        enabled: false,
+                        textAlign: TextAlign.justify,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                          border: InputBorder
+                              .none, // Hapus border pada input decoration TextField
+                          hintText: 'Cari Produk di Mall UKM',
+                          hintStyle: const TextStyle(fontSize: 12),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -104,7 +122,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                 child: const Icon(
                   Icons.shopping_cart,
                   color: Colors.black,
-                  size: 32,
+                  size: 22,
                 ),
               ),
               onPressed: () {},
@@ -279,7 +297,6 @@ class RecommendPageView extends GetView<RecommendPageController> {
                             );
                           }),
                     ),
-                  
                   ],
                 ),
               ),

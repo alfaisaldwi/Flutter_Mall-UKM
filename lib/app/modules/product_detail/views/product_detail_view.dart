@@ -28,11 +28,15 @@ class ProductDetailView extends GetView<ProductDetailController> {
   Widget build(BuildContext context) {
     var product = productDetails.first;
 
-    List people = [
-      'Mike',
-      'Barron',
-      64,
-    ];
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    const int count = 16;
+    const int itemsPerRow = 2;
+    const double ratio = 1 / 1;
+    const double horizontalPadding = 0;
+    final double calcHeight = ((width / itemsPerRow) - (horizontalPadding)) *
+        (count / itemsPerRow).ceil() *
+        (1 / ratio);
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
@@ -40,50 +44,39 @@ class ProductDetailView extends GetView<ProductDetailController> {
           title: Container(
             width: double.infinity,
             height: 40,
-            color: Color(0xfff7f7f7),
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  showSearch(
-                    context: context,
-                    delegate: SearchPage(
-                      barTheme: ThemeData.light(useMaterial3: true),
-                      onQueryUpdate: print,
-                      items: homeC.products,
-                      searchLabel: 'Cari..',
-                      suggestion: const Center(
-                        child: Text('Cari produk yang kamu kebutuhan'),
-                      ),
-                      failure: const Center(
-                        child: Text('Produk yang kamu cari tidak ada :('),
-                      ),
-                      filter: (product) => [
-                        product.title,
-                      ],
-                      builder: (product) => SearchView(
-                        products: product,
-                      ),
-                    ),
-                  );
-                },
-                child: Center(
-                  child: TextField(
-                    enabled: false,
-                    textAlign: TextAlign.justify,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      hintText: 'Cari Produk',
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            color: Colors.white,
           ),
           actions: [
+            GestureDetector(
+              onTap: () {
+                showSearch(
+                  context: context,
+                  delegate: SearchPage(
+                    barTheme: ThemeData.light(useMaterial3: true),
+                    onQueryUpdate: print,
+                    items: homeC.products,
+                    searchLabel: 'Cari..',
+                    suggestion: const Center(
+                      child: Text('Cari produk yang kamu kebutuhan'),
+                    ),
+                    failure: const Center(
+                      child: Text('Produk yang kamu cari tidak ada :('),
+                    ),
+                    filter: (product) => [
+                      product.title,
+                    ],
+                    builder: (product) => SearchView(
+                      products: product,
+                    ),
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.search,
+                size: 22,
+                color: Colors.black,
+              ),
+            ),
             IconButton(
               icon: GestureDetector(
                 onTap: () {
@@ -105,7 +98,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 child: const Icon(
                   Icons.shopping_cart,
                   color: Colors.black,
-                  size: 32,
+                  size: 22,
                 ),
               ),
               onPressed: () {},
@@ -374,9 +367,9 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(2)} m dari lokasi',
+                              'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(2)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(2)} dan Longitude ${homeC.longitude.value.toStringAsFixed(2)}',
                               style: Styles.bodyStyle(
-                                  color: Colors.black45, size: 15),
+                                  color: Colors.black45, size: 14),
                             ),
                           ),
                         ),
@@ -409,13 +402,6 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           ),
                         ),
                       ),
-                    ),
-                    const Text('Long'),
-                    Obx(() => Text(homeC.longitude.value.toString())),
-                    const Text('Latt'),
-                    Obx(() => Text(homeC.latitude.value.toString())),
-                    const SizedBox(
-                      height: 20,
                     ),
                   ]),
                 ),
