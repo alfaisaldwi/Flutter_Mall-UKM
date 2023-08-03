@@ -8,6 +8,7 @@ class ApiEndPoints {
   static _TransactionEndPoints transactionEndPoints = _TransactionEndPoints();
   static _ProfileCompany profileCompany = _ProfileCompany();
   static _CheckHaversine checkHaversine = _CheckHaversine();
+  static _CSI csi = _CSI();
 }
 
 class _AuthEndPoints {
@@ -23,6 +24,10 @@ class _ProfileCompany {
 
 class _CheckHaversine {
   final String check = '/api/check/haverinse';
+}
+class _CSI {
+  final String question = '/api/auth/question';
+  final String store = '/api/auth/result/store';
 }
 
 class _AddressEndPoints {

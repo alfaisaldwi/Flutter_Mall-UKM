@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,41 @@ class TransactionPageController extends GetxController {
   var transactionDetail = Rx<TransactionShow>(TransactionShow());
   WebViewController ctr = WebViewController();
 
-  final count = 0.obs;
+  RxString remainingTime = ''.obs;
+  late Timer _timer;
+  late DateTime _endTime;
+
+  void startCountdown(String createdAt) {
+    DateTime parsedCreatedAt = DateTime.parse(createdAt);
+    _endTime = parsedCreatedAt.add(Duration(days: 1));
+
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      _calculateRemainingTime();
+    });
+  }
+
+  void _calculateRemainingTime() {
+    DateTime now = DateTime.now();
+    Duration remainingDuration = _endTime.difference(now);
+
+    if (remainingDuration.isNegative) {
+      remainingTime.value = '00:00:00 | Dibatalkan';
+      _timer.cancel();
+    } else {
+      String twoDigits(int n) => n.toString().padLeft(2, '0');
+      String hours = twoDigits(remainingDuration.inHours);
+      String minutes = twoDigits(remainingDuration.inMinutes.remainder(60));
+      String seconds = twoDigits(remainingDuration.inSeconds.remainder(60));
+      remainingTime.value = '$hours:$minutes:$seconds';
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
   @override
   void onInit() {
     getTransaction();
@@ -35,7 +70,6 @@ class TransactionPageController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 
   Future<void> getTransaction() async {
     String? token = GetStorage().read('token');

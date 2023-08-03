@@ -36,7 +36,6 @@ class ProductDetailController extends GetxController {
 
   @override
   void onInit() {
-    
     super.onInit();
   }
 

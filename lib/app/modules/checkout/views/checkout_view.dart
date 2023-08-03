@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +42,7 @@ class CheckoutView extends GetView<CheckoutController> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Get.back(); 
+              Get.back();
               controller.goToCartAndRefresh();
             }),
         backgroundColor: Colors.white,
@@ -75,27 +76,50 @@ class CheckoutView extends GetView<CheckoutController> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    List<Map<String, dynamic>> productsList = [];
-                    for (int i = 0; i < dataCart.length; i++) {
-                      Map<String, dynamic> product = {
-                        "id": dataCart[i].cart.id,
-                        "product_id": dataCart[i].cart.productId,
-                        "price": dataCart[i].cart.price,
-                        "quantity": dataCart[i].cart.qty,
-                        "variant": dataCart[i].cart.unitVariant
-                      };
-                      productsList.add(product);
+                    if (addressId != 0) {
+                      if (controller.selectedCourier.value != '') {
+                        List<Map<String, dynamic>> productsList = [];
+                        for (int i = 0; i < dataCart.length; i++) {
+                          Map<String, dynamic> product = {
+                            "id": dataCart[i].cart.id,
+                            "product_id": dataCart[i].cart.productId,
+                            "price": dataCart[i].cart.price,
+                            "quantity": dataCart[i].cart.qty,
+                            "variant": dataCart[i].cart.unitVariant
+                          };
+                          productsList.add(product);
+                        }
+
+                        CheckoutData checkoutData = CheckoutData(
+                          addressId: addressId,
+                          courier: controller.selectedCourier.value,
+                          costCourier: ongkir.value.toInt(),
+                          statusPayment: 'Online',
+                          total: subtot.value.toInt(),
+                          products: productsList,
+                        );
+
+                        controller.tambahDataTransaksi(checkoutData);
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: 'Kamu belum memilih Kurir',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey[800],
+                          textColor: Colors.white,
+                          fontSize: 14.0,
+                        );
+                      }
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Kamu belum memilih alamat',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[800],
+                        textColor: Colors.white,
+                        fontSize: 14.0,
+                      );
                     }
-
-                    CheckoutData checkoutData = CheckoutData(
-                      addressId: addressId,
-                      courier: controller.selectedCourier.value,
-                      costCourier: ongkir.value.toInt(),
-                      total: subtot.value.toInt(),
-                      products: productsList,
-                    );
-
-                    controller.tambahDataTransaksi(checkoutData);
                   },
                   child: Container(
                     height: 45,
@@ -317,16 +341,16 @@ class CheckoutView extends GetView<CheckoutController> {
                           ]));
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Pesan',
-                        prefixIcon: Icon(Icons.message),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  //   child: TextFormField(
+                  //     decoration: const InputDecoration(
+                  //       labelText: 'Pesan',
+                  //       prefixIcon: Icon(Icons.message),
+                  //       floatingLabelBehavior: FloatingLabelBehavior.always,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(height: 20),
                   Card(
                     margin: const EdgeInsets.all(8.0),
@@ -347,13 +371,25 @@ class CheckoutView extends GetView<CheckoutController> {
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.all(12.0)),
                                 onChanged: (value) {
-                                  if (controller.selectedCourier.value == '') {
+                                  if (addressId != 0) {
+                                    if (controller.selectedCourier.value ==
+                                        '') {
+                                      controller.selectedCourier.value = value!;
+                                    } else {
+                                      controller.selectedService.value = '';
+                                    }
                                     controller.selectedCourier.value = value!;
+                                    controller.fetchServices();
                                   } else {
-                                    controller.selectedService.value = '';
+                                    Fluttertoast.showToast(
+                                      msg: 'Kamu belum memilih alamat',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.grey[800],
+                                      textColor: Colors.white,
+                                      fontSize: 14.0,
+                                    );
                                   }
-                                  controller.selectedCourier.value = value!;
-                                  controller.fetchServices();
                                 },
                                 items: controller.couriers.map((courier) {
                                   return DropdownMenuItem<String>(

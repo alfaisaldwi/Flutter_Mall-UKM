@@ -1,16 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class TransactionDetailView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var trsDetail = Get.arguments as TransactionShow;
-
+    controller.startCountdown(trsDetail.createdAt!);
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -49,7 +55,6 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                         trsDetail.orderId!,
                         softWrap: true,
                         maxLines: 2,
-                        // overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                             fontSize: 13, fontWeight: FontWeight.w500),
@@ -80,27 +85,32 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                         ],
                       ),
                       Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(Icons.local_shipping),
-                          Text(trsDetail.courier!.toUpperCase()),
-                        ],
-                      ),
-                      Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Ongkos Kirim:'),
-                          Text(
-                            ' ${controller.convertToIdr(int.parse(trsDetail.costCourier!), 2)}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                      if (trsDetail.statusPayment == 'online')
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.local_shipping),
+                                Text(trsDetail.courier!.toUpperCase()),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Ongkos Kirim:'),
+                                Text(
+                                  ' ${controller.convertToIdr(int.parse(trsDetail.costCourier!), 2)}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,9 +120,64 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                             trsDetail.status!.toUpperCase(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: trsDetail.status == 'paid'
+                              color: trsDetail.status == 'paid' ||
+                                      trsDetail.status == 'delivered' ||
+                                      trsDetail.status == 'sending'
                                   ? Colors.green
                                   : Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (trsDetail.status == 'paid' &&
+                          trsDetail.statusPayment == 'online')
+                        Column(
+                          children: [
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Nomor Resi:'),
+                                Text(
+                                  trsDetail.receiptNumber != null
+                                      ? '${trsDetail.receiptNumber}'
+                                      : 'Belum Dikirim',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      if (trsDetail.status == 'unpaid')
+                        Column(
+                          children: [
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Sisa waktu pembayaran:'),
+                                Obx(() => Text(
+                                      controller.remainingTime.value,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red,
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                      Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Jenis Pembayaran :'),
+                          Text(
+                            trsDetail.statusPayment!.toUpperCase(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
@@ -175,36 +240,44 @@ class TransactionDetailView extends GetView<TransactionPageController> {
               SizedBox(height: 16),
               Divider(),
               SizedBox(height: 16),
-              Text(
-                'Alamat Pengiriman:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Card(
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        leading: Icon(Icons.person),
-                        title:
-                            Text('Nama Penerima: ${trsDetail.addressUsername}'),
-                        subtitle:
-                            Text('Nomor Telepon: ${trsDetail.addressPhone}'),
+              if (trsDetail.statusPayment == 'online')
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Alamat Pengiriman:',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Card(
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              leading: Icon(Icons.person),
+                              title: Text(
+                                  'Nama Penerima: ${trsDetail.addressUsername}'),
+                              subtitle: Text(
+                                  'Nomor Telepon: ${trsDetail.addressPhone}'),
+                            ),
+                            SizedBox(height: 8),
+                            ListTile(
+                              leading: Icon(Icons.location_on),
+                              title:
+                                  Text('Alamat: ${trsDetail.addressInAddress}'),
+                              subtitle: Text(
+                                  'Detail Alamat: ${trsDetail.addressAddressDetail}'),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 8),
-                      ListTile(
-                        leading: Icon(Icons.location_on),
-                        title: Text('Alamat: ${trsDetail.addressInAddress}'),
-                        subtitle: Text(
-                            'Detail Alamat: ${trsDetail.addressAddressDetail}'),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
               SizedBox(height: 16),
               if (trsDetail.status == 'paid')
                 Container(
@@ -242,6 +315,57 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                             style: Styles.bodyStyle(
                                 color: Colors.white, size: 14)),
                       ),
+                    ),
+                  ),
+                ),
+              if (trsDetail.status == 'sending')
+                Container(
+                  height: 45,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(11),
+                    color: const Color(0xff034779),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text('Sedang dikirim ke alamat',
+                          style:
+                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                    ),
+                  ),
+                ),
+              if (trsDetail.status == 'delivered')
+                Container(
+                  height: 45,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(11),
+                    color: const Color(0xff034779),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text('Pesanan Selesai',
+                          style:
+                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                    ),
+                  ),
+                ),
+              if (trsDetail.status == 'canceled')
+                Container(
+                  height: 45,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(11),
+                    color: const Color(0xffBB2124),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text('Pembayaran Gagal',
+                          style:
+                              Styles.bodyStyle(color: Colors.white, size: 14)),
                     ),
                   ),
                 ),

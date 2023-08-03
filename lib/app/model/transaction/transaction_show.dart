@@ -9,6 +9,7 @@ class TransactionShow {
   String? total;
   String? paymentUrl;
   String? status;
+  String? statusPayment;
   String? createdAt;
   String? updatedAt;
   String? userUsernameSender;
@@ -29,6 +30,7 @@ class TransactionShow {
     this.total,
     this.paymentUrl,
     this.status,
+    this.statusPayment,
     this.createdAt,
     this.updatedAt,
     this.userUsernameSender,
@@ -56,6 +58,7 @@ class TransactionShow {
       total: json['total'],
       paymentUrl: json['payment_url'],
       status: json['status'],
+      statusPayment: json['status_payment'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       userUsernameSender: json['user_username_sender'],

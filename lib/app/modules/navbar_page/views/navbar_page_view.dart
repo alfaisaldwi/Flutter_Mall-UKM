@@ -18,20 +18,18 @@ class NavbarPageView extends GetView<NavbarPageController> {
       color: Colors.white.withOpacity(0.5),
       fontWeight: FontWeight.w500,
       fontSize: 12);
-    String? token = GetStorage().read('token');
-
+  String? token = GetStorage().read('token');
 
   final TextStyle selectedLabelStyle =
       TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12);
 
   List<Widget> _buildScreen() {
-
     RxString tokenRx = RxString(token ?? '');
     return [
       HomeView(),
       RecommendPageView(),
-      token != null ?  TransactionPageView() : SigninView(),
-      token != null ?  AccountView() : SigninView()
+      TransactionPageView(),
+      ProfileView()
     ];
   }
 

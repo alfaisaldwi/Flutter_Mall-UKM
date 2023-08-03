@@ -46,19 +46,15 @@ class CheckoutController extends GetxController {
 
     final url = Uri.parse(ApiEndPoints.baseUrl +
         ApiEndPoints.transactionEndPoints
-            .store); // Ganti URL sesuai dengan endpoint yang benar
-
-    // Buat body request sesuai dengan contoh yang kamu berikan
+            .store); 
     final body = jsonEncode(checkoutData.toJson());
 
     final response = await http.post(url, body: body, headers: headers);
 
     if (response.statusCode == 200) {
-      // Jika berhasil, parse respons JSON ke dalam objek TransaksiStore
       TransaksiStore transaksi =
           TransaksiStore.fromJson(jsonDecode(response.body));
 
-      // Lakukan redirect ke payment_url jika ada
       if (transaksi.data!.paymentUrl != null) {
         String paymentUrl = transaksi.data!.paymentUrl!;
         ctr = WebViewController()
@@ -123,6 +119,7 @@ class CheckoutController extends GetxController {
 
     var response = await http.post(Uri.parse(apiUrl),
         headers: headers, body: json.encode(requestBody));
+        
     var jsonData = json.decode(response.body);
     print(response.body);
 

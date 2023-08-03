@@ -5,10 +5,12 @@ import 'package:mall_ukm/app/model/transaction/transaction_index_model.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
-class TransactionSemuaView extends GetView<TransactionPageController> {
+class TransactionCanceledView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
+    bool hasPaidTransactions;
+
     return RefreshIndicator(
       onRefresh: () async {
         controller.callGettrs();
@@ -17,7 +19,30 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
         color: Colors.white,
         child: Column(
           children: [
-            if (ctrT.transactionIndexList.isEmpty)
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+                child: Obx(
+                  () => ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: ctrT.transactionIndexList.length,
+                    itemBuilder: (context, index) {
+                      var trs = ctrT.transactionIndexList[index];
+                      if (trs.status == 'canceled') {
+                        hasPaidTransactions = true;
+                        return TransactionCard(transaction: trs);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
+            if (hasPaidTransactions = false)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 300.0),
                 child: Container(
@@ -25,25 +50,6 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
                   child: const Align(
                     alignment: Alignment.center,
                     child: Text('Tidak ada transaksi'),
-                  ),
-                ),
-              )
-            else
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                  child: Obx(
-                    () => ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: ctrT.transactionIndexList.length,
-                      itemBuilder: (context, index) {
-                        var trs = ctrT.transactionIndexList[index];
-                        return TransactionCard(transaction: trs);
-                      },
-                    ),
                   ),
                 ),
               ),
@@ -124,8 +130,8 @@ class TransactionCard extends StatelessWidget {
                             color: Colors.yellowAccent[100],
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child:const  Padding(
-                            padding:  EdgeInsets.all(6.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(6.0),
                             child: Text(
                               'Belum Bayar',
                               style: TextStyle(
