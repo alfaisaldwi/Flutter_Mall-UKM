@@ -8,129 +8,102 @@ import '../controllers/survey_page_controller.dart';
 class SurveyPageView extends GetView<SurveyPageController> {
   @override
   Widget build(BuildContext context) {
-    var kepentingan = 0.obs;
-    var kinerja = 0.obs;
-    var jawabanKepentinganList = <int>[].obs;
-    var jawabanKinerjaList = <int>[].obs;
     return Scaffold(
       appBar: AppBar(
-        title: Text('SurveyPageView'),
-        centerTitle: true,
+        title: Text('Survei'),
       ),
       body: Obx(
         () => controller.isLoading.value
             ? Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemCount: controller.pertanyaanList.length,
+            : Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: controller.questions.length,
                       itemBuilder: (context, index) {
-                        var pertanyaan = controller.pertanyaanList[index];
-                        var number = pertanyaan['id'].toString();
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                pertanyaan['title'],
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text('Kepentingan'),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                for (int i = 1; i <= 5; i++)
-                                  Row(
-                                    children: [
-                                      Obx(() => Radio<int>(
-                                            value: i,
-                                            groupValue:
-                                                controller.selectedAnswers[
-                                                    'kepentingan']!,
-                                            onChanged: (int? value) {
-                                              controller.selectedAnswers[
-                                                  'kepentingan'] = value!;
-                                            },
-                                          )),
-                                      Text('$i'),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text('Kinerja'),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                for (int i = 1; i <= 5; i++)
-                                  Row(
-                                    children: [
-                                      Radio<int>(
-                                        value: i,
-                                        groupValue: controller
-                                            .selectedAnswers['kinerja$number']!,
-                                        onChanged: (int? value) {
-                                          controller.selectedAnswers[
-                                              'kinerja$number'] = value!;
-                                        },
-                                      ),
-                                      Text('$i'),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          ],
-                        );
+                        var question = controller.questions[index];
+                        return buildQuestionCard(question, index);
                       },
                     ),
-                    SizedBox(height: 16),
-                    buildSaranField(),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextFormField(
+                      maxLines: 5,
+                      decoration: InputDecoration(labelText: 'Saran'),
+                      onChanged: (value) {
+                        controller.setSuggestion(value);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      controller.sendSurvey();
+                    },
+                    child: Text('Kirim Survey'),
+                  ),
+                ],
               ),
       ),
     );
   }
 
-  Widget buildQuestionCard(Question question) {
+  Widget buildQuestionCard(Map<String, dynamic> question, int questionIndex) {
+    var number = questionIndex + 1;
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              question.title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              '${number}. ${question['title']}',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Kinerja'),
+                Obx(() => Row(
+                      children: List.generate(
+                        5,
+                        (index) => Radio(
+                          value: index + 1,
+                          groupValue: controller.kinerjaValues[questionIndex],
+                          onChanged: (value) {
+                            controller.setKinerja(questionIndex, value!);
+                          },
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Kepentingan'),
+                Obx(() => Row(
+                      children: List.generate(
+                        5,
+                        (index) => Radio(
+                          value: index + 1,
+                          
+                          groupValue:
+                              controller.kepentinganValues[questionIndex],
+                          onChanged: (value) {
+                            controller.setKepentingan(questionIndex, value!);
+                          },
+                        ),
+                      ),
+                    )),
+              ],
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget buildSaranField() {
-    return TextFormField(
-      onChanged: (value) {},
-      maxLines: 5,
-      decoration: InputDecoration(
-        labelText: 'Saran',
-        border: OutlineInputBorder(),
       ),
     );
   }
