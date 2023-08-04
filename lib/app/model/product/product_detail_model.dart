@@ -7,6 +7,7 @@ class ProductDetail {
   String qty;
   String weight;
   String unit;
+  String? promo;
   String category;
   List<String> unitVariant;
   String description;
@@ -25,6 +26,7 @@ class ProductDetail {
     required this.qty,
     required this.weight,
     required this.unit,
+    this.promo,
     required this.category,
     required this.unitVariant,
     required this.description,
@@ -45,6 +47,7 @@ class ProductDetail {
       qty: json['qty'],
       weight: json['weight'],
       unit: json['unit'],
+      promo: json['promo'],
       category: json['category'],
       unitVariant: List<String>.from(json['unit_variant']),
       description: json['description'],

@@ -8,12 +8,14 @@ import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/category/bindings/category_binding.dart';
 import 'package:mall_ukm/app/modules/category/views/category_view.dart';
 import 'package:mall_ukm/app/modules/checkout/bindings/checkout_binding.dart';
+import 'package:mall_ukm/app/modules/checkout/views/checkout_offline_view.dart';
 import 'package:mall_ukm/app/modules/checkout/views/checkout_view.dart';
 import 'package:mall_ukm/app/modules/home/bindings/home_binding.dart';
 import 'package:mall_ukm/app/modules/home/views/home_view.dart';
 import 'package:mall_ukm/app/modules/navbar_page/bindings/navbar_page_binding.dart';
 import 'package:mall_ukm/app/modules/navbar_page/views/navbar_page_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/bindings/product_detail_binding.dart';
+import 'package:mall_ukm/app/modules/product_detail/views/product_detail_promo.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/modules/profile/bindings/profile_binding.dart';
 import 'package:mall_ukm/app/modules/profile/views/profile_view.dart';
@@ -85,6 +87,11 @@ class AppPages {
       binding: ProductDetailBinding(),
     ),
     GetPage(
+      name: _Paths.PRODUCT_DETAIL_PROMO,
+      page: () => ProductDetailPromoView(),
+      binding: ProductDetailBinding(),
+    ),
+    GetPage(
       name: _Paths.SIGNUP,
       page: () => SignupPageView(),
       binding: ProfileBinding(),
@@ -107,6 +114,11 @@ class AppPages {
     GetPage(
       name: _Paths.CHECKOUT,
       page: () => CheckoutView(),
+      binding: CheckoutBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT_OFFLINE,
+      page: () => CheckoutOfflineView(),
       binding: CheckoutBinding(),
     ),
     GetPage(

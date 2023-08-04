@@ -19,7 +19,6 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
- 
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     const int count = 16;
@@ -273,6 +272,139 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                   ),
+                  Obx(
+                    () {
+                      if (controller.productsPromo.isEmpty) {
+                        return SizedBox();
+                      } else {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15.0, horizontal: 10.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Promo Kemerdekaan',
+                                      style: Styles.headerStyles(size: 16),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Image.asset(
+                                      'assets/images/flag.png',
+                                      height: 40,
+                                      width: 40,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 180,
+                              child: ListView.builder(
+                                physics: const ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: controller.productsPromo.length,
+                                itemBuilder: (context, index) {
+                                  var product = controller.productsPromo[index];
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      await Fluttertoast.showToast(
+                                        msg:
+                                            'Mohong tunggu. Sedang mencari lokasimu',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[800],
+                                        textColor: Colors.white,
+                                        fontSize: 14.0,
+                                      );
+                                      await controller.postCurrentLocation();
+                                      var productDetails = await controller
+                                          .fetchProductDetails(product.id);
+                                      Get.toNamed('product-detail-promo',
+                                          arguments: [productDetails]);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 2.0),
+                                      child: Card(
+                                        child: Container(
+                                          width: 140,
+                                          padding: const EdgeInsets.all(5),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 5.0,
+                                                left: 8.0,
+                                                right: 8.0,
+                                                bottom: 0.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    child: Image.network(
+                                                      product.photo,
+                                                      fit: BoxFit.cover,
+                                                      width: 140,
+                                                      height: 90,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 4.0),
+                                                  child: Text(
+                                                    product.title,
+                                                    textAlign: TextAlign.left,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 2.0),
+                                                  child: Text(
+                                                    ' ${controller.convertToIdr(int.parse(product.promo), 0)}',
+                                                    textAlign: TextAlign.left,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                  Divider(),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 15.0, horizontal: 10.0),
@@ -286,17 +418,13 @@ class HomeView extends GetView<HomeController> {
                   ),
                   Obx(() {
                     if (controller.products.isEmpty) {
-                      return Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height: 200,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Data tidak ditemukan',
-                              style: Styles.bodyStyle(),
-                            ),
-                          ),
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: 200,
+                          height: 100,
+                          color: Colors.deepOrange[400],
                         ),
                       );
                     } else {
@@ -315,8 +443,6 @@ class HomeView extends GetView<HomeController> {
 
                                 return GestureDetector(
                                   onTap: () async {
-                                    controller.getCurrentLocation();
-                                    controller.postCurrentLocation();
                                     var productDetails = await controller
                                         .fetchProductDetails(product.id);
                                     Get.toNamed('product-detail',
@@ -395,7 +521,7 @@ class HomeView extends GetView<HomeController> {
                                                       controller.convertToIdr(
                                                           double.parse(
                                                               product.price),
-                                                          2),
+                                                          0),
                                                       style: const TextStyle(
                                                           fontSize: 14,
                                                           color: Color.fromRGBO(
@@ -411,7 +537,7 @@ class HomeView extends GetView<HomeController> {
                                                       controller.convertToIdr(
                                                           double.parse(product
                                                               .priceRetail),
-                                                          2),
+                                                          0),
                                                       style: const TextStyle(
                                                           fontSize: 12,
                                                           color: Colors.red,

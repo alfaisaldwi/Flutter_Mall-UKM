@@ -17,9 +17,8 @@ import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 import '../controllers/product_detail_controller.dart';
 
-class ProductDetailView extends GetView<ProductDetailController> {
+class ProductDetailPromoView extends GetView<ProductDetailController> {
   var controllerProductDetail = Get.put(ProductDetailController());
-  var ctrlCart = CartController();
   var productDetails = Get.arguments as List<ProductDetail>;
   final CarouselController controllerCaraousel = CarouselController();
   var homeC = Get.put(HomeController());
@@ -28,15 +27,6 @@ class ProductDetailView extends GetView<ProductDetailController> {
   Widget build(BuildContext context) {
     var product = productDetails.first;
 
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
-    const int count = 16;
-    const int itemsPerRow = 2;
-    const double ratio = 1 / 1;
-    const double horizontalPadding = 0;
-    final double calcHeight = ((width / itemsPerRow) - (horizontalPadding)) *
-        (count / itemsPerRow).ceil() *
-        (1 / ratio);
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
@@ -122,7 +112,22 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    homeC.storeOffline();
+                    String? token = GetStorage().read('token');
+                    if (token != null) {
+                      print(product.id);
+
+                      showOrderDialogOffline(context);
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Silahkan Signin terlebih dahulu',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[800],
+                        textColor: Colors.white,
+                        fontSize: 14.0,
+                      );
+                      Get.toNamed('/profile');
+                    }
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,
@@ -150,15 +155,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   onTap: () async {
                     String? token = GetStorage().read('token');
                     if (token != null) {
-                      // CartItem cartItem = CartItem(
-                      //     product_id: product.id,
-                      //     qty: int.parse(product.qty),
-                      //     unit_variant: product.unitVariant.first);
-
-                      // await ctrlCart.addToCart(cartItem);
                       showOrderDialog(context);
-
-                      // Get.toNamed(('/cart'));
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Silahkan Signin terlebih dahulu',
@@ -349,6 +346,43 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             ),
                           ),
                         ),
+                        if (homeC.radius == null)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                'Tidak dapat menemukan Lokasi',
+                                style: Styles.bodyStyle(
+                                    color: Colors.black45, size: 15),
+                              ),
+                            ),
+                          ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(0)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(2)} dan Longitude ${homeC.longitude.value.toStringAsFixed(2)}',
+                              style: Styles.bodyStyle(
+                                  color: Colors.black45, size: 14),
+                            ),
+                          ),
+                        ),
+                        if (product.promo != null)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                'Harga promo : ${product.promo}',
+                                style: Styles.bodyStyle(
+                                    color: Colors.black45, size: 14),
+                              ),
+                            ),
+                          ),
                         Divider(),
                       ]),
                 ),
@@ -526,6 +560,190 @@ class ProductDetailView extends GetView<ProductDetailController> {
   }
 }
 
+void showOrderDialogOffline(BuildContext context) {
+  var productDetails = Get.arguments as List<ProductDetail>;
+  var product = productDetails.first;
+  RxInt selectQuantity = 0.obs;
+  var controllerProductDetail = Get.put(ProductDetailController());
+
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 16),
+                  Text(
+                    'Varian Produk',
+                    style: GoogleFonts.roboto(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: product.unitVariant.map((variant) {
+                      return GestureDetector(
+                        onTap: () {
+                          controllerProductDetail.selectVariant(variant);
+                        },
+                        child: Obx(() => Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: controllerProductDetail
+                                            .selectedVariant.value ==
+                                        variant
+                                    ? Colors.blue
+                                    : Colors.grey,
+                              ),
+                              child: Obx(() => Text(
+                                    variant,
+                                    style: TextStyle(
+                                      color: controllerProductDetail
+                                                  .selectedVariant.value ==
+                                              variant
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  )),
+                            )),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Obx(() => CartStepperInt(
+                      value: controllerProductDetail.counter.value,
+                      size: 22,
+                      style: CartStepperStyle(
+                        foregroundColor: Colors.black87,
+                        activeForegroundColor: Colors.black87,
+                        activeBackgroundColor: Colors.white,
+                        border: Border.all(color: Colors.grey),
+                        radius: const Radius.circular(8),
+                        elevation: 0,
+                        buttonAspectRatio: 1.5,
+                      ),
+                      didChangeCount: (count) async {
+                        if (count <= int.parse(product.qty)) {
+                          controllerProductDetail.counter.value = count;
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Melebihi Stok Produk',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[800],
+                            textColor: Colors.white,
+                            fontSize: 14.0,
+                          );
+                        }
+                        print(controllerProductDetail.counter.value = count);
+                      })),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(36, 54, 101, 1.0),
+                      border: Border.all(),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
+                    child: InkWell(
+                      onTap: () async {
+                        String? token = GetStorage().read('token');
+                        if (token != null) {
+                          if (controllerProductDetail
+                              .selectedVariant.value.isNotEmpty) {
+                            if (int.parse(product.qty) >=
+                                controllerProductDetail.counter.value) {
+                              print(controllerProductDetail
+                                  .selectedVariant.value);
+
+                              var total =
+                                  controllerProductDetail.counter.value *
+                                      int.parse(product.promo!);
+                              var totalBefore =
+                                  controllerProductDetail.counter.value *
+                                      double.parse(product.price);
+                              print(product.id);
+                              Get.toNamed('/checkout-offline', arguments: [
+                                product.id,
+                                product,
+                                controllerProductDetail.counter.value,
+                                product.promo,
+                                controllerProductDetail.selectedVariant.value,
+                                total,
+                                totalBefore,
+                              ]);
+                              controllerProductDetail.counter.value = 1;
+                              controllerProductDetail.selectedVariant.value =
+                                  '';
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: 'Melebihi Stok Produk',
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey[800],
+                                textColor: Colors.white,
+                                fontSize: 14.0,
+                              );
+                            }
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: 'Silahkan Pilih Varian',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.grey[800],
+                              textColor: Colors.white,
+                              fontSize: 14.0,
+                            );
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Silahkan Signin terlebih dahulu',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[800],
+                            textColor: Colors.white,
+                            fontSize: 14.0,
+                          );
+                          Get.toNamed('/profile');
+                        }
+                      },
+                      child: SizedBox(
+                        height: kToolbarHeight - 15,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Center(
+                          child: Text(
+                            'Tambah Keranjang',
+                            style: Styles.bodyStyle(
+                                color: Colors.white,
+                                weight: FontWeight.w500,
+                                size: 13),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      });
+}
+
 void showOrderDialog(BuildContext context) {
   var productDetails = Get.arguments as List<ProductDetail>;
   var product = productDetails.first;
@@ -617,11 +835,6 @@ void showOrderDialog(BuildContext context) {
                           );
                         }
                         print(controllerProductDetail.counter.value = count);
-
-                        // } else if (count <
-                        //     controllerProductDetail.counter.value) {
-                        //   controllerProductDetail.decrementQuantity();
-                        // }
                       })),
                   const SizedBox(height: 16),
                   Container(

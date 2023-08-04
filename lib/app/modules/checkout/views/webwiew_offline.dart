@@ -3,13 +3,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
+import 'package:mall_ukm/app/modules/checkout/controllers/checkout_offline_controller.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class WebviewCheckout extends GetView<TransactionPageController> {
-  var contr = Get.put(CheckoutController());
+class WebviewCheckoutOffline extends GetView<TransactionPageController> {
+  var contr = Get.put(CheckoutOfflineController());
   var controllerNav = Get.put(NavbarPageController());
 
   @override

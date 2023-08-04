@@ -18,6 +18,14 @@ class WebviewCheckout extends GetView<TransactionPageController> {
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                Get.offNamed('navbar-page');
+              },
+            ),
+          ],
         ),
         body: SafeArea(
             child: WillPopScope(
@@ -26,12 +34,11 @@ class WebviewCheckout extends GetView<TransactionPageController> {
               contr.ctr.goBack();
               return false;
             } else {
-              Get.offAndToNamed('navbar-page');
+              contr.callTransaksi();
+              controllerNav.tabController.index = 2;
+              Get.offNamed('navbar-page'); // Kembali ke halaman 'navbar-page'
+              return true;
             }
-            contr.callTransaksi();
-            controllerNav.tabController.index = 2;
-            Get.offAndToNamed('navbar-page');
-            return true;
           },
           child: WebViewWidget(
               controller: controller.ctr, gestureRecognizers: const <

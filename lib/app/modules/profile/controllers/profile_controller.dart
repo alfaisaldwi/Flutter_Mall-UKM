@@ -58,7 +58,7 @@ class ProfileController extends GetxController {
         var token = json['data'];
         GetStorage().write('token', token);
         // cNav.tabController.index = 2;
-        Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
+     await Get.offAndToNamed('navbar-page');
         cemail.clear();
         cpw.clear();
         Fluttertoast.showToast(

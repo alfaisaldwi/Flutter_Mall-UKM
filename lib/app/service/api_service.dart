@@ -46,6 +46,7 @@ class _TransactionEndPoints {
   final String index = '/api/auth/transaction';
   final String show = '/api/auth/transaction/show';
   final String store = '/api/auth/transaction/store';
+  final String storeOffline = '/api/auth/transaction/store/offline';
   final String unpaid = '/api/auth/transaction/unpaid';
   final String paid = '/api/auth/transaction/paid';
 }
@@ -58,6 +59,7 @@ class _ProductEndPoints {
   final String recomend = '/api/product/recomendation/';
   final String carousel = '/api/carousel/';
   final String recomendshow = '/api/category/recomendation';
+  final String promo = '/api/product/promo';
 }
 
 class _CartEndPoints {
