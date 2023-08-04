@@ -341,6 +341,7 @@ class CheckoutOfflineView extends GetView<CheckoutOfflineController> {
                               controller.convertToIdr(totalBefore, 2),
                               style: TextStyle(
                                 fontSize: 16,
+                                color: Colors.red,
                                 decoration: TextDecoration.lineThrough,
                               ),
                             ),

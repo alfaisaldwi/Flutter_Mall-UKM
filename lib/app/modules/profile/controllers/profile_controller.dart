@@ -55,20 +55,31 @@ class ProfileController extends GetxController {
       print(response.body);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        var token = json['data'];
-        GetStorage().write('token', token);
-        // cNav.tabController.index = 2;
-     await Get.offAndToNamed('navbar-page');
-        cemail.clear();
-        cpw.clear();
-        Fluttertoast.showToast(
-          msg: 'Login Berhasil',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[800],
-          textColor: Colors.white,
-          fontSize: 14.0,
-        );
+        if (json['code'] == "200") {
+          var token = json['data'];
+          GetStorage().write('token', token);
+          // cNav.tabController.index = 2;
+          await Get.offAllNamed('navbar-page');
+          cemail.clear();
+          cpw.clear();
+          Fluttertoast.showToast(
+            msg: 'Login Berhasil',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.grey[800],
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: 'Periksa kembali email dan password',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.grey[800],
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
+        }
       } else {
         Fluttertoast.showToast(
           msg: 'Periksa kembali email dan password',
@@ -80,14 +91,7 @@ class ProfileController extends GetxController {
         );
       }
     } catch (error) {
-      Fluttertoast.showToast(
-        msg: 'Periksa kembali email dan password',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.grey[800],
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      error;
     }
   }
 

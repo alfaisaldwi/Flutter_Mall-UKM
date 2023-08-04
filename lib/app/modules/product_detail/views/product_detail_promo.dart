@@ -187,352 +187,350 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              Card(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Column(
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      height: 280,
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: CarouselSlider(
-                          carouselController: controllerCaraousel,
-                          options: CarouselOptions(
-                            enableInfiniteScroll: false,
-                            aspectRatio: 16 /
-                                9, // Sesuaikan dengan rasio aspek gambar Anda
-                            viewportFraction: 1,
-                            height: double.infinity,
-                            autoPlay: false,
-                            enlargeCenterPage: true,
-                            onPageChanged: controller.onPageChanged,
-                          ),
-                          items: product.photo.map((url) {
-                            return Container(
-                              margin: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                image: DecorationImage(
-                                  image: NetworkImage(url),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: const Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Text(
-                                  '',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Obx(() =>
-                            buildIndicator(controller.currentIndex.value)),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 12.0, top: 15),
-                          child: RichText(
-                            text: TextSpan(
-                              text: controllerProductDetail.convertToIdr(
-                                  double.parse(product.price), 2),
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
-                              children: [
-                                WidgetSpan(
-                                  child: Container(
-                                    width: 8, // Adjust the width as needed
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: controllerProductDetail.convertToIdr(
-                                      double.parse(product.priceRetail), 2),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.red,
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 12.0, top: 8.0, bottom: 14.0),
-                        child: Text(
-                          '${product.title}',
-                          textAlign: TextAlign.left,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Styles.headerStyles(
-                              weight: FontWeight.w400, size: 17),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      body: RefreshIndicator(
+        onRefresh: () {
+          return homeC.postCurrentLocation();
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                Card(
+                  margin: const EdgeInsets.only(bottom: 10),
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              'Detail Produk',
-                              style: Styles.headerStyles(
-                                  size: 16, weight: FontWeight.w600),
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        height: 280,
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                          child: CarouselSlider(
+                            carouselController: controllerCaraousel,
+                            options: CarouselOptions(
+                              enableInfiniteScroll: false,
+                              aspectRatio: 16 /
+                                  9, // Sesuaikan dengan rasio aspek gambar Anda
+                              viewportFraction: 1,
+                              height: double.infinity,
+                              autoPlay: false,
+                              enlargeCenterPage: true,
+                              onPageChanged: controller.onPageChanged,
                             ),
+                            items: product.photo.map((url) {
+                              return Container(
+                                margin: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                    image: NetworkImage(url),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: const Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    '',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Kategori : ${product.category}',
-                              style: Styles.bodyStyle(
-                                  color: Colors.black54, size: 15),
-                            ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Obx(() =>
+                              buildIndicator(controller.currentIndex.value)),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 12.0, top: 15),
+                            child: RichText(
+                              text: TextSpan(
+                                text: controllerProductDetail.convertToIdr(
+                                    int.parse(product.promo!), 2),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                                children: [
+                                  WidgetSpan(
+                                    child: Container(
+                                      width: 8, // Adjust the width as needed
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: controllerProductDetail.convertToIdr(
+                                        double.parse(product.price), 2),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.red,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 12.0, top: 8.0, bottom: 14.0),
+                          child: Text(
+                            '${product.title}',
+                            textAlign: TextAlign.left,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Styles.headerStyles(
+                                weight: FontWeight.w400, size: 17),
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              'Stok : ${product.qty}',
-                              style: Styles.bodyStyle(
-                                  color: Colors.black45, size: 15),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              'Berat Satuan : ${product.weight}gram',
-                              style: Styles.bodyStyle(
-                                  color: Colors.black45, size: 15),
-                            ),
-                          ),
-                        ),
-                        if (homeC.radius == null)
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
                               child: Text(
-                                'Tidak dapat menemukan Lokasi',
+                                'Detail Produk',
+                                style: Styles.headerStyles(
+                                    size: 16, weight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Kategori : ${product.category}',
+                                style: Styles.bodyStyle(
+                                    color: Colors.black54, size: 15),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                'Stok : ${product.qty}',
                                 style: Styles.bodyStyle(
                                     color: Colors.black45, size: 15),
                               ),
                             ),
                           ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(0)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(2)} dan Longitude ${homeC.longitude.value.toStringAsFixed(2)}',
-                              style: Styles.bodyStyle(
-                                  color: Colors.black45, size: 14),
-                            ),
-                          ),
-                        ),
-                        if (product.promo != null)
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
                               child: Text(
-                                'Harga promo : ${product.promo}',
+                                'Berat Satuan : ${product.weight}gram',
+                                style: Styles.bodyStyle(
+                                    color: Colors.black45, size: 15),
+                              ),
+                            ),
+                          ),
+                          if (homeC.radius == null)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  'Tidak dapat menemukan Lokasi',
+                                  style: Styles.bodyStyle(
+                                      color: Colors.black45, size: 15),
+                                ),
+                              ),
+                            ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(0)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(6)} dan Longitude ${homeC.longitude.value.toStringAsFixed(6)}',
                                 style: Styles.bodyStyle(
                                     color: Colors.black45, size: 14),
                               ),
                             ),
                           ),
-                        Divider(),
-                      ]),
+                          Divider(),
+                        ]),
+                  ),
                 ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: Column(children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          'Deskripsi Produk',
-                          style: Styles.headerStyles(
-                              size: 16, weight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          product.description,
-                          style: Styles.bodyStyle(
-                            size: 14,
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Column(children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            'Deskripsi Produk',
+                            style: Styles.headerStyles(
+                                size: 16, weight: FontWeight.w600),
                           ),
                         ),
                       ),
-                    ),
-                  ]),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                color: Colors.blue[50],
-                child: Column(
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 20, bottom: 10, left: 10),
-                      child: Align(
+                      Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Rekomendasi untukmu',
-                          style: Styles.headerStyles(weight: FontWeight.w500),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            product.description,
+                            style: Styles.bodyStyle(
+                              size: 14,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, bottom: 20),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * .3 - 45,
-                        width: double.infinity,
-                        child: Obx(() => ListView.builder(
-                            physics: const ClampingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: controller.recomend.length,
-                            itemBuilder: (context, index) {
-                              var recomend = controller.recomend[index];
+                    ]),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  color: Colors.blue[50],
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, bottom: 10, left: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Rekomendasi untukmu',
+                            style: Styles.headerStyles(weight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, bottom: 20),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * .3 - 45,
+                          width: double.infinity,
+                          child: Obx(() => ListView.builder(
+                              physics: const ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: controller.recomend.length,
+                              itemBuilder: (context, index) {
+                                var recomend = controller.recomend[index];
 
-                              return GestureDetector(
-                                onTap: () async {
-                                  // homeC.fetchProductDetails(recomend.id);
-                                  var productDetails = await homeC
-                                      .fetchProductDetails(recomend.id);
-                                  Get.offAndToNamed('/product-detail',
-                                      arguments: [productDetails]);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 2.0),
-                                  child: Card(
-                                    child: Container(
-                                      width: 140,
-                                      padding: const EdgeInsets.all(5),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 5.0,
-                                            left: 8.0,
-                                            right: 8.0,
-                                            bottom: 0.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                                child: Image.network(
-                                                  recomend.photo.first,
-                                                  fit: BoxFit.cover,
-                                                  width: 140,
-                                                  height: 90,
+                                return GestureDetector(
+                                  onTap: () async {
+                                    // homeC.fetchProductDetails(recomend.id);
+                                    var productDetails = await homeC
+                                        .fetchProductDetails(recomend.id);
+                                    Get.offAndToNamed('/product-detail',
+                                        arguments: [productDetails]);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 2.0),
+                                    child: Card(
+                                      child: Container(
+                                        width: 140,
+                                        padding: const EdgeInsets.all(5),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 5.0,
+                                              left: 8.0,
+                                              right: 8.0,
+                                              bottom: 0.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                  child: Image.network(
+                                                    recomend.photo.first,
+                                                    fit: BoxFit.cover,
+                                                    width: 140,
+                                                    height: 90,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 4.0),
-                                              child: Text(
-                                                recomend.title,
-                                                textAlign: TextAlign.left,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Styles.bodyStyle(
-                                                    weight: FontWeight.w600),
+                                              const SizedBox(
+                                                height: 10,
                                               ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 2.0),
-                                              child: Text(
-                                                controllerProductDetail
-                                                    .convertToIdr(
-                                                        double.parse(
-                                                            recomend.price),
-                                                        2),
-                                                textAlign: TextAlign.left,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style:
-                                                    Styles.bodyStyle(size: 12),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 4.0),
+                                                child: Text(
+                                                  recomend.title,
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: Styles.bodyStyle(
+                                                      weight: FontWeight.w600),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 2.0),
+                                                child: Text(
+                                                  controllerProductDetail
+                                                      .convertToIdr(
+                                                          double.parse(
+                                                              recomend.price),
+                                                          2),
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: Styles.bodyStyle(
+                                                      size: 12),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            })),
+                                );
+                              })),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

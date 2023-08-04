@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
@@ -168,14 +169,53 @@ class TransactionPageController extends GetxController {
       ..loadRequest(Uri.parse(url));
 
     Get.offAll((WebviewCheckout()), arguments: url);
-
-    // Navigator.push(
-    //     Get.context!,
-    //     MaterialPageRoute(
-    //       builder: (context) => MyHomePage(
-    //         url: paymentUrl,
-    //       ),
-    //     ));
     print(url);
+  }
+
+  Future<void> updateStatus(int idTransaction) async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    var url = Uri.parse(
+      ApiEndPoints.baseUrl +
+          ApiEndPoints.transactionEndPoints.changeStatus +
+          '$idTransaction',
+    );
+    Map<String, dynamic> body() {
+      return {
+        "status": "delivered",
+      };
+    }
+
+    Map<String, dynamic> requestBody = body();
+    String encodedBody = jsonEncode(requestBody);
+    print(encodedBody);
+    http.Response response =
+        await http.post(url, body: encodedBody, headers: headers);
+    print(' ||| ${response.body} ||| STATUS ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['code'] == 200) {
+        callGettrs();
+        Get.back();
+        Fluttertoast.showToast(
+          msg: 'Berhasil konfirmasi menerima barang',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
+        print('Berhasil');
+      } else {
+        print(
+            'Gagal konfimaasi menerima barang  ${response.body} ||| ${jsonResponse['code']} || ${jsonResponse}');
+      }
+    }
   }
 }

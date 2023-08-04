@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart';
 import 'package:mall_ukm/app/modules/recommend_page/controllers/recommend_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
@@ -19,6 +20,9 @@ class NavbarPageBinding extends Bindings {
     );
     Get.lazyPut<RecommendPageController>(
       () => RecommendPageController(),
+    );
+    Get.lazyPut<HomeController>(
+      () => HomeController(),
     );
   }
 }

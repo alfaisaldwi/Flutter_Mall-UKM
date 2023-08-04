@@ -49,6 +49,7 @@ class _TransactionEndPoints {
   final String storeOffline = '/api/auth/transaction/store/offline';
   final String unpaid = '/api/auth/transaction/unpaid';
   final String paid = '/api/auth/transaction/paid';
+  final String changeStatus = '/api/auth/transaction/update/status/payment/';
 }
 
 class _ProductEndPoints {

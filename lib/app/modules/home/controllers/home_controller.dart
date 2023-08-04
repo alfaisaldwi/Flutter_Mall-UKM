@@ -38,6 +38,8 @@ class HomeController extends GetxController {
   void onInit() {
     fetchProduct();
     startDataRefreshTimer();
+    postCurrentLocation();
+
     fetchCategories();
     getCarouselData();
     fetchPromo();
@@ -67,6 +69,7 @@ class HomeController extends GetxController {
   }
 
   void reFetch() {
+    postCurrentLocation();
     fetchProduct();
     fetchCategories();
     getCarouselData();
