@@ -101,7 +101,7 @@ class TransactionPageController extends GetxController {
         throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
       }
     } catch (error) {
-      throw error.toString();
+      throw '${error.toString()}';
     }
   }
 

@@ -3,9 +3,9 @@ class Transaction {
   final String userId;
   final String addressId;
   final String orderId;
-  final String courier;
-  final String costCourier;
-  final String? receiptNumber;
+  String? courier;
+  String? costCourier;
+  String? receiptNumber;
   final String total;
   final String paymentUrl;
   final String status;
@@ -21,8 +21,8 @@ class Transaction {
     required this.userId,
     required this.addressId,
     required this.orderId,
-    required this.courier,
-    required this.costCourier,
+    this.courier,
+    this.costCourier,
     this.receiptNumber,
     required this.total,
     required this.paymentUrl,

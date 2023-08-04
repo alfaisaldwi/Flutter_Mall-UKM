@@ -94,7 +94,7 @@ class CheckoutView extends GetView<CheckoutController> {
                           addressId: addressId,
                           courier: controller.selectedCourier.value,
                           costCourier: ongkir.value.toInt(),
-                          statusPayment: 'Online',
+                          statusPayment: 'online',
                           total: subtot.value.toInt(),
                           products: productsList,
                         );
@@ -267,9 +267,6 @@ class CheckoutView extends GetView<CheckoutController> {
                       productId = int.parse(dataCart[index].cart.productId);
                       cartId = dataCart[index].cart.id;
                       priceProduct = dataCart[index].cart.price.toInt();
-                      // var w = int.parse(cart.cart.weight);
-                      // controller.weight2[index].value = w;
-                      // print(cart.cart.weight);
                       unitVariant = dataCart[index].cart.unitVariant;
 
                       return Container(

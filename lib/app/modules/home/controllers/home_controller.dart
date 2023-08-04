@@ -11,6 +11,8 @@ import 'package:mall_ukm/app/model/carousel/carousel_model.dart';
 import 'package:mall_ukm/app/model/category/category_show.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
+import 'package:mall_ukm/app/model/product/product_promo_model.dart';
+import 'package:mall_ukm/app/modules/checkout/views/checkout_offline_view.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 
@@ -19,15 +21,14 @@ import '../../../model/category/category_model.dart';
 class HomeController extends GetxController {
   TextEditingController cSearch = TextEditingController();
   var categoryData = <CategoryShow>[].obs;
-
-  final count = 0.obs;
   var category = <Category>[].obs;
   var products = <Product>[].obs;
   var isLoadingProduct = true.obs;
   var isLoadingCategory = true.obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
-  double? radius;
+  var radius;
+  var productsPromo = <ProductPromo>[].obs;
 
   var carouselList = <CarouselIndex>[].obs;
   Timer? _timer;
@@ -38,6 +39,7 @@ class HomeController extends GetxController {
     startDataRefreshTimer();
     fetchCategories();
     getCarouselData();
+    fetchPromo();
 
     super.onInit();
   }
@@ -53,12 +55,10 @@ class HomeController extends GetxController {
   }
 
   void startDataRefreshTimer() {
-    const refreshInterval =
-        Duration(minutes: 1); // Set the refresh interval as desired
+    const refreshInterval = Duration(minutes: 1);
 
-    // Start the timer
     _timer = Timer.periodic(refreshInterval, (timer) {
-      // Fetch data periodically
+      fetchPromo();
       fetchProduct();
       getCarouselData();
       fetchCategories();
@@ -143,7 +143,6 @@ class HomeController extends GetxController {
           ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.product);
       http.Response response = await http.get(url, headers: headers);
 
-      // print(response.body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse['code'] == 200) {
@@ -242,7 +241,33 @@ class HomeController extends GetxController {
     }
   }
 
-  void getCurrentLocation() async {
+  Future<void> fetchPromo() async {
+    var headers = {
+      'Accept': 'application/json',
+    };
+    try {
+      var url =
+          Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.promo);
+      http.Response response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = jsonDecode(response.body)['data'];
+        final List<ProductPromo> productList =
+            responseData.map((item) => ProductPromo.fromJson(item)).toList();
+        productsPromo.value = productList;
+      } else {
+        print('Berhasil ambil data promo');
+      }
+    } catch (e) {
+      print('Error ambil data promo: $e');
+    }
+  }
+
+  Future postCurrentLocation() async {
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
     try {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -252,22 +277,64 @@ class HomeController extends GetxController {
       longitude.value = position.longitude;
 
       Map<String, dynamic> requestBody = {
-        "latitude": latitude,
-        "longitude": longitude,
+        "latitude": latitude.value,
+        "longitude": longitude.value,
       };
-      return getCurrentLocation();
+
+      var url =
+          Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.checkHaversine.check);
+
+      http.Response response =
+          await http.post(url, body: jsonEncode(requestBody), headers: headers);
+      print('body $requestBody ||| ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        var radiusData = jsonResponse['data'];
+        radius = radiusData;
+
+        Fluttertoast.showToast(
+          msg: 'Kamu berada diradius Mall UKM',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
+      } else {
+        final jsonResponse = jsonDecode(response.body);
+
+        var radiusData = jsonResponse['data'];
+        radius = radiusData;
+        Fluttertoast.showToast(
+          msg: 'Kamu tidak berada diradius Mall UKM',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
+      }
     } catch (e) {
-      print("Terjadi kesalahan saat mengambil lokasi: $e");
+      print("Terjadi kesalahan: $e");
     }
   }
 
-  void postCurrentLocation() async {
+  void storeOffline() async {
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     };
 
     try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      latitude.value = position.latitude;
+      longitude.value = position.longitude;
+
       Map<String, dynamic> requestBody = {
         "latitude": latitude.value,
         "longitude": longitude.value,
@@ -287,6 +354,8 @@ class HomeController extends GetxController {
         radius = radiusData;
 
         print(' www ${radius}');
+
+        Get.toNamed('/checkout-offline', arguments: products);
         Fluttertoast.showToast(
           msg: 'Berhasil, Kamu berada diradius Mall UKM',
           toastLength: Toast.LENGTH_SHORT,

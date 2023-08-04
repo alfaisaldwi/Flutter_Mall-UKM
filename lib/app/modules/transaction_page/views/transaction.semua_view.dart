@@ -30,19 +30,24 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
               )
             else
               Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                  child: Obx(
-                    () => ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: ctrT.transactionIndexList.length,
-                      itemBuilder: (context, index) {
-                        var trs = ctrT.transactionIndexList[index];
-                        return TransactionCard(transaction: trs);
-                      },
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.callGettrs();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 0),
+                    child: Obx(
+                      () => ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: ctrT.transactionIndexList.length,
+                        itemBuilder: (context, index) {
+                          var trs = ctrT.transactionIndexList[index];
+                          return TransactionCard(transaction: trs);
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -124,8 +129,8 @@ class TransactionCard extends StatelessWidget {
                             color: Colors.yellowAccent[100],
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child:const  Padding(
-                            padding:  EdgeInsets.all(6.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(6.0),
                             child: Text(
                               'Belum Bayar',
                               style: TextStyle(

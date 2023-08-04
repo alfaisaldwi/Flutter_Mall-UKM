@@ -73,6 +73,20 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text('Nama Pembeli:'),
+                          Text(
+                            ' ${trsDetail.userUsernameSender}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           Text('Total:'),
                           Text(
                             ' ${controller.convertToIdr(int.parse(trsDetail.total!), 2)}',

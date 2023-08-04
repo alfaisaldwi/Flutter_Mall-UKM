@@ -14,11 +14,13 @@ abstract class Routes {
   static const SURVEY_PAGE = _Paths.SURVEY_PAGE;
   static const CART = _Paths.CART;
   static const PRODUCT_DETAIL = _Paths.PRODUCT_DETAIL;
+  static const PRODUCT_DETAIL_PROMO = _Paths.PRODUCT_DETAIL_PROMO;
   static const SIGNUP = _Paths.SIGNUP;
   static const SIGNIN = _Paths.SIGNIN;
   static const ADDRESS = _Paths.ADDRESS;
   static const ADDRESS_INDEX = _Paths.ADDRESS_INDEX;
   static const CHECKOUT = _Paths.CHECKOUT;
+  static const CHECKOUT_OFFLINE = _Paths.CHECKOUT_OFFLINE;
   static const CATEGORY = _Paths.CATEGORY;
   static const PROFILE_COMPANY = _Paths.PROFILE_COMPANY;
 }
@@ -34,11 +36,13 @@ abstract class _Paths {
   static const SURVEY_PAGE = '/survey-page';
   static const CART = '/cart';
   static const PRODUCT_DETAIL = '/product-detail';
+  static const PRODUCT_DETAIL_PROMO = '/product-detail-promo';
   static const SIGNUP = '/signup';
   static const SIGNIN = '/signin';
   static const ADDRESS = '/address';
   static const ADDRESS_INDEX = '/address-index';
   static const CHECKOUT = '/checkout';
+  static const CHECKOUT_OFFLINE = '/checkout-offline';
   static const CATEGORY = '/category';
   static const PROFILE_COMPANY = '/profile-company';
 }
