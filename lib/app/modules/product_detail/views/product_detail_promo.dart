@@ -114,9 +114,9 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                   onTap: () {
                     String? token = GetStorage().read('token');
                     if (token != null) {
-                      print(product.id);
+                      homeC.storeOffline();
 
-                      showOrderDialogOffline(context);
+                      // showOrderDialogOffline(context);
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Silahkan Signin terlebih dahulu',

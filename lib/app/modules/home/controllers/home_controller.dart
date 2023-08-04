@@ -13,6 +13,7 @@ import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/model/product/product_promo_model.dart';
 import 'package:mall_ukm/app/modules/checkout/views/checkout_offline_view.dart';
+import 'package:mall_ukm/app/modules/product_detail/views/product_detail_promo.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 
@@ -328,13 +329,6 @@ class HomeController extends GetxController {
     };
 
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      latitude.value = position.latitude;
-      longitude.value = position.longitude;
-
       Map<String, dynamic> requestBody = {
         "latitude": latitude.value,
         "longitude": longitude.value,
@@ -355,7 +349,6 @@ class HomeController extends GetxController {
 
         print(' www ${radius}');
 
-        Get.toNamed('/checkout-offline', arguments: products);
         Fluttertoast.showToast(
           msg: 'Berhasil, Kamu berada diradius Mall UKM',
           toastLength: Toast.LENGTH_SHORT,
@@ -364,6 +357,7 @@ class HomeController extends GetxController {
           textColor: Colors.white,
           fontSize: 14.0,
         );
+        showOrderDialogOffline(Get.context!);
       } else {
         final jsonResponse = jsonDecode(response.body);
 

@@ -418,14 +418,26 @@ class HomeView extends GetView<HomeController> {
                   ),
                   Obx(() {
                     if (controller.products.isEmpty) {
-                      return Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
-                        child: Container(
-                          width: 200,
-                          height: 100,
-                          color: Colors.deepOrange[400],
-                        ),
+                      return Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: GridView.count(
+                            crossAxisCount: 2,
+                            shrinkWrap: true,
+                            physics: const ScrollPhysics(),
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 20,
+                            children: List.generate(6, (index) {
+                              return Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    margin: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ));
+                            })),
                       );
                     } else {
                       return Padding(
@@ -436,7 +448,7 @@ class HomeView extends GetView<HomeController> {
                               shrinkWrap: true,
                               physics: const ScrollPhysics(),
                               mainAxisSpacing: 16,
-                              crossAxisSpacing: 18,
+                              crossAxisSpacing: 20,
                               itemCount: controller.products.length,
                               itemBuilder: (context, index) {
                                 var product = controller.products[index];
