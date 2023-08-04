@@ -76,33 +76,53 @@ class CheckoutView extends GetView<CheckoutController> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    if (addressId != 0) {
-                      if (controller.selectedCourier.value != '') {
-                        List<Map<String, dynamic>> productsList = [];
-                        for (int i = 0; i < dataCart.length; i++) {
-                          Map<String, dynamic> product = {
-                            "id": dataCart[i].cart.id,
-                            "product_id": dataCart[i].cart.productId,
-                            "price": dataCart[i].cart.price,
-                            "quantity": dataCart[i].cart.qty,
-                            "variant": dataCart[i].cart.unitVariant
-                          };
-                          productsList.add(product);
+                    if (!controller.isLoading.value) {
+                      if (addressId != 0) {
+                        if (controller.selectedCourier.value != '') {
+                          controller.isLoading.value = true;
+                          List<Map<String, dynamic>> productsList = [];
+                          for (int i = 0; i < dataCart.length; i++) {
+                            Map<String, dynamic> product = {
+                              "id": dataCart[i].cart.id,
+                              "product_id": dataCart[i].cart.productId,
+                              "price": dataCart[i].cart.price,
+                              "quantity": dataCart[i].cart.qty,
+                              "variant": dataCart[i].cart.unitVariant
+                            };
+                            productsList.add(product);
+                          }
+
+                          CheckoutData checkoutData = CheckoutData(
+                            addressId: addressId,
+                            courier: controller.selectedCourier.value,
+                            costCourier: ongkir.value.toInt(),
+                            statusPayment: 'online',
+                            total: subtot.value.toInt(),
+                            products: productsList,
+                          );
+
+                          controller
+                              .tambahDataTransaksi(checkoutData)
+                              .then((response) {
+                            controller.isLoading.value = false;
+                          }).catchError((error) {
+                            controller.isLoading.value = false;
+                            print('Error: $error');
+                          });
+                          
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Kamu belum memilih Kurir',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[800],
+                            textColor: Colors.white,
+                            fontSize: 14.0,
+                          );
                         }
-
-                        CheckoutData checkoutData = CheckoutData(
-                          addressId: addressId,
-                          courier: controller.selectedCourier.value,
-                          costCourier: ongkir.value.toInt(),
-                          statusPayment: 'online',
-                          total: subtot.value.toInt(),
-                          products: productsList,
-                        );
-
-                        controller.tambahDataTransaksi(checkoutData);
                       } else {
                         Fluttertoast.showToast(
-                          msg: 'Kamu belum memilih Kurir',
+                          msg: 'Kamu belum memilih alamat',
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.grey[800],
@@ -110,15 +130,6 @@ class CheckoutView extends GetView<CheckoutController> {
                           fontSize: 14.0,
                         );
                       }
-                    } else {
-                      Fluttertoast.showToast(
-                        msg: 'Kamu belum memilih alamat',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        backgroundColor: Colors.grey[800],
-                        textColor: Colors.white,
-                        fontSize: 14.0,
-                      );
                     }
                   },
                   child: Container(

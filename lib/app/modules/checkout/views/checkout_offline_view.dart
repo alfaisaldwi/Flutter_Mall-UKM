@@ -78,37 +78,47 @@ class CheckoutOfflineView extends GetView<CheckoutOfflineController> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    if (addressId != 0) {
-                      List<Map<String, dynamic>> productsList = [];
-                      for (int i = 0; i < 1; i++) {
-                        Map<String, dynamic> product = {
-                          "product_id": productPromoId,
-                          "price": pricePromo,
-                          "quantity": kuantiti,
-                          "variant": selectVariant
-                        };
-                        productsList.add(product);
+                    if (!controller.isLoading.value) {
+                      if (addressId != 0) {
+                        controller.isLoading.value = true;
+
+                        List<Map<String, dynamic>> productsList = [];
+                        for (int i = 0; i < 1; i++) {
+                          Map<String, dynamic> product = {
+                            "product_id": productPromoId,
+                            "price": pricePromo,
+                            "quantity": kuantiti,
+                            "variant": selectVariant
+                          };
+                          productsList.add(product);
+                        }
+
+                        CheckoutDataOffline checkoutDataOffline =
+                            CheckoutDataOffline(
+                          addressId: addressId,
+                          statusPayment: 'offline',
+                          total: total,
+                          products: productsList,
+                        );
+
+                        controller
+                            .tambahDataTransaksiOffline(checkoutDataOffline)
+                            .then((response) {
+                          controller.isLoading.value = false;
+                        }).catchError((error) {
+                          controller.isLoading.value = false;
+                          print('Error: $error');
+                        });
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: 'Kamu belum memilih alamat',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey[800],
+                          textColor: Colors.white,
+                          fontSize: 14.0,
+                        );
                       }
-
-                      CheckoutDataOffline checkoutDataOffline =
-                          CheckoutDataOffline(
-                        addressId: addressId,
-                        statusPayment: 'offline',
-                        total: total,
-                        products: productsList,
-                      );
-
-                      controller
-                          .tambahDataTransaksiOffline(checkoutDataOffline);
-                    } else {
-                      Fluttertoast.showToast(
-                        msg: 'Kamu belum memilih alamat',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        backgroundColor: Colors.grey[800],
-                        textColor: Colors.white,
-                        fontSize: 14.0,
-                      );
                     }
                   },
                   child: Container(

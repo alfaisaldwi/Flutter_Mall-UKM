@@ -22,6 +22,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 class CheckoutOfflineController extends GetxController {
   var controllerNav = Get.put(NavbarPageController());
   TextEditingController selectedCourier1 = TextEditingController();
+   var isLoading = false.obs;
+
   WebViewController ctr = WebViewController();
   var idkecamatan = '';
   var weight = ''.obs;

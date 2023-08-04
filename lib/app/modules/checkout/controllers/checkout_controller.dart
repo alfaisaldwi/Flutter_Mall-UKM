@@ -21,6 +21,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class CheckoutController extends GetxController {
   var controllerNav = Get.put(NavbarPageController());
+   var isLoading = false.obs;
   TextEditingController selectedCourier1 = TextEditingController();
   var selectedCourier = ''.obs;
   var selectedCourierFirst = '';
