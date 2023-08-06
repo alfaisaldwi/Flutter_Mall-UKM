@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 import 'package:mall_ukm/app/model/carousel/carousel_model.dart';
 import 'package:mall_ukm/app/model/category/category_show.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
@@ -16,6 +17,7 @@ import 'package:mall_ukm/app/modules/checkout/views/checkout_offline_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_promo.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../model/category/category_model.dart';
 
@@ -39,7 +41,7 @@ class HomeController extends GetxController {
     fetchProduct();
     startDataRefreshTimer();
     postCurrentLocation();
-
+    requestLocationPermission();
     fetchCategories();
     getCarouselData();
     fetchPromo();
@@ -273,8 +275,9 @@ class HomeController extends GetxController {
     };
 
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+      geolocator.Position position =
+          await geolocator.Geolocator.getCurrentPosition(
+        desiredAccuracy: geolocator.LocationAccuracy.high,
       );
 
       latitude.value = position.latitude;
@@ -377,6 +380,51 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print("Terjadi kesalahan: $e");
+    }
+  }
+
+  Future<void> requestLocationPermission() async {
+    var status = await Permission.location.request();
+    if (status.isGranted) {
+      LocationData locationData = await Location().getLocation();
+    } else if (status.isDenied) {
+      showDialog(
+        context: Get.context!,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('Akses Lokasi Diperlukan'),
+          content: Text(
+              'Anda telah menolak izin lokasi. Buka pengaturan untuk mengizinkannya?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Tutup'),
+            ),
+            TextButton(
+              onPressed: () => openAppSettings(),
+              child: Text('Buka Pengaturan'),
+            ),
+          ],
+        ),
+      );
+    } else if (status.isPermanentlyDenied) {
+      showDialog(
+        context: Get.context!,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('Akses Lokasi Diperlukan'),
+          content: Text(
+              'Anda telah menolak izin lokasi secara permanen. Buka pengaturan untuk mengizinkannya?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Tutup'),
+            ),
+            TextButton(
+              onPressed: () => openAppSettings(),
+              child: Text('Buka Pengaturan'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
