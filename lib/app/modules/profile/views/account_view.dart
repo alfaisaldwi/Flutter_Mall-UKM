@@ -242,7 +242,7 @@ class AccountView extends GetView<ProfileController> {
                                 },
                                 leading: const Icon(Icons.file_copy_outlined),
                                 title: Text(
-                                  'Kuesioner Kepuasan Pengguna Mall UKM Kota Cirebon',
+                                  'Survey Kepuasan Pengguna Mall UKM Kota Cirebon',
                                   style: Styles.bodyStyle(),
                                 ),
                               ),

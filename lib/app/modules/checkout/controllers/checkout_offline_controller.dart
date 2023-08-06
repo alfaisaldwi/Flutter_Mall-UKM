@@ -75,13 +75,7 @@ class CheckoutOfflineController extends GetxController {
           ..loadRequest(Uri.parse(paymentUrl));
 
         Get.offAll((WebviewCheckoutOffline()), arguments: url);
-        // Navigator.push(
-        //     Get.context!,
-        //     MaterialPageRoute(
-        //       builder: (context) => MyHomePage(
-        //         url: paymentUrl,
-        //       ),
-        //     ));
+
         print(paymentUrl);
       }
 

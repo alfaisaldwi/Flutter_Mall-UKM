@@ -83,7 +83,7 @@ class HomeView extends GetView<HomeController> {
                         textAlign: TextAlign.justify,
                         decoration: InputDecoration(
                           fillColor: Colors.white,
-                          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 4),
                           border: InputBorder
                               .none, // Hapus border pada input decoration TextField
                           hintText: 'Cari Produk di Mall UKM',
@@ -313,16 +313,16 @@ class HomeView extends GetView<HomeController> {
                                   var product = controller.productsPromo[index];
                                   return GestureDetector(
                                     onTap: () async {
-                                      await Fluttertoast.showToast(
-                                        msg:
-                                            'Mohong tunggu. Sedang mencari lokasimu',
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[800],
-                                        textColor: Colors.white,
-                                        fontSize: 14.0,
-                                      );
-                                      await controller.postCurrentLocation();
+                                      // await Fluttertoast.showToast(
+                                      //   msg:
+                                      //       'Mohong tunggu. Sedang mencari lokasimu',
+                                      //   toastLength: Toast.LENGTH_SHORT,
+                                      //   gravity: ToastGravity.BOTTOM,
+                                      //   backgroundColor: Colors.grey[800],
+                                      //   textColor: Colors.white,
+                                      //   fontSize: 14.0,
+                                      // );
+                                      // await controller.postCurrentLocation();
                                       var productDetails = await controller
                                           .fetchProductDetails(product.id);
                                       Get.toNamed('product-detail-promo',

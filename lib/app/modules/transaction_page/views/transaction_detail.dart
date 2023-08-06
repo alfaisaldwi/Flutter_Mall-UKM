@@ -293,7 +293,31 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                   ],
                 ),
               SizedBox(height: 16),
-              if (trsDetail.status == 'paid')
+              if (trsDetail.status == 'paid' &&
+                  trsDetail.statusPayment == 'offline')
+                GestureDetector(
+                  onTap: () async {
+                    await controller.updateStatus(trsDetail.id!);
+                  },
+                  child: Container(
+                    height: 45,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(11),
+                      color: const Color(0xff198754),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Text('Sudah dibayar',
+                            style: Styles.bodyStyle(
+                                color: Colors.white, size: 14)),
+                      ),
+                    ),
+                  ),
+                ),
+              if (trsDetail.status == 'paid' &&
+                  trsDetail.statusPayment == 'online')
                 Container(
                   height: 45,
                   width: double.infinity,

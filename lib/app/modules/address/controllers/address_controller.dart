@@ -8,10 +8,12 @@ import 'package:http/http.dart' as http;
 import 'package:mall_ukm/app/model/address/address_index.dart';
 import 'package:mall_ukm/app/model/address/address_model.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
+import 'package:mall_ukm/app/modules/checkout/controllers/checkout_offline_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 
 class AddressController extends GetxController {
   var checkoutC = Get.put(CheckoutController());
+  var checkoutO = Get.put(CheckoutOfflineController());
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
@@ -104,6 +106,7 @@ class AddressController extends GetxController {
 
   void getAdrresNow() {
     checkoutC.refreshAddress();
+    checkoutO.refreshAddress();
   }
 
   Future<void> getAddress() async {
