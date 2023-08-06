@@ -3,7 +3,6 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';

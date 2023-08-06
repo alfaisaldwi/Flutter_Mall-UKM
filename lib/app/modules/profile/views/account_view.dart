@@ -107,9 +107,6 @@ class AccountView extends GetView<ProfileController> {
                               GestureDetector(
                                 onTap: () {
                                   controllerNav.tabController.index = 2;
-                                  // controllerNav.contr.index = 2;
-
-                                  // Get.toNamed('/transaction-page');
                                 },
                                 child: ListTile(
                                   leading: const Icon(
@@ -183,11 +180,7 @@ class AccountView extends GetView<ProfileController> {
                               ),
                               ListTile(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) => MyHomePage(),
-                                  //     ));
+                                  Get.toNamed('/change-password');
                                 },
                                 leading: const Icon(Icons.key_outlined),
                                 title: Text(
@@ -195,13 +188,7 @@ class AccountView extends GetView<ProfileController> {
                                   style: Styles.bodyStyle(),
                                 ),
                               ),
-                              // ListTile(
-                              //   leading: const Icon(Icons.call_outlined),
-                              //   title: Text(
-                              //     'Ubah No. Handphone',
-                              //     style: Styles.bodyStyle(),
-                              //   ),
-                              // ),
+                       
                             ],
                           ),
                         ),
@@ -240,7 +227,7 @@ class AccountView extends GetView<ProfileController> {
                                   await profileCompany.fetchProfileCompany();
                                   Get.toNamed('survey-page');
                                 },
-                                leading: const Icon(Icons.file_copy_outlined),
+                                leading: const Icon(Icons.feedback_rounded),
                                 title: Text(
                                   'Survey Kepuasan Pengguna Mall UKM Kota Cirebon',
                                   style: Styles.bodyStyle(),
@@ -260,7 +247,7 @@ class AccountView extends GetView<ProfileController> {
                                   }
                                 },
                                 leading: const Icon(
-                                  Icons.headphones_outlined,
+                                  Icons.quick_contacts_dialer,
                                   size: 20,
                                 ),
                                 title: Text(
@@ -273,7 +260,7 @@ class AccountView extends GetView<ProfileController> {
                                   await profileCompany.fetchProfileCompany();
                                   Get.toNamed('profile-company');
                                 },
-                                leading: const Icon(Icons.file_copy_outlined),
+                                leading: const Icon(Icons.file_copy_rounded),
                                 title: Text(
                                   'Syarat dan Ketentuan',
                                   style: Styles.bodyStyle(),

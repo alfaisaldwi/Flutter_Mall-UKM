@@ -353,31 +353,35 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                               ),
                             ),
                           ),
-                          if (homeC.radius == null)
+                          if (homeC.radius == null ||
+                              homeC.radius == 0 ||
+                              homeC.radius == '' ||
+                              homeC.radius == 0.0)
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Text(
-                                  'Tidak dapat menemukan Lokasi',
+                                  'Anda berada dalam radius : Tidak dapat menemukan Lokasi',
                                   style: Styles.bodyStyle(
                                       color: Colors.black45, size: 15),
                                 ),
                               ),
                             ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(
-                                'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(0)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(6)} dan Longitude ${homeC.longitude.value.toStringAsFixed(6)}',
-                                style: Styles.bodyStyle(
-                                    color: Colors.black45, size: 14),
+                          if (homeC.radius != null)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(0)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(6)} dan Longitude ${homeC.longitude.value.toStringAsFixed(6)}',
+                                  style: Styles.bodyStyle(
+                                      color: Colors.black45, size: 14),
+                                ),
                               ),
                             ),
-                          ),
                           Divider(),
                         ]),
                   ),

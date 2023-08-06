@@ -15,6 +15,7 @@ class _AuthEndPoints {
   final String register = '/api/auth/register';
   final String loginEmail = '/api/auth/login';
   final String logout = '/api/auth/logout';
+  final String changePw = '/api/auth/change/password';
   final String me = '/api/auth/me';
 }
 
