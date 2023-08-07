@@ -30,7 +30,7 @@ class ProfileCompanyView extends GetView<ProfileCompanyController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Syarat dan Ketentuan:',
+                    'Syarat:',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class ProfileCompanyView extends GetView<ProfileCompanyController> {
                   ),
                   SizedBox(height: 24),
                   Text(
-                    'Kondisi Penggunaan:',
+                    'Ketentuan:',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

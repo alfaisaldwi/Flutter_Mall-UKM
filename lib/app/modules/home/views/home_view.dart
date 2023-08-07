@@ -339,6 +339,9 @@ class HomeView extends GetView<HomeController> {
                                   var product = controller.productsPromo[index];
                                   return GestureDetector(
                                     onTap: () async {
+                                      await controller
+                                          .requestLocationPermission();
+                                      await controller.postCurrentLocation();
                                       var productDetails = await controller
                                           .fetchProductDetails(product.id);
                                       Get.toNamed('product-detail-promo',

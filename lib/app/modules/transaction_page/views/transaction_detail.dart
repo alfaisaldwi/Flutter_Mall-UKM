@@ -10,6 +10,7 @@ import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_pa
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:url_launcher/url_launcher.dart';
 
 class TransactionDetailView extends GetView<TransactionPageController> {
   @override
@@ -296,7 +297,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                   trsDetail.statusPayment == 'offline')
                 GestureDetector(
                   onTap: () async {
-                    await controller.updateStatus(trsDetail.id!);
+                    await controller.updateStatus(trsDetail.id!, "delivered");
                   },
                   child: Container(
                     height: 45,
@@ -317,21 +318,47 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                 ),
               if (trsDetail.status == 'paid' &&
                   trsDetail.statusPayment == 'online')
-                Container(
-                  height: 45,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11),
-                    color: const Color(0xff198754),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Text('Sudah dibayar',
-                          style:
-                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                Column(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(11),
+                        color: const Color(0xff198754),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Text('Sudah dibayar',
+                              style: Styles.bodyStyle(
+                                  color: Colors.white, size: 14)),
+                        ),
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: () async {
+                        await controller.updateStatus(
+                            trsDetail.id!, "canceled");
+                      },
+                      child: Container(
+                        height: 45,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Color.fromARGB(255, 247, 255, 15),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Text('Batalkan  Pesanan ?',
+                                style: Styles.bodyStyle(
+                                    color: Colors.black, size: 14)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               if (trsDetail.status == 'unpaid')
                 GestureDetector(
@@ -390,21 +417,54 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                   ),
                 ),
               if (trsDetail.status == 'canceled')
-                Container(
-                  height: 45,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11),
-                    color: const Color(0xffBB2124),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Text('Pembayaran Gagal',
-                          style:
-                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                Column(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(11),
+                        color: const Color(0xffBB2124),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Text('Pesanan dibatalkan',
+                              style: Styles.bodyStyle(
+                                  color: Colors.white, size: 14)),
+                        ),
+                      ),
                     ),
-                  ),
+                    Divider(),
+                    GestureDetector(
+                      onTap: () async {
+                        try {
+                          final Uri _url = Uri.parse(
+                              'https://wa.me/6283823065878?text=Haloo Admin Mall UKM Kota Cirebon, Saya ingin bertanya sesuatu nih.');
+                          await launchUrl(_url,
+                              mode: LaunchMode.externalApplication);
+                        } catch (err) {
+                          debugPrint('Something bad happened');
+                        }
+                      },
+                      child: Container(
+                        height: 45,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Color.fromARGB(255, 43, 250, 91),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Text('Hubungi Admin',
+                                style: Styles.bodyStyle(
+                                    color: Colors.white, size: 14)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
             ],
           ),
