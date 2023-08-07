@@ -104,7 +104,7 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color.fromRGBO(36, 54, 101, 1.0),
                   border: Border.all(),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
@@ -131,54 +131,14 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: Center(
                       child: Text('Beli Langsung',
                           textAlign: TextAlign.center,
                           style: Styles.bodyStyle(
-                              color: const Color.fromRGBO(36, 54, 101, 1.0),
+                              color: Colors.white,
                               weight: FontWeight.w500,
                               size: 13)),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(36, 54, 101, 1.0),
-                  border: Border.all(),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    String? token = GetStorage().read('token');
-                    if (token != null) {
-                      showOrderDialog(context);
-                    } else {
-                      Fluttertoast.showToast(
-                        msg: 'Silahkan Signin terlebih dahulu',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        backgroundColor: Colors.grey[800],
-                        textColor: Colors.white,
-                        fontSize: 14.0,
-                      );
-                      Get.toNamed('/profile');
-                    }
-                  },
-                  child: SizedBox(
-                    height: kToolbarHeight - 15,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Center(
-                      child: Text(
-                        'Tambah Keranjang',
-                        style: Styles.bodyStyle(
-                            color: Colors.white,
-                            weight: FontWeight.w500,
-                            size: 13),
-                      ),
                     ),
                   ),
                 ),

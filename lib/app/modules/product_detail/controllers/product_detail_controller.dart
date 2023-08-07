@@ -56,7 +56,7 @@ class ProductDetailController extends GetxController {
     };
     try {
       var url = Uri.parse(
-        ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.recomend + '6',
+        ApiEndPoints.baseUrl + ApiEndPoints.productEndPoints.recomend + '5',
       );
       http.Response response = await http.get(url, headers: headers);
 

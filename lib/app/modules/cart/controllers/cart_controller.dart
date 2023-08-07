@@ -163,6 +163,9 @@ class CartController extends GetxController {
       final jsonResponse = jsonDecode(response.body);
       if (jsonResponse['code'] == 200) {
         carts.removeWhere((cart) => cart.id == cartId);
+        selectedItems.clear();
+        totalHarga.value = 0;
+        update();
         Fluttertoast.showToast(
           msg: 'Berhasil menghapus barang dari keranjang',
           toastLength: Toast.LENGTH_SHORT,
