@@ -37,6 +37,7 @@ class HomeController extends GetxController {
   void onInit() {
     fetchProduct();
     startDataRefreshTimer();
+    requestLocationPermission();
     fetchCategories();
     getCarouselData();
     fetchPromo();

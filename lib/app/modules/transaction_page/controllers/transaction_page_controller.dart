@@ -204,7 +204,7 @@ class TransactionPageController extends GetxController {
         callGettrs();
         Get.back();
         Fluttertoast.showToast(
-          msg: 'Berhasil konfirmasi menerima barang',
+          msg: 'Berhasil memperbaharui status',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.grey[800],
