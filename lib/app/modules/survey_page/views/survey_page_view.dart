@@ -37,13 +37,13 @@ class SurveyPageView extends GetView<SurveyPageController> {
                               ),
                               Divider(),
                               Text(
-                                '1. Penilaian Kinerja : mengacu pada penilaian atau evaluasi pelanggan terhadap sejauh mana perusahaan atau produknya memenuhi atau melampaui harapan pelanggan. Faktor-faktor yang dievaluasi dalam penilaian kinerja meliputi kualitas produk atau layanan, keandalan, responsifitas, kecepatan, komunikasi, dan faktor-faktor lain yang berhubungan dengan kinerja perusahaan dalam memenuhi kebutuhan pelanggan.',
+                                '1. Penilaian Kinerja : melibatkan evaluasi seberapa baik Mall UKM Kota Cirebon memenuhi harapan pelanggan dalam berbagai aspek, seperti kecepatan pelayanan dan kualitas produk.',
                                 style: TextStyle(fontSize: 14),
                                 textAlign: TextAlign.justify,
                               ),
                               Divider(),
                               Text(
-                                  '2.  Penilaian kepentingan : berkaitan dengan seberapa pentingnya faktor-faktor tertentu bagi pelanggan. Ini mencerminkan tingkat prioritas yang diberikan oleh pelanggan terhadap elemen-elemen yang berbeda dalam pengalaman dengan perusahaan atau produknya. Faktor-faktor yang dievaluasi dalam penilaian kepentingan dapat mencakup harga, kualitas, layanan pelanggan, kecepatan pengiriman, keamanan produk, inovasi, dan sebagainya.',
+                                  '2.Penilaian Kepentingan : adalah elemen-elemen spesifik yang dianggap penting oleh pelanggan, seperti ketersediaan produk dan harga yang bersaing.',
                                   style: TextStyle(fontSize: 14),
                                   textAlign: TextAlign.justify),
                               Divider(),

@@ -10,6 +10,7 @@ import 'package:mall_ukm/app/modules/category/views/category_view.dart';
 import 'package:mall_ukm/app/modules/change_password/bindings/change_password_binding.dart';
 import 'package:mall_ukm/app/modules/change_password/views/change_password_view.dart';
 import 'package:mall_ukm/app/modules/checkout/bindings/checkout_binding.dart';
+import 'package:mall_ukm/app/modules/checkout/views/checkout_direct.dart';
 import 'package:mall_ukm/app/modules/checkout/views/checkout_offline_view.dart';
 import 'package:mall_ukm/app/modules/checkout/views/checkout_view.dart';
 import 'package:mall_ukm/app/modules/home/bindings/home_binding.dart';
@@ -121,6 +122,11 @@ class AppPages {
     GetPage(
       name: _Paths.CHECKOUT_OFFLINE,
       page: () => CheckoutOfflineView(),
+      binding: CheckoutBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT_DIRECT,
+      page: () => CheckoutDirectView(),
       binding: CheckoutBinding(),
     ),
     GetPage(

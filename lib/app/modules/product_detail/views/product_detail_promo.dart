@@ -133,7 +133,7 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                     height: kToolbarHeight - 15,
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: Center(
-                      child: Text('Beli Langsung',
+                      child: Text('Beli Ditempat',
                           textAlign: TextAlign.center,
                           style: Styles.bodyStyle(
                               color: Colors.white,
@@ -688,7 +688,7 @@ void showOrderDialogOffline(BuildContext context) {
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: Center(
                           child: Text(
-                            'Tambah Keranjang',
+                            'Beli Ditempat',
                             style: Styles.bodyStyle(
                                 color: Colors.white,
                                 weight: FontWeight.w500,

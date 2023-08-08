@@ -45,16 +45,6 @@ class AccountView extends GetView<ProfileController> {
                             style: Styles.headerStyles(),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Icon(
-                              Icons.settings_outlined,
-                              size: 25,
-                            ),
-                          ),
-                        ),
                         Row(
                           children: [
                             Padding(
@@ -188,7 +178,6 @@ class AccountView extends GetView<ProfileController> {
                                   style: Styles.bodyStyle(),
                                 ),
                               ),
-                       
                             ],
                           ),
                         ),
