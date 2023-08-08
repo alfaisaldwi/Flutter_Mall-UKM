@@ -56,7 +56,7 @@ class SignupPageView extends GetView<ProfileController> {
                 decoration: InputDecoration(
                   focusColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(26.0),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
               ),
@@ -79,7 +79,7 @@ class SignupPageView extends GetView<ProfileController> {
                 decoration: InputDecoration(
                   focusColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
               ),
@@ -112,7 +112,7 @@ class SignupPageView extends GetView<ProfileController> {
                         ),
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
                   )),

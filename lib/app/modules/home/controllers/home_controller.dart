@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
@@ -13,9 +12,7 @@ import 'package:mall_ukm/app/model/category/category_show.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/model/product/product_promo_model.dart';
-import 'package:mall_ukm/app/modules/checkout/views/checkout_offline_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_promo.dart';
-import 'package:mall_ukm/app/modules/profile/controllers/preferenceUtils.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -40,7 +37,6 @@ class HomeController extends GetxController {
   void onInit() {
     fetchProduct();
     startDataRefreshTimer();
-    postCurrentLocation();
     requestLocationPermission();
     fetchCategories();
     getCarouselData();
@@ -103,12 +99,11 @@ class HomeController extends GetxController {
         throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
       }
     } catch (error) {
-      throw error.toString();
+      throw '${error.toString()}';
     }
   }
 
   Future<List<Category>> getCategories() async {
-    // isLoadingCategory.value = true;
     var headers = {
       'Accept': 'application/json',
     };

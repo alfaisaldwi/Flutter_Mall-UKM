@@ -172,7 +172,7 @@ class TransactionPageController extends GetxController {
     print(url);
   }
 
-  Future<void> updateStatus(int idTransaction) async {
+  Future<void> updateStatus(int idTransaction, String status) async {
     String? token = GetStorage().read('token');
     var headers = {
       'Accept': 'application/json',
@@ -187,7 +187,7 @@ class TransactionPageController extends GetxController {
     );
     Map<String, dynamic> body() {
       return {
-        "status": "delivered",
+        "status": status,
       };
     }
 
@@ -204,7 +204,7 @@ class TransactionPageController extends GetxController {
         callGettrs();
         Get.back();
         Fluttertoast.showToast(
-          msg: 'Berhasil konfirmasi menerima barang',
+          msg: 'Berhasil memperbaharui status',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.grey[800],

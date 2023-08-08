@@ -21,8 +21,10 @@ abstract class Routes {
   static const ADDRESS_INDEX = _Paths.ADDRESS_INDEX;
   static const CHECKOUT = _Paths.CHECKOUT;
   static const CHECKOUT_OFFLINE = _Paths.CHECKOUT_OFFLINE;
+  static const CHECKOUT_DIRECT = _Paths.CHECKOUT_DIRECT;
   static const CATEGORY = _Paths.CATEGORY;
   static const PROFILE_COMPANY = _Paths.PROFILE_COMPANY;
+  static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
 }
 
 abstract class _Paths {
@@ -43,6 +45,8 @@ abstract class _Paths {
   static const ADDRESS_INDEX = '/address-index';
   static const CHECKOUT = '/checkout';
   static const CHECKOUT_OFFLINE = '/checkout-offline';
+  static const CHECKOUT_DIRECT = '/checkout-direct';
   static const CATEGORY = '/category';
   static const PROFILE_COMPANY = '/profile-company';
+  static const CHANGE_PASSWORD = '/change-password';
 }

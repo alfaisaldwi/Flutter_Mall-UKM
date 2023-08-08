@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mall_ukm/app/modules/category/views/category_view.dart';
 import 'package:mall_ukm/app/modules/home/views/search_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
@@ -154,9 +156,32 @@ class HomeView extends GetView<HomeController> {
                                     aspectRatio: 16 / 8),
                                 items: controller.carouselList.map((carousel) {
                                   return Container(
-                                    child: Image.network(
-                                      carousel.photo,
-                                      fit: BoxFit.fill,
+                                    child: CachedNetworkImage(
+                                      imageUrl: carousel.photo,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Image(
+                                        image: imageProvider,
+                                        fit: BoxFit.fitWidth,
+                                        alignment: Alignment.center,
+                                      ),
+                                      placeholder: (context, url) => Center(
+                                          child: Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              child: Container(
+                                                margin: EdgeInsets.all(8),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ))),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(
+                                        Icons.image_not_supported_rounded,
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                   );
                                 }).toList(),
@@ -205,63 +230,64 @@ class HomeView extends GetView<HomeController> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           SizedBox(
-                                            height: 80,
-                                            width: 50,
-                                            child: Obx(() => Column(
-                                                  children: [
-                                                    controller.isLoadingCategory
-                                                            .value
-                                                        ? Shimmer.fromColors(
-                                                            baseColor: Colors
-                                                                .grey.shade300,
-                                                            highlightColor:
-                                                                Colors.grey
-                                                                    .shade100,
-                                                            child: Container(
-                                                              width: 40,
-                                                              height: 30,
-                                                              color: Colors
-                                                                      .deepOrange[
-                                                                  400],
-                                                            ),
-                                                          )
-                                                        : Align(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child:
-                                                                Image.network(
-                                                              category.photo,
-                                                              width: 28,
-                                                              height: 30,
-                                                              color: Colors
-                                                                      .deepOrange[
-                                                                  400],
-                                                              fit: BoxFit.fill,
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                            ),
-                                                          ),
-                                                    Expanded(
-                                                      child: Align(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Text(
-                                                          category.title,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              Styles.bodyStyle(
-                                                                  size: 10),
-                                                        ),
+                                              height: 80,
+                                              width: 50,
+                                              child: Column(
+                                                children: [
+                                                  CachedNetworkImage(
+                                                    imageUrl: category.photo,
+                                                    imageBuilder: (context,
+                                                            imageProvider) =>
+                                                        Image(
+                                                      image: imageProvider,
+                                                      width: 30,
+                                                      height: 30,
+                                                      color: Colors
+                                                          .deepOrange[400],
+                                                      fit: BoxFit.fill,
+                                                      alignment:
+                                                          Alignment.center,
+                                                    ),
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            Center(
+                                                      child:
+                                                          LoadingAnimationWidget
+                                                              .flickr(
+                                                        rightDotColor: Colors
+                                                            .grey.shade200,
+                                                        leftDotColor:
+                                                            const Color(
+                                                                0xfffd0079),
+                                                        size: 25,
                                                       ),
                                                     ),
-                                                  ],
-                                                )),
-                                          ),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            const Icon(
+                                                      Icons
+                                                          .image_not_supported_rounded,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        category.title,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: Styles.bodyStyle(
+                                                            size: 10),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
                                         ],
                                       ),
                                     ),
@@ -313,16 +339,8 @@ class HomeView extends GetView<HomeController> {
                                   var product = controller.productsPromo[index];
                                   return GestureDetector(
                                     onTap: () async {
-                                      // await Fluttertoast.showToast(
-                                      //   msg:
-                                      //       'Mohong tunggu. Sedang mencari lokasimu',
-                                      //   toastLength: Toast.LENGTH_SHORT,
-                                      //   gravity: ToastGravity.BOTTOM,
-                                      //   backgroundColor: Colors.grey[800],
-                                      //   textColor: Colors.white,
-                                      //   fontSize: 14.0,
-                                      // );
-                                      // await controller.postCurrentLocation();
+                                      
+                                      await controller.postCurrentLocation();
                                       var productDetails = await controller
                                           .fetchProductDetails(product.id);
                                       Get.toNamed('product-detail-promo',
@@ -345,15 +363,41 @@ class HomeView extends GetView<HomeController> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 SizedBox(
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                    child: Image.network(
-                                                      product.photo,
-                                                      fit: BoxFit.cover,
-                                                      width: 140,
-                                                      height: 90,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: product.photo,
+                                                    imageBuilder: (context,
+                                                            imageProvider) =>
+                                                        ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                      child: Image(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        width: 140,
+                                                        height: 90,
+                                                      ),
+                                                    ),
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            Center(
+                                                      child:
+                                                          LoadingAnimationWidget
+                                                              .flickr(
+                                                        rightDotColor:
+                                                            Colors.black,
+                                                        leftDotColor:
+                                                            const Color(
+                                                                0xfffd0079),
+                                                        size: 25,
+                                                      ),
+                                                    ),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            const Icon(
+                                                      Icons
+                                                          .image_not_supported_rounded,
+                                                      color: Colors.grey,
                                                     ),
                                                   ),
                                                 ),
@@ -469,29 +513,37 @@ class HomeView extends GetView<HomeController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Obx(() => ClipRRect(
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                topLeft: Radius.circular(10.0),
-                                                topRight: Radius.circular(10.0),
-                                              ),
-                                              child: controller
-                                                      .isLoadingProduct.value
-                                                  ? Shimmer.fromColors(
-                                                      baseColor:
-                                                          Colors.grey.shade300,
-                                                      highlightColor:
-                                                          Colors.grey.shade100,
-                                                      child: Container(
-                                                        width: 200,
-                                                        height: 100,
-                                                        color: Colors
-                                                            .deepOrange[400],
-                                                      ),
-                                                    )
-                                                  : Image.network(
-                                                      product.photo.first),
-                                            )),
+                                        CachedNetworkImage(
+                                          imageUrl: product.photo.first,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(10.0),
+                                              topRight: Radius.circular(10.0),
+                                            ),
+                                            child: Image(
+                                              image: imageProvider,
+                                            ),
+                                          ),
+                                          placeholder: (context, url) => Center(
+                                              child: Shimmer.fromColors(
+                                            baseColor: Colors.grey.shade300,
+                                            highlightColor:
+                                                Colors.grey.shade100,
+                                            child: Container(
+                                              width: 200,
+                                              height: 100,
+                                              color: Colors.deepOrange[400],
+                                            ),
+                                          )),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(
+                                            Icons.image_not_supported_rounded,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 2, vertical: 5),

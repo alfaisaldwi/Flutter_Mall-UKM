@@ -3,7 +3,6 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
@@ -11,6 +10,7 @@ import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_pa
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:url_launcher/url_launcher.dart';
 
 class TransactionDetailView extends GetView<TransactionPageController> {
   @override
@@ -219,7 +219,8 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                       child: ListTile(
                         leading: Image.network(detail!.productPhoto,
                             width: 80, height: 70),
-                        title: Text('${detail.productName} - *${detail.qty}'),
+                        title:
+                            Text('${detail.productName} - *${detail.qty}pcs'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -297,7 +298,40 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                   trsDetail.statusPayment == 'offline')
                 GestureDetector(
                   onTap: () async {
-                    await controller.updateStatus(trsDetail.id!);
+                    Get.defaultDialog(
+                      title: "Yakin ingin mengubah status pemesanan?",
+                      titleStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 10),
+                        ],
+                      ),
+                      confirm: ElevatedButton(
+                        onPressed: () async {
+                          Get.back();
+                          await controller.updateStatus(
+                              trsDetail.id!, "delivered");
+                          print("Status pemesanan berubah");
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                        ),
+                        child: Text("Ya"),
+                      ),
+                      cancel: ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                        ),
+                        child: Text("Tidak"),
+                      ),
+                    );
                   },
                   child: Container(
                     height: 45,
@@ -309,7 +343,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(1.0),
-                        child: Text('Sudah dibayar',
+                        child: Text('Terima pesanan',
                             style: Styles.bodyStyle(
                                 color: Colors.white, size: 14)),
                       ),
@@ -318,21 +352,84 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                 ),
               if (trsDetail.status == 'paid' &&
                   trsDetail.statusPayment == 'online')
-                Container(
-                  height: 45,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11),
-                    color: const Color(0xff198754),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Text('Sudah dibayar',
-                          style:
-                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                Column(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xff198754),
+                        ),
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Text('Pembayaran telah dikonfirmasi',
+                              style: Styles.bodyStyle(
+                                  color: Color(0xff198754), size: 14)),
+                        ),
+                      ),
                     ),
-                  ),
+                    Divider(),
+                    GestureDetector(
+                      onTap: () async {
+                        Get.defaultDialog(
+                          title: "Yakin ingin mengubah status pemesanan?",
+                          titleStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(width: 10),
+                            ],
+                          ),
+                          confirm: ElevatedButton(
+                            onPressed: () async {
+                          Get.back();
+                              await controller.updateStatus(
+                                  trsDetail.id!, "canceled");
+                              print("Status pemesanan berubah");
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                            ),
+                            child: Text("Ya"),
+                          ),
+                          cancel: ElevatedButton(
+                            onPressed: () {
+                              Get.back();
+
+                              print("Batal mengubah status pemesanan");
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.red,
+                            ),
+                            child: Text("Tidak"),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 45,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Color.fromARGB(255, 223, 15, 15),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Text('Batalkan  Pesanan ?',
+                                style: Styles.bodyStyle(
+                                    color: Colors.white, size: 14)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               if (trsDetail.status == 'unpaid')
                 GestureDetector(
@@ -384,29 +481,66 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(1.0),
-                      child: Text('Pesanan Selesai',
+                      child: Text('Pesanan Sudah diterima',
                           style:
                               Styles.bodyStyle(color: Colors.white, size: 14)),
                     ),
                   ),
                 ),
               if (trsDetail.status == 'canceled')
-                Container(
-                  height: 45,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11),
-                    color: const Color(0xffBB2124),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Text('Pembayaran Gagal',
-                          style:
-                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                Column(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: const Color(0xffBB2124), width: 1),
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Text('Pesanan telah dibatalkan',
+                              style: Styles.bodyStyle(
+                                  color: Colors.black, size: 14)),
+                        ),
+                      ),
                     ),
-                  ),
+                    Divider(),
+                    GestureDetector(
+                      onTap: () async {
+                        try {
+                          final Uri _url = Uri.parse(
+                              'https://wa.me/6283823065878?text=Haloo Admin Mall UKM Kota Cirebon, Saya ingin bertanya sesuatu nih.');
+                          await launchUrl(_url,
+                              mode: LaunchMode.externalApplication);
+                        } catch (err) {
+                          debugPrint('Something bad happened');
+                        }
+                      },
+                      child: Container(
+                        height: 45,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Color.fromARGB(255, 13, 139, 43),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Text('Hubungi Admin',
+                                style: Styles.bodyStyle(
+                                    color: Colors.white, size: 14)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+              SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),

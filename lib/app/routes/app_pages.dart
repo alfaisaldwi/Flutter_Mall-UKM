@@ -7,7 +7,10 @@ import 'package:mall_ukm/app/modules/cart/bindings/cart_binding.dart';
 import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/category/bindings/category_binding.dart';
 import 'package:mall_ukm/app/modules/category/views/category_view.dart';
+import 'package:mall_ukm/app/modules/change_password/bindings/change_password_binding.dart';
+import 'package:mall_ukm/app/modules/change_password/views/change_password_view.dart';
 import 'package:mall_ukm/app/modules/checkout/bindings/checkout_binding.dart';
+import 'package:mall_ukm/app/modules/checkout/views/checkout_direct.dart';
 import 'package:mall_ukm/app/modules/checkout/views/checkout_offline_view.dart';
 import 'package:mall_ukm/app/modules/checkout/views/checkout_view.dart';
 import 'package:mall_ukm/app/modules/home/bindings/home_binding.dart';
@@ -122,6 +125,11 @@ class AppPages {
       binding: CheckoutBinding(),
     ),
     GetPage(
+      name: _Paths.CHECKOUT_DIRECT,
+      page: () => CheckoutDirectView(),
+      binding: CheckoutBinding(),
+    ),
+    GetPage(
       name: _Paths.CATEGORY,
       page: () => CategoryView(),
       binding: CategoryBinding(),
@@ -135,6 +143,11 @@ class AppPages {
       name: _Paths.PROFILE_COMPANY,
       page: () => ProfileCompanyView(),
       binding: ProfileCompanyBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => ChangePasswordView(),
+      binding: ChangePasswordBinding(),
     ),
   ];
 }

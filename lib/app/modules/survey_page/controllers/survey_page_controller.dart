@@ -58,6 +58,17 @@ class SurveyPageController extends GetxController {
   }
 
   void sendSurvey() async {
+    if (!_areAllFieldsFilled()) {
+      Fluttertoast.showToast(
+        msg: 'Harap isi semua field sebelum mengirim survei!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return;
+    }
+
     String? token = GetStorage().read('token');
     var headers = {
       'Accept': 'application/json',
@@ -106,5 +117,14 @@ class SurveyPageController extends GetxController {
     } catch (e) {
       print('Error sending survey: $e');
     }
+  }
+
+  bool _areAllFieldsFilled() {
+    for (var i = 0; i < questions.length; i++) {
+      if (kinerjaValues[i] == null || kepentinganValues[i] == null) {
+        return false;
+      }
+    }
+    return suggestion.value.trim().isNotEmpty;
   }
 }

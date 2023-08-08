@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -17,6 +16,7 @@ class ProfileController extends GetxController {
   TextEditingController cnamalengkap = TextEditingController();
   TextEditingController cusername = TextEditingController();
   TextEditingController cnohp = TextEditingController();
+
   var cNav = NavbarPageController();
   var isPasswordVisible = false.obs;
   var isLoading = true.obs;
@@ -24,8 +24,6 @@ class ProfileController extends GetxController {
   var errmsg = "".obs;
   var accountData = RxMap<String, dynamic>({});
 
-  Dio dio = Dio();
-  final count = 0.obs;
 
   @override
   void onInit() {
@@ -43,7 +41,6 @@ class ProfileController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
   Future<void> loginWithEmail() async {
     var headers = {'Content-Type': 'application/json'};
     try {
@@ -250,17 +247,8 @@ class ProfileController extends GetxController {
     }
   }
 
+
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
-
-  // Future<void> fetchUsers() async {
-  //   try {
-  //     var fetchedUsers = await getUsers();
-  //     accountData.assignAll(fetchedUsers);
-  //   } catch (error) {
-  //     // Handle error jika terjadi kesalahan dalam mengambil pengguna
-  //     print('Terjadi kesalahan: $error');
-  //   }
-  // }
 }

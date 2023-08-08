@@ -40,7 +40,7 @@ class RecommendPageController extends GetxController {
 
   @override
   void onInit() {
-    // fetchRecomend();
+    fetchRecomend();
     recomendProduct();
     // fetchRecomend2();
     super.onInit();

@@ -104,7 +104,7 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color.fromRGBO(36, 54, 101, 1.0),
                   border: Border.all(),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
@@ -131,54 +131,14 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                   },
                   child: SizedBox(
                     height: kToolbarHeight - 15,
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: Center(
-                      child: Text('Beli Langsung',
+                      child: Text('Beli Ditempat',
                           textAlign: TextAlign.center,
                           style: Styles.bodyStyle(
-                              color: const Color.fromRGBO(36, 54, 101, 1.0),
+                              color: Colors.white,
                               weight: FontWeight.w500,
                               size: 13)),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(36, 54, 101, 1.0),
-                  border: Border.all(),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    String? token = GetStorage().read('token');
-                    if (token != null) {
-                      showOrderDialog(context);
-                    } else {
-                      Fluttertoast.showToast(
-                        msg: 'Silahkan Signin terlebih dahulu',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        backgroundColor: Colors.grey[800],
-                        textColor: Colors.white,
-                        fontSize: 14.0,
-                      );
-                      Get.toNamed('/profile');
-                    }
-                  },
-                  child: SizedBox(
-                    height: kToolbarHeight - 15,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Center(
-                      child: Text(
-                        'Tambah Keranjang',
-                        style: Styles.bodyStyle(
-                            color: Colors.white,
-                            weight: FontWeight.w500,
-                            size: 13),
-                      ),
                     ),
                   ),
                 ),
@@ -353,31 +313,35 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                               ),
                             ),
                           ),
-                          if (homeC.radius == null)
+                          if (homeC.radius == null ||
+                              homeC.radius == 0 ||
+                              homeC.radius == '' ||
+                              homeC.radius == 0.0)
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Text(
-                                  'Tidak dapat menemukan Lokasi',
+                                  'Anda berada dalam radius : Tidak dapat menemukan Lokasi',
                                   style: Styles.bodyStyle(
                                       color: Colors.black45, size: 15),
                                 ),
                               ),
                             ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(
-                                'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(0)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(6)} dan Longitude ${homeC.longitude.value.toStringAsFixed(6)}',
-                                style: Styles.bodyStyle(
-                                    color: Colors.black45, size: 14),
+                          if (homeC.radius != null)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  'Anda berada dalam radius : ${homeC.radius?.toStringAsFixed(0)} Meter dari lokasi Mall UKM dengan Latitude ${homeC.latitude.value.toStringAsFixed(6)} dan Longitude ${homeC.longitude.value.toStringAsFixed(6)}',
+                                  style: Styles.bodyStyle(
+                                      color: Colors.black45, size: 14),
+                                ),
                               ),
                             ),
-                          ),
                           Divider(),
                         ]),
                   ),
@@ -724,7 +688,7 @@ void showOrderDialogOffline(BuildContext context) {
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: Center(
                           child: Text(
-                            'Tambah Keranjang',
+                            'Beli Ditempat',
                             style: Styles.bodyStyle(
                                 color: Colors.white,
                                 weight: FontWeight.w500,

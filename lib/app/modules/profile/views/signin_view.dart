@@ -58,7 +58,7 @@ class SigninView extends GetView<ProfileController> {
                 hintText: 'Email',
                 focusColor: Colors.white,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(26.0),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
               ),
             ),
@@ -82,7 +82,7 @@ class SigninView extends GetView<ProfileController> {
                       ),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
                 )),
@@ -135,12 +135,6 @@ class SigninView extends GetView<ProfileController> {
                 ),
               ),
               onPressed: () async {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => SignupPageView(),
-                //     ));
-
                 Get.toNamed('signup');
               },
             ),

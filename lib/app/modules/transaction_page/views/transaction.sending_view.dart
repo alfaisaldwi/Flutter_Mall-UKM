@@ -5,7 +5,7 @@ import 'package:mall_ukm/app/model/transaction/transaction_index_model.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
-class TransactionDeliveredView extends GetView<TransactionPageController> {
+class TransactionSendingView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
@@ -80,7 +80,7 @@ class TransactionCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Padding(
+               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                 child: Row(
