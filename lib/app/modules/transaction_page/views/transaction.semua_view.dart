@@ -20,11 +20,16 @@ class TransactionSemuaView extends GetView<TransactionPageController> {
             if (ctrT.transactionIndexList.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 300.0),
-                child: Container(
-                  color: Colors.white,
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Text('Tidak ada transaksi'),
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.callGettrs();
+                  },
+                  child: Container(
+                    color: Colors.white,
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Text('Tidak ada transaksi'),
+                    ),
                   ),
                 ),
               )

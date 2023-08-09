@@ -217,7 +217,6 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                 borderRadius: BorderRadius.circular(8),
                                 image: DecorationImage(
                                   image: NetworkImage(url),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
                               child: const Align(

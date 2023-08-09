@@ -26,8 +26,6 @@ class CheckoutOfflineView extends GetView<CheckoutOfflineController> {
   var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
-    controller.totalWeight.value = Get.arguments[2].toString();
-
     var addressId = 0;
     var productId = 0;
     var cartId = 0;
