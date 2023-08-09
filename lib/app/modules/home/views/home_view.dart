@@ -21,15 +21,7 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
-    const int count = 16;
-    const int itemsPerRow = 2;
-    const double ratio = 1 / 1;
-    const double horizontalPadding = 0;
-    final double calcHeight = ((width / itemsPerRow) - (horizontalPadding)) *
-        (count / itemsPerRow).ceil() *
-        (1 / ratio);
+    String? token = GetStorage().read('token');
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -458,25 +450,26 @@ class HomeView extends GetView<HomeController> {
                     },
                   ),
                   Divider(),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.toNamed('/survey-page');
-                        },
-                        child: Text(
-                          'Bagikan pendapat Anda melalui survei kami untuk membantu kami meningkatkan layanan di Mall UKM Kota Cirebon.',
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                              fontSize: 11,
-                              letterSpacing: 0.8,
-                              color: Colors.blue.shade900),
+                  if (token != null)
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed('/survey-page');
+                          },
+                          child: Text(
+                            'Bagikan pendapat Anda melalui survei kami untuk membantu kami meningkatkan layanan di Mall UKM Kota Cirebon.',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                fontSize: 11,
+                                letterSpacing: 0.8,
+                                color: Colors.blue.shade900),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   Divider(),
                   Padding(
                     padding: const EdgeInsets.symmetric(
