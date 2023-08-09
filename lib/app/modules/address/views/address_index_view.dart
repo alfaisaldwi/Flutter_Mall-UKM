@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/address/controllers/address_controller.dart';
+import 'package:mall_ukm/app/modules/checkout/controllers/checkout_offline_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -9,14 +10,16 @@ class AddressIndexView extends GetView<AddressController> {
   Widget build(BuildContext context) {
     RxDouble tot = 0.0.obs;
     var idAddress = 0.obs;
+    var checkoutO = Get.put(CheckoutOfflineController());
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
+              checkoutO.refreshAddress();
               controller.getAdrresNow();
-              
+
               Get.back();
             }),
         iconTheme: const IconThemeData(color: Colors.black),
@@ -28,6 +31,7 @@ class AddressIndexView extends GetView<AddressController> {
         actions: [
           GestureDetector(
               onTap: () {
+                checkoutO.refreshAddress();
                 controller.fetchProvinces();
                 Get.toNamed('/address');
               },

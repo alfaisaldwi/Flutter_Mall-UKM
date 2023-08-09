@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart';
 import 'package:mall_ukm/app/modules/profile/views/signup_view.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SigninView extends GetView<ProfileController> {
   var ctrLogin = Get.put(ProfileController());
@@ -87,7 +89,28 @@ class SigninView extends GetView<ProfileController> {
                   ),
                 )),
           ),
-          SizedBox(
+          const SizedBox(
+            height: 5,
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+                onTap: () async {
+                  // var wa = profileCompany.profileCompany.value.phone;
+                  try {
+                    final Uri _url = Uri.parse(
+                        'https://wa.me/6283823065878?text=Haloo Admin Mall UKM Kota Cirebon, Saya mengalami lupa password pada akun saya, Tolong bantu saya.');
+                    await launchUrl(_url, mode: LaunchMode.externalApplication);
+                  } catch (err) {
+                    debugPrint('Something bad happened');
+                  }
+                },
+                child: Text(
+                  'Lupa pasword? Hubungi admin',
+                  style: TextStyle(color: Colors.blue.shade900, fontSize: 12),
+                )),
+          ),
+          const SizedBox(
             height: 30,
           ),
           Container(
@@ -110,7 +133,7 @@ class SigninView extends GetView<ProfileController> {
             ),
           ),
           const SizedBox(
-            height: 40,
+            height: 30,
           ),
           Text(
             'Belum mempunyai akun?',
@@ -140,7 +163,7 @@ class SigninView extends GetView<ProfileController> {
             ),
           ),
           const SizedBox(
-            height: 40,
+            height: 160,
           ),
         ],
       ),

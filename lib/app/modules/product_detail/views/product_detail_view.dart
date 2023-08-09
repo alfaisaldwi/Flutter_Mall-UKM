@@ -217,7 +217,6 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                 borderRadius: BorderRadius.circular(8),
                                 image: DecorationImage(
                                   image: NetworkImage(url),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
                               child: const Align(
@@ -629,9 +628,11 @@ void showOrderDialogDirect(BuildContext context) {
                               print(controllerProductDetail
                                   .selectedVariant.value);
 
-                              var total =
+                              double total =
                                   controllerProductDetail.counter.value *
-                                      int.parse(product.price);
+                                      double.parse(product.price);
+                              double weight = double.parse(product.weight) *
+                                  controllerProductDetail.counter.value;
                               print(product.id);
                               Get.toNamed('/checkout-direct', arguments: [
                                 product.id,
@@ -640,6 +641,7 @@ void showOrderDialogDirect(BuildContext context) {
                                 product.promo,
                                 controllerProductDetail.selectedVariant.value,
                                 total,
+                                weight
                               ]);
                               controllerProductDetail.counter.value = 1;
                               controllerProductDetail.selectedVariant.value =

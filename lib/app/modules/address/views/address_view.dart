@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/model/address/address_model.dart';
 import 'package:mall_ukm/app/modules/address/views/address_dialog.dart';
+import 'package:mall_ukm/app/modules/checkout/controllers/checkout_offline_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
 import '../controllers/address_controller.dart';
@@ -15,6 +17,7 @@ class AddressView extends GetView<AddressController> {
 
   @override
   Widget build(BuildContext context) {
+    var checkoutO = Get.put(CheckoutOfflineController());
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -71,19 +74,33 @@ class AddressView extends GetView<AddressController> {
             ElevatedButton(
               child: Text('Tambah Alamat'),
               onPressed: () async {
-                var idKecamatan =
-                    int.parse(address.selectedSubdistrictId.value);
+                if (address.nameController.text.isEmpty ||
+                    address.phoneController.text.isEmpty ||
+                    address.addressName.value.isEmpty ||
+                    address.selectedSubdistrictId.value == '') {
+                  Fluttertoast.showToast(
+                    msg: 'Mohon isi semua field ',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.grey[800],
+                    textColor: Colors.white,
+                    fontSize: 14.0,
+                  );
+                } else {
+                  var idKecamatan =
+                      int.parse(address.selectedSubdistrictId.value);
+                  Address addressItem = Address(
+                      username: address.nameController.text,
+                      phone: address.phoneController.text,
+                      address: address.addressName.value,
+                      addressDetail: address.addressDetail.text,
+                      destinationId:
+                          int.parse(address.selectedSubdistrictId.value),
+                      status: 'unselected');
 
-                Address addressItem = Address(
-                    username: address.nameController.text,
-                    phone: address.phoneController.text,
-                    address: address.addressName.value,
-                    addressDetail: address.addressDetail.text,
-                    destinationId:
-                        int.parse(address.selectedSubdistrictId.value),
-                    status: 'unselected');
-
-                await address.addAdress(addressItem);
+                  checkoutO.refreshAddress();
+                  await address.addAdress(addressItem);
+                }
               },
             ),
           ],

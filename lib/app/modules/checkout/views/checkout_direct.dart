@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -17,8 +19,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
   var productPromoId = Get.arguments[0];
   var productDetail = Get.arguments[1];
   var kuantiti = Get.arguments[2];
-  var pricePromo = Get.arguments[3];
-  var hargaBarang = Get.arguments[1];
+  var hargaBarang = Get.arguments[3];
   var selectVariant = Get.arguments[4];
   var total = Get.arguments[5];
   var subtot = 0.0.obs;
@@ -26,7 +27,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
   var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
-    controller.totalWeight.value = Get.arguments[2].toString();
+    controller.totalWeight.value = Get.arguments[6].toString();
 
     var addressId = 0;
     var productId = 0;
@@ -66,13 +67,14 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                   ),
                   Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                      child: Text(
-                        controller.convertToIdr(total, 2),
-                        style: Styles.bodyStyle(
-                          weight: FontWeight.w500,
-                          size: 15,
-                        ),
-                      ))
+                      child: Obx(() => Text(
+                            controller.convertToIdr(
+                                double.parse(subtot.toString()), 2),
+                            style: Styles.bodyStyle(
+                              weight: FontWeight.w500,
+                              size: 15,
+                            ),
+                          )))
                 ],
               ),
               Center(
@@ -86,7 +88,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                         for (int i = 0; i < 1; i++) {
                           Map<String, dynamic> product = {
                             "product_id": productPromoId,
-                            "price": pricePromo,
+                            "price": hargaBarang,
                             "quantity": kuantiti,
                             "variant": selectVariant
                           };
@@ -97,7 +99,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                           addressId: addressId,
                           courier: controller.selectedCourier.value,
                           costCourier: ongkir.value.toInt(),
-                          statusPayment: 'offline',
+                          statusPayment: 'online',
                           total: subtot.value.toInt(),
                           products: productsList,
                         );
@@ -300,7 +302,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                                     ),
                                     Text(
                                       controller.convertToIdr(
-                                          int.parse(productDetail.promo), 2),
+                                          int.parse(productDetail.price), 2),
                                       style: Styles.bodyStyle(size: 14),
                                     ),
                                   ],
@@ -433,10 +435,9 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                           vertical: 6.0, horizontal: 6.0),
                       child: Column(
                         children: [
-                         
                           ListTile(
                             title: const Text(
-                              'Harga PROMO',
+                              'Harga Barang',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
@@ -453,6 +454,46 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                     height: 10,
                   ),
                   const SizedBox(height: 10),
+                  Card(
+                    margin: const EdgeInsets.all(8.0),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: ListTile(
+                        title: const Text(
+                          'Berat Total',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        trailing: Text(
+                          '${double.parse(controller.totalWeight.value).toStringAsFixed(2)}gram',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Card(
+                    margin: EdgeInsets.all(8.0),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Obx(
+                        () => ListTile(
+                          title: Text(
+                            'Ongkir',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          trailing: Text(
+                            controller.convertToIdr(ongkir.value, 2),
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   const SizedBox(height: 20),
                 ],
               ),
