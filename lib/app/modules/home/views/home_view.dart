@@ -298,6 +298,23 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/survey-page');
+                      },
+                      child: Text(
+                        'Bagikan pendapat Anda melalui survei kami untuk membantu kami meningkatkan layanan di Mall UKM Kota Cirebon.',
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                            fontSize: 11,
+                            letterSpacing: 1.0,
+                            color: Colors.blue.shade900),
+                      ),
+                    ),
+                  ),
                   Obx(
                     () {
                       if (controller.productsPromo.isEmpty) {
@@ -306,8 +323,8 @@ class HomeView extends GetView<HomeController> {
                         return Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 10.0),
+                              padding:
+                                  const EdgeInsets.only(top: 2.0, left: 10.0),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Row(
@@ -339,7 +356,6 @@ class HomeView extends GetView<HomeController> {
                                   var product = controller.productsPromo[index];
                                   return GestureDetector(
                                     onTap: () async {
-                                      
                                       await controller.postCurrentLocation();
                                       var productDetails = await controller
                                           .fetchProductDetails(product.id);

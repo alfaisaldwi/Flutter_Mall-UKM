@@ -21,7 +21,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class CheckoutController extends GetxController {
   var controllerNav = Get.put(NavbarPageController());
-   var isLoading = false.obs;
+  var isLoading = false.obs;
   TextEditingController selectedCourier1 = TextEditingController();
   var selectedCourier = ''.obs;
   var selectedCourierFirst = '';
@@ -33,8 +33,8 @@ class CheckoutController extends GetxController {
   var weight = ''.obs;
   RxList<RxInt> weight2 = <RxInt>[].obs;
   var totalWeight = ''.obs;
-  final List<String> couriers = ['jne', 'pos', 'tiki', 'sicepat', 'jnt'];
-  final List<String> layanan = ['jne', 'pos', 'tiki', 'sicepat', 'jnt'];
+  final List<String> couriers = ['jne', 'pos', 'sicepat', 'jnt'];
+  final List<String> layanan = ['jne', 'pos', 'sicepat', 'jnt'];
   Rx<Future<AddressSelect>>? futureAddress;
 
   Future<TransaksiStore> tambahDataTransaksi(CheckoutData checkoutData) async {
@@ -45,9 +45,8 @@ class CheckoutController extends GetxController {
       'Authorization': 'Bearer $token',
     };
 
-    final url = Uri.parse(ApiEndPoints.baseUrl +
-        ApiEndPoints.transactionEndPoints
-            .store); 
+    final url = Uri.parse(
+        ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.store);
     final body = jsonEncode(checkoutData.toJson());
 
     final response = await http.post(url, body: body, headers: headers);
@@ -120,7 +119,7 @@ class CheckoutController extends GetxController {
 
     var response = await http.post(Uri.parse(apiUrl),
         headers: headers, body: json.encode(requestBody));
-        
+
     var jsonData = json.decode(response.body);
     print(response.body);
 
