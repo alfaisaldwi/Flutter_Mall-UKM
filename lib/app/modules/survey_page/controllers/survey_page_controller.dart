@@ -82,8 +82,8 @@ class SurveyPageController extends GetxController {
       var answer = {
         'number': i + 1,
         'title': question['title'],
-        'mis': kinerjaValues[i] ?? 0,
-        'mss': kepentinganValues[i] ?? 0,
+        'mis': kepentinganValues[i] ?? 0,
+        'mss': kinerjaValues[i] ?? 0,
       };
       answers.add(answer);
     }
