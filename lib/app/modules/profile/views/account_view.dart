@@ -8,6 +8,7 @@ import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/profile_company/controllers/profile_company_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
+import 'package:mall_ukm/app/style/first_capitalize.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -41,7 +42,7 @@ class AccountView extends GetView<ProfileController> {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            'Akun',
+                            'Profil',
                             style: Styles.headerStyles(),
                           ),
                         ),
@@ -59,8 +60,8 @@ class AccountView extends GetView<ProfileController> {
                             Obx(() {
                               return Expanded(
                                 child: Text(
-                                  controllerP.accountData.value['name'] ??
-                                      'User',
+                                  (controllerP.accountData.value['name'] ??
+                                      'User'),
                                   style: Styles.headerStyles(),
                                 ),
                               );
@@ -211,28 +212,30 @@ class AccountView extends GetView<ProfileController> {
                             shrinkWrap: true,
                             physics: const ScrollPhysics(),
                             children: [
+                              // ListTile(
+                              //   onTap: () async {
+                              //     await profileCompany.fetchProfileCompany();
+                              //     Get.toNamed('survey-page');
+                              //   },
+                              //   leading: const Icon(Icons.feedback_rounded),
+                              //   title: Text(
+                              //     'Survey Kepuasan Pengguna Mall UKM Kota Cirebon',
+                              //     style: Styles.bodyStyle(),
+                              //   ),
+                              // ),
                               ListTile(
                                 onTap: () async {
                                   await profileCompany.fetchProfileCompany();
-                                  Get.toNamed('survey-page');
-                                },
-                                leading: const Icon(Icons.feedback_rounded),
-                                title: Text(
-                                  'Survey Kepuasan Pengguna Mall UKM Kota Cirebon',
-                                  style: Styles.bodyStyle(),
-                                ),
-                              ),
-                              ListTile(
-                                onTap: () async {
                                   var wa =
                                       profileCompany.profileCompany.value.phone;
                                   try {
                                     final Uri _url = Uri.parse(
-                                        'https://wa.me/6283823065878?text=Haloo Admin Mall UKM Kota Cirebon, Saya ingin bertanya sesuatu nih.');
+                                        '$wa?text=Haloo Admin Mall UKM Kota Cirebon, Saya ingin bertanya sesuatu nih.');
+                                    print(_url);
                                     await launchUrl(_url,
                                         mode: LaunchMode.externalApplication);
                                   } catch (err) {
-                                    debugPrint('Something bad happened');
+                                    debugPrint('Something bad happened ,$err');
                                   }
                                 },
                                 leading: const Icon(
@@ -240,7 +243,7 @@ class AccountView extends GetView<ProfileController> {
                                   size: 20,
                                 ),
                                 title: Text(
-                                  'Hubungi Customer Service Mall UKM Cirebon',
+                                  'Hubungi Customer Service',
                                   style: Styles.bodyStyle(),
                                 ),
                               ),
