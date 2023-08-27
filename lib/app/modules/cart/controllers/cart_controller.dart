@@ -73,11 +73,40 @@ class CartController extends GetxController {
     }
   }
 
-  void setCheckedAll(bool value) {
-    for (int i = 0; i < isCheckedList.length; i++) {
-      isCheckedList[i] = value;
+  RxBool selectAll = false.obs;
+
+  void toggleSelectAll(bool value) {
+       for (int index = 0; index < isCheckedList.length; index++) {
+      isCheckedList[index] = value;
+      if (value) {
+        totalHarga.value += priceC[index].value * counter[index].value;
+        totalWeight.value += counter[index].value * subWeightC[index].value;
+
+        selectedItems.add(SelectedCartItem(isChecked: true, cart: carts[index]));
+      } else {
+        totalHarga.value -= priceC[index].value * counter[index].value;
+        totalWeight.value -= counter[index].value * subWeightC[index].value;
+
+        selectedItems.removeWhere((item) => item.cart == carts[index]);
+      }
     }
+    update();
   }
+  
+
+  // void updateTotalsAndSelectedItems( bool value) {
+  //   if (value) {
+  //     totalHarga.value += priceC[index].value * counter[index].value;
+  //     totalWeight.value += counter[index].value * subWeightC[index].value;
+
+  //     selectedItems.add(SelectedCartItem(isChecked: true, cart: carts[index]));
+  //   } else {
+  //     totalHarga.value -= priceC[index].value * counter[index].value;
+  //     totalWeight.value -= counter[index].value * subWeightC[index].value;
+
+  //     selectedItems.removeWhere((item) => item.cart == carts[index]);
+  //   }
+  // }
 
   Future<void> fetchCart() async {
     try {
@@ -232,15 +261,6 @@ class CartController extends GetxController {
           counter[index].value--;
           totalHarga.value -= priceC[index].value;
           totalWeight.value -= subWeightC[index].value;
-
-          // Fluttertoast.showToast(
-          //   msg: 'Berhasil mengurangi kuantitas',
-          //   toastLength: Toast.LENGTH_SHORT,
-          //   gravity: ToastGravity.BOTTOM,
-          //   backgroundColor: Colors.grey[800],
-          //   textColor: Colors.white,
-          //   fontSize: 14.0,
-          // );
         }
         print('Item berhasil diupdate');
       } else if (jsonResponse['code'] == 400) {
@@ -265,9 +285,5 @@ class CartController extends GetxController {
   void refreshCartData() {
     selectedItems.clear();
     Get.put(CartController());
-    // update();
-    // totalHarga.value = 0.0;
-    // isCheckedList.clear();
-    // totalWeight.value = 0;
   }
 }
