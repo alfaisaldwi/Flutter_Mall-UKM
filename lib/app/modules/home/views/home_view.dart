@@ -24,6 +24,7 @@ class HomeView extends GetView<HomeController> {
     String? token = GetStorage().read('token');
     return Scaffold(
       appBar: AppBar(
+          elevation: 0,
           backgroundColor: Colors.white,
           title: Container(
             width: double.infinity,
@@ -144,8 +145,8 @@ class HomeView extends GetView<HomeController> {
                                 options: CarouselOptions(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     autoPlay: true,
-                                    viewportFraction: 0.9,
-                                    aspectRatio: 16 / 8),
+                                    viewportFraction: 0.97,
+                                    aspectRatio: 16 / 9),
                                 items: controller.carouselList.map((carousel) {
                                   return Container(
                                     child: CachedNetworkImage(
@@ -154,6 +155,7 @@ class HomeView extends GetView<HomeController> {
                                           Image(
                                         image: imageProvider,
                                         fit: BoxFit.fitWidth,
+                                        width: 600,
                                         alignment: Alignment.center,
                                       ),
                                       placeholder: (context, url) => Center(
@@ -223,7 +225,7 @@ class HomeView extends GetView<HomeController> {
                                         children: [
                                           SizedBox(
                                               height: 80,
-                                              width: 50,
+                                              width: 60,
                                               child: Column(
                                                 children: [
                                                   CachedNetworkImage(
@@ -232,8 +234,8 @@ class HomeView extends GetView<HomeController> {
                                                             imageProvider) =>
                                                         Image(
                                                       image: imageProvider,
-                                                      width: 30,
-                                                      height: 30,
+                                                      width: 45,
+                                                      height: 45,
                                                       color: Colors
                                                           .deepOrange[400],
                                                       fit: BoxFit.fill,
@@ -274,7 +276,7 @@ class HomeView extends GetView<HomeController> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: Styles.bodyStyle(
-                                                            size: 10),
+                                                            size: 13),
                                                       ),
                                                     ),
                                                   ),
@@ -449,27 +451,6 @@ class HomeView extends GetView<HomeController> {
                       }
                     },
                   ),
-                  Divider(),
-                  if (token != null)
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.toNamed('/survey-page');
-                          },
-                          child: Text(
-                            'Bagikan pendapat Anda melalui survei kami untuk membantu kami meningkatkan layanan di Mall UKM Kota Cirebon.',
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                                fontSize: 11,
-                                letterSpacing: 0.8,
-                                color: Colors.blue.shade900),
-                          ),
-                        ),
-                      ),
-                    ),
                   Divider(),
                   Padding(
                     padding: const EdgeInsets.symmetric(

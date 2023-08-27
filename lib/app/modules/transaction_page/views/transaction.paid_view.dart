@@ -67,7 +67,7 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createdAt = DateTime.parse(transaction.createdAt);
+    final createdAt = DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
     final formattedDate = DateFormat('dd MMM yyyy').format(createdAt);
     var ctrT = Get.put(TransactionPageController());
 
@@ -133,12 +133,12 @@ class TransactionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(transaction.productPhoto),
+                      image: NetworkImage(transaction.productPhoto ?? "Sedang memuat.."),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                title: Text(transaction.productName),
+                title: Text(transaction.productName ?? "Sedang memuat.."),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -146,7 +146,7 @@ class TransactionCard extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                        'Total:  ${ctrT.convertToIdr(double.parse(transaction.total), 2)}'),
+                        'Total:  ${ctrT.convertToIdr(double.parse(transaction.total ?? "Sedang memuat.."), 2)}'),
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward),

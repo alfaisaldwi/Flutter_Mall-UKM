@@ -23,6 +23,7 @@ class WebviewCheckout extends GetView<TransactionPageController> {
               icon: Icon(Icons.close),
               onPressed: () {
                 Get.offNamed('navbar-page');
+                controllerNav.tabController.index = 2;
               },
             ),
           ],
@@ -35,9 +36,8 @@ class WebviewCheckout extends GetView<TransactionPageController> {
               return false;
             } else {
               contr.callTransaksi();
+              await Get.offNamed('navbar-page');
               controllerNav.tabController.index = 2;
-              await Get.offNamed(
-                  'navbar-page'); // Kembali ke halaman 'navbar-page'
               return true;
             }
           },
