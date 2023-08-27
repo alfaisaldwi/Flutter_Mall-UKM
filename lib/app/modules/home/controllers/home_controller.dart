@@ -37,7 +37,6 @@ class HomeController extends GetxController {
   void onInit() {
     fetchProduct();
     startDataRefreshTimer();
-    requestLocationPermission();
     fetchCategories();
     getCarouselData();
     fetchPromo();
@@ -58,12 +57,7 @@ class HomeController extends GetxController {
   void startDataRefreshTimer() {
     const refreshInterval = Duration(minutes: 1);
 
-    _timer = Timer.periodic(refreshInterval, (timer) {
-      fetchPromo();
-      fetchProduct();
-      getCarouselData();
-      fetchCategories();
-    });
+    _timer = Timer.periodic(refreshInterval, (timer) {});
   }
 
   void reFetch() {

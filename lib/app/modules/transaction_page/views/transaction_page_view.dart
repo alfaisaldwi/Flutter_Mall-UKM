@@ -19,6 +19,7 @@ class TransactionPageView extends GetView<TransactionPageController> {
       length: 6,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           toolbarHeight: 10,
           backgroundColor: Colors.white,
           bottom: TabBar(

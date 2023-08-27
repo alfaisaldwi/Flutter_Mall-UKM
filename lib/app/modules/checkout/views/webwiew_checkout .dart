@@ -16,13 +16,21 @@ class WebviewCheckout extends GetView<TransactionPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Text(
+            'Pembayaran',
+            style: TextStyle(color: Colors.black),
+          ),
           iconTheme: const IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
           actions: [
             IconButton(
               icon: Icon(Icons.close),
-              onPressed: () {
-                Get.offNamed('navbar-page');
+              onPressed: () async {
+                await Get.toNamed('navbar-page')?.then((value) {
+                  Future.delayed(Duration(milliseconds: 4000), () {
+                    controllerNav.tabController.index = 2;
+                  });
+                });
               },
             ),
           ],
@@ -35,8 +43,8 @@ class WebviewCheckout extends GetView<TransactionPageController> {
               return false;
             } else {
               contr.callTransaksi();
-              controllerNav.tabController.index = 2;
               Get.offNamed('navbar-page'); // Kembali ke halaman 'navbar-page'
+              controllerNav.tabController.index = 2;
               return true;
             }
           },

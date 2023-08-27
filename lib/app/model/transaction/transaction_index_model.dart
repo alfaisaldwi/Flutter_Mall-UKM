@@ -1,38 +1,38 @@
 class Transaction {
   final int id;
-  final String userId;
-  final String addressId;
-  final String orderId;
+   String? userId;
+   String? addressId;
+   String? orderId;
   String? courier;
   String? costCourier;
   String? receiptNumber;
-  final String total;
-  final String paymentUrl;
-  final String status;
-  final String createdAt;
-  final String updatedAt;
-  final String productName;
-  final String productQty;
-  final String productVariant;
-  final String productPhoto;
+   String? total;
+   String? paymentUrl;
+   String? status;
+   String? createdAt;
+   String? updatedAt;
+   String? productName;
+   String? productQty;
+   String? productVariant;
+   String? productPhoto;
 
   Transaction({
     required this.id,
-    required this.userId,
-    required this.addressId,
+     this.userId,
+     this.addressId,
     required this.orderId,
     this.courier,
     this.costCourier,
     this.receiptNumber,
-    required this.total,
-    required this.paymentUrl,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.productName,
-    required this.productQty,
-    required this.productVariant,
-    required this.productPhoto,
+     this.total,
+     this.paymentUrl,
+     this.status,
+     this.createdAt,
+     this.updatedAt,
+     this.productName,
+     this.productQty,
+     this.productVariant,
+     this.productPhoto,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {

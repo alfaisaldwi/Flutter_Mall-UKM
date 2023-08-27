@@ -16,6 +16,7 @@ class CartView extends GetView<CartController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Keranjang',
@@ -130,280 +131,334 @@ class CartView extends GetView<CartController> {
                             onRefresh: () async {
                               controller.fetchCart();
                             },
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: controller.carts.length,
-                              itemBuilder: (context, index) {
-                                var cart = controller.carts[index];
-                                controller.subWeightC.add(RxDouble(0.0));
-                                controller.counter[index].value = cart.qty;
-                                controller.subWeightC[index].value =
-                                    cart.weight;
-                                controller.priceC[index].value = cart.price;
-                                var isChecked = controller.isChecked(index).obs;
+                            child: Column(
+                              children: [
+                                Obx(
+                                  () => CheckboxListTile(
+                                    title: Text("Select All"),
+                                    value: controller.selectAllChecked.value,
+                                    onChanged: (value) {
+                                      controller.selectAllChecked.value = value ?? false;
+                                      if (value == true) {
+                                        controller.totalHarga.value = 0;
+                                        controller.totalWeight.value = 0;
 
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Obx(
-                                          () => CheckboxTile(
-                                            value: isChecked.value ?? false,
-                                            onChanged: (bool? value) {
-                                              isChecked.value = value ?? false;
-                                              if (value == true) {
-                                                controller.totalHarga.value +=
-                                                    controller.priceC[index]
+                                        controller.selectedItems.assignAll(
+                                            controller.carts.map((cart) {
+                                          controller.totalHarga.value +=
+                                              cart.price *
+                                                  controller
+                                                      .counter[controller.carts
+                                                          .indexOf(cart)]
+                                                      .value;
+                                          controller.totalWeight.value +=
+                                              cart.weight *
+                                                  controller
+                                                      .counter[controller.carts
+                                                          .indexOf(cart)]
+                                                      .value;
+                                          return SelectedCartItem(
+                                              isChecked: true, cart: cart);
+                                        }));
+                                      } else {
+                                        controller.totalHarga.value = 0;
+                                        controller.totalWeight.value = 0;
+                                        controller.selectedItems.clear();
+                                      }
+                                      controller.setCheckedAll(value ?? false);
+                                    },
+                                  ),
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  itemCount: controller.carts.length,
+                                  itemBuilder: (context, index) {
+                                    var cart = controller.carts[index];
+                                    controller.subWeightC.add(RxDouble(0.0));
+                                    controller.counter[index].value = cart.qty;
+                                    controller.subWeightC[index].value =
+                                        cart.weight;
+                                    controller.priceC[index].value = cart.price;
+                                    var isChecked =
+                                        controller.isChecked(index).obs;
+                                    bool selectAll = false;
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Obx(
+                                              () => CheckboxTile(
+                                                value: isChecked.value ?? false,
+                                                onChanged: (bool? value) {
+                                                  isChecked.value =
+                                                      value ?? false;
+                                                  if (value == true) {
+                                                    controller.totalHarga
+                                                        .value += controller
+                                                            .priceC[index]
                                                             .value *
                                                         controller
                                                             .counter[index]
                                                             .value;
-                                                controller.totalWeight.value +=
-                                                    controller.counter[index]
+                                                    controller.totalWeight
+                                                        .value += controller
+                                                            .counter[index]
                                                             .value *
                                                         controller
                                                             .subWeightC[index]
                                                             .value;
 
-                                                controller.selectedItems.add(
-                                                    SelectedCartItem(
-                                                        isChecked: true,
-                                                        cart: cart));
-                                              } else {
-                                                controller.totalHarga.value -=
-                                                    controller.priceC[index]
+                                                    controller.selectedItems
+                                                        .add(SelectedCartItem(
+                                                            isChecked: true,
+                                                            cart: cart));
+                                                  } else {
+                                                    controller.totalHarga
+                                                        .value -= controller
+                                                            .priceC[index]
                                                             .value *
                                                         controller
                                                             .counter[index]
                                                             .value;
-                                                controller.totalWeight.value -=
-                                                    controller.counter[index]
+                                                    controller.totalWeight
+                                                        .value -= controller
+                                                            .counter[index]
                                                             .value *
                                                         controller
                                                             .subWeightC[index]
                                                             .value;
-                                                controller.selectedItems
-                                                    .removeWhere((item) =>
-                                                        item.cart == cart);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 120,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.85,
-                                        padding: EdgeInsets.all(5),
-                                        child: Row(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: Image.network(
-                                                '${cart.photo}',
-                                                width: 120,
-                                                height: 100,
-                                                fit: BoxFit.cover,
+                                                    controller.selectedItems
+                                                        .removeWhere((item) =>
+                                                            item.cart == cart);
+                                                  }
+                                                },
                                               ),
                                             ),
-                                            SizedBox(width: 8),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(height: 8),
-                                                    Text(
-                                                      cart.title,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    Text(
-                                                      'Varian: ${cart.unitVariant}',
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    Text(
-                                                      controller.convertToIdr(
-                                                          cart.price, 2),
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    Spacer(),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
+                                          ),
+                                          Container(
+                                            height: 120,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.85,
+                                            padding: EdgeInsets.all(5),
+                                            child: Row(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  child: Image.network(
+                                                    '${cart.photo}',
+                                                    width: 120,
+                                                    height: 100,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 4.0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Obx(() {
-                                                          return CartStepperInt(
-                                                            value: controller
-                                                                .counter[index]
-                                                                .value,
-                                                            size: 22,
-                                                            style:
-                                                                CartStepperStyle(
-                                                              foregroundColor:
-                                                                  Colors
-                                                                      .black87,
-                                                              activeForegroundColor:
-                                                                  Colors
-                                                                      .black87,
-                                                              activeBackgroundColor:
-                                                                  Colors.white,
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .grey),
-                                                              radius: const Radius
-                                                                  .circular(8),
-                                                              elevation: 0,
-                                                              buttonAspectRatio:
-                                                                  1.5,
-                                                            ),
-                                                            didChangeCount:
-                                                                (count) async {
-                                                              if (isChecked
-                                                                      .value ==
-                                                                  true) {
-                                                                if (count >
-                                                                    controller
-                                                                        .counter[
-                                                                            index]
-                                                                        .value) {
-                                                                  cart.qty = controller
-                                                                      .counter[
-                                                                          index]
-                                                                      .value;
-                                                                  controller
-                                                                      .counterPlus
-                                                                      .value = true;
-                                                                  cart.qty++;
-                                                                  print(
-                                                                      cart.qty);
-                                                                  CartItem
-                                                                      cartItem =
-                                                                      CartItem(
-                                                                    product_id:
-                                                                        int.parse(
-                                                                            cart.productId),
-                                                                    qty: 1,
-                                                                    unit_variant:
-                                                                        cart.unitVariant,
-                                                                  );
-                                                                  await controller
-                                                                      .updateCart(
+                                                        SizedBox(height: 8),
+                                                        Text(
+                                                          cart.title,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        Text(
+                                                          'Varian: ${cart.unitVariant}',
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize: 14),
+                                                        ),
+                                                        Text(
+                                                          controller
+                                                              .convertToIdr(
+                                                                  cart.price,
+                                                                  2),
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        Spacer(),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Obx(() {
+                                                              return CartStepperInt(
+                                                                value: controller
+                                                                    .counter[
+                                                                        index]
+                                                                    .value,
+                                                                size: 22,
+                                                                style:
+                                                                    CartStepperStyle(
+                                                                  foregroundColor:
+                                                                      Colors
+                                                                          .black87,
+                                                                  activeForegroundColor:
+                                                                      Colors
+                                                                          .black87,
+                                                                  activeBackgroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .grey),
+                                                                  radius: const Radius
+                                                                      .circular(8),
+                                                                  elevation: 0,
+                                                                  buttonAspectRatio:
+                                                                      1.5,
+                                                                ),
+                                                                didChangeCount:
+                                                                    (count) async {
+                                                                  if (isChecked
+                                                                          .value ==
+                                                                      true) {
+                                                                    if (count >
+                                                                        controller
+                                                                            .counter[index]
+                                                                            .value) {
+                                                                      cart.qty = controller
+                                                                          .counter[
+                                                                              index]
+                                                                          .value;
+                                                                      controller
+                                                                          .counterPlus
+                                                                          .value = true;
+                                                                      cart.qty++;
+                                                                      print(cart
+                                                                          .qty);
+                                                                      CartItem
+                                                                          cartItem =
+                                                                          CartItem(
+                                                                        product_id:
+                                                                            int.parse(cart.productId),
+                                                                        qty: 1,
+                                                                        unit_variant:
+                                                                            cart.unitVariant,
+                                                                      );
+                                                                      await controller.updateCart(
                                                                           cart.id,
                                                                           cartItem,
                                                                           index);
-                                                                } else if (count <
-                                                                    controller
-                                                                        .counter[
-                                                                            index]
-                                                                        .value) {
-                                                                  if (controller
-                                                                          .counter[
-                                                                              index]
-                                                                          .value <=
-                                                                      1) {
-                                                                    // await controller
-                                                                    //     .deleteCart(
-                                                                    //         cart.id);
-                                                                  } else if (count <
-                                                                      controller
-                                                                          .counter[
-                                                                              index]
-                                                                          .value) {
-                                                                    controller
-                                                                        .counterPlus
-                                                                        .value = false;
-                                                                    CartItem
-                                                                        cartItem =
-                                                                        CartItem(
-                                                                      product_id:
-                                                                          int.parse(
-                                                                              cart.productId),
-                                                                      qty: -1,
-                                                                      unit_variant:
-                                                                          cart.unitVariant,
+                                                                    } else if (count <
+                                                                        controller
+                                                                            .counter[index]
+                                                                            .value) {
+                                                                      if (controller
+                                                                              .counter[index]
+                                                                              .value <=
+                                                                          1) {
+                                                                        // await controller
+                                                                        //     .deleteCart(
+                                                                        //         cart.id);
+                                                                      } else if (count <
+                                                                          controller
+                                                                              .counter[index]
+                                                                              .value) {
+                                                                        controller
+                                                                            .counterPlus
+                                                                            .value = false;
+                                                                        CartItem
+                                                                            cartItem =
+                                                                            CartItem(
+                                                                          product_id:
+                                                                              int.parse(cart.productId),
+                                                                          qty:
+                                                                              -1,
+                                                                          unit_variant:
+                                                                              cart.unitVariant,
+                                                                        );
+                                                                        await controller.updateCart(
+                                                                            cart.id,
+                                                                            cartItem,
+                                                                            index);
+                                                                      }
+                                                                    }
+                                                                  } else {
+                                                                    Fluttertoast
+                                                                        .showToast(
+                                                                      msg:
+                                                                          'Ceklis Produk yang ingin kamu hitung',
+                                                                      toastLength:
+                                                                          Toast
+                                                                              .LENGTH_SHORT,
+                                                                      gravity:
+                                                                          ToastGravity
+                                                                              .BOTTOM,
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .grey[800],
+                                                                      textColor:
+                                                                          Colors
+                                                                              .white,
+                                                                      fontSize:
+                                                                          14.0,
                                                                     );
-                                                                    await controller.updateCart(
-                                                                        cart.id,
-                                                                        cartItem,
-                                                                        index);
                                                                   }
-                                                                }
-                                                              } else {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                  msg:
-                                                                      'Ceklis Produk yang ingin kamu hitung',
-                                                                  toastLength: Toast
-                                                                      .LENGTH_SHORT,
-                                                                  gravity:
-                                                                      ToastGravity
-                                                                          .BOTTOM,
-                                                                  backgroundColor:
-                                                                      Colors.grey[
-                                                                          800],
-                                                                  textColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  fontSize:
-                                                                      14.0,
-                                                                );
-                                                              }
-                                                            },
-                                                          );
-                                                        }),
-                                                        GestureDetector(
-                                                          onTap: () async {
-                                                            await controller
-                                                                .deleteCart(
-                                                                    cart.id);
-                                                          },
-                                                          child: const Padding(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        8.0),
-                                                            child: Icon(
-                                                              Icons
-                                                                  .delete_outline_rounded,
-                                                              color: Colors.red,
+                                                                },
+                                                              );
+                                                            }),
+                                                            GestureDetector(
+                                                              onTap: () async {
+                                                                await controller
+                                                                    .deleteCart(
+                                                                        cart.id);
+                                                              },
+                                                              child:
+                                                                  const Padding(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            8.0),
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .delete_outline_rounded,
+                                                                  color: Colors
+                                                                      .red,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),
-                                                  ],
+                                                  ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           );
                         }

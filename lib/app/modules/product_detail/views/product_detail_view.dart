@@ -40,6 +40,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
         (1 / ratio);
     return Scaffold(
       appBar: AppBar(
+          elevation: 0,
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
           title: Text(
@@ -326,7 +327,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             child: Text(
                               'Stok : ${product.qty}',
                               style: Styles.bodyStyle(
-                                  color: Colors.black45, size: 15),
+                                  color: Colors.black54, size: 15),
                             ),
                           ),
                         ),
@@ -337,7 +338,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             child: Text(
                               'Berat Satuan : ${product.weight}gram',
                               style: Styles.bodyStyle(
-                                  color: Colors.black45, size: 15),
+                                  color: Colors.black54, size: 15),
                             ),
                           ),
                         ),
@@ -363,12 +364,13 @@ class ProductDetailView extends GetView<ProductDetailController> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        padding: const EdgeInsets.only(bottom: 10.0),
                         child: Text(
                           product.description,
                           style: Styles.bodyStyle(
                             size: 14,
                           ),
+                          textAlign: TextAlign.justify,
                         ),
                       ),
                     ),

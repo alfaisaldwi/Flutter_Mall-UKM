@@ -30,10 +30,6 @@ class CheckoutDirectView extends GetView<CheckoutController> {
     controller.totalWeight.value = Get.arguments[6].toString();
 
     var addressId = 0;
-    var productId = 0;
-    var cartId = 0;
-    var priceProduct = 0;
-    var unitVariant = '';
     var ongkir = 0.0.obs;
 
     return Scaffold(
