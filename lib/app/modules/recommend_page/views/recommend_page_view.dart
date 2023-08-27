@@ -30,6 +30,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
         (1 / ratio);
     return Scaffold(
       appBar: AppBar(
+          elevation: 0,
           backgroundColor: Colors.white,
           title: Container(
             width: double.infinity,
@@ -120,7 +121,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                   }
                 },
                 child: const Icon(
-                  Icons.shopping_cart,
+                  Icons.shopping_cart_outlined,
                   color: Colors.black,
                   size: 22,
                 ),

@@ -79,13 +79,7 @@ class CheckoutController extends GetxController {
           ..loadRequest(Uri.parse(paymentUrl));
 
         Get.offAll((WebviewCheckout()), arguments: url);
-        // Navigator.push(
-        //     Get.context!,
-        //     MaterialPageRoute(
-        //       builder: (context) => MyHomePage(
-        //         url: paymentUrl,
-        //       ),
-        //     ));
+
         print(paymentUrl);
       }
 

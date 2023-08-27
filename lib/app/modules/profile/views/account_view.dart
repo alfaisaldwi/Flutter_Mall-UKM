@@ -275,11 +275,21 @@ class AccountView extends GetView<ProfileController> {
                         controllerP.logout();
                         // GetStorage().remove('token');
                       },
-                      child: Text(
-                        'Keluar',
-                        style: Styles.headerStyles(
-                            color: const Color(0xff990000),
-                            weight: FontWeight.bold),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.logout_outlined,
+                            color: Colors.red.shade600,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Keluar',
+                            style:
+                                Styles.headerStyles(color: Colors.red.shade600),
+                          ),
+                        ],
                       ),
                     ),
                   ),

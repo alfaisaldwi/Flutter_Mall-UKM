@@ -3,11 +3,14 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:url_launcher/url_launcher.dart';
@@ -16,9 +19,23 @@ class TransactionDetailView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var trsDetail = Get.arguments as TransactionShow;
+    var status = ''.obs;
+    if (trsDetail.status == 'paid') {
+      status.value = 'Sudah Bayar';
+    } else if (trsDetail.status == 'unpaid') {
+      status.value = 'Belum Bayar';
+    } else if (trsDetail.status == 'sending') {
+      status.value = 'Sedang Dikirim';
+    } else if (trsDetail.status == 'delivered') {
+      status.value = 'Selesai';
+    } else {
+      status.value = 'Dibatalkan';
+    }
+
     controller.startCountdown(trsDetail.createdAt!);
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Column(
           children: [
@@ -31,14 +48,14 @@ class TransactionDetailView extends GetView<TransactionPageController> {
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
         child: Container(
           color: Colors.white,
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Card(
-                elevation: 4,
+                elevation: 0,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -51,13 +68,41 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                       SizedBox(
                         height: 5,
                       ),
-                      Text(
-                        trsDetail.orderId!,
-                        softWrap: true,
-                        maxLines: 2,
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w500),
+                      Row(
+                        children: [
+                          Text(
+                            trsDetail.orderId!,
+                            softWrap: true,
+                            maxLines: 2,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Clipboard.setData(
+                                  ClipboardData(text: trsDetail.orderId));
+                              Fluttertoast.showToast(
+                                msg: 'Disalin',
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey[800],
+                                textColor: Colors.white,
+                                fontSize: 14.0,
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(0),
+                              child: Icon(
+                                Icons.copy,
+                                size: 15,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 15,
@@ -131,7 +176,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                         children: [
                           Text('Status:'),
                           Text(
-                            trsDetail.status!.toUpperCase(),
+                            status.toUpperCase(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: trsDetail.status == 'paid' ||
@@ -143,7 +188,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                           ),
                         ],
                       ),
-                      if (trsDetail.status == 'paid' &&
+                      if (trsDetail.status == 'sending' &&
                           trsDetail.statusPayment == 'online')
                         Column(
                           children: [
@@ -152,13 +197,41 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Nomor Resi:'),
-                                Text(
-                                  trsDetail.receiptNumber != null
-                                      ? '${trsDetail.receiptNumber}'
-                                      : 'Belum Dikirim',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      trsDetail.receiptNumber != null
+                                          ? '${trsDetail.receiptNumber}'
+                                          : 'Belum Dikirim',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Clipboard.setData(ClipboardData(
+                                            text: trsDetail.receiptNumber));
+                                        Fluttertoast.showToast(
+                                          msg: 'Disalin',
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[800],
+                                          textColor: Colors.white,
+                                          fontSize: 14.0,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(0),
+                                        child: Icon(
+                                          Icons.copy,
+                                          size: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -213,7 +286,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                 itemBuilder: (context, index) {
                   var detail = trsDetail.detailTransaction?[index];
                   return Card(
-                    elevation: 3,
+                    elevation: 0,
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: ListTile(
@@ -266,9 +339,9 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                     ),
                     SizedBox(height: 8),
                     Card(
-                      elevation: 4,
+                      elevation: 0,
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -375,56 +448,52 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                     Divider(),
                     GestureDetector(
                       onTap: () async {
-                        Get.defaultDialog(
-                          title: "Yakin ingin mengubah status pemesanan?",
-                          titleStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(width: 10),
-                            ],
-                          ),
-                          confirm: ElevatedButton(
-                            onPressed: () async {
-                          Get.back();
-                              await controller.updateStatus(
-                                  trsDetail.id!, "canceled");
-                              print("Status pemesanan berubah");
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.green,
+                        Alert(
+                          context: context,
+                          type: AlertType.warning,
+                          title: "",
+                          desc: "Yakin ingin membatalkan pesanan?",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Tidak",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              color: Colors.grey,
                             ),
-                            child: Text("Ya"),
-                          ),
-                          cancel: ElevatedButton(
-                            onPressed: () {
-                              Get.back();
-
-                              print("Batal mengubah status pemesanan");
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.red,
-                            ),
-                            child: Text("Tidak"),
-                          ),
-                        );
+                            DialogButton(
+                              child: Text(
+                                "Ya",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () async {
+                                Get.back();
+                                await controller.updateStatus(
+                                    trsDetail.id!, "canceled");
+                              },
+                              color: Color.fromRGBO(0, 179, 134, 1.0),
+                            )
+                          ],
+                        ).show();
                       },
                       child: Container(
                         height: 45,
                         width: double.infinity,
                         decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.red,
+                          ),
                           borderRadius: BorderRadius.circular(11),
-                          color: Color.fromARGB(255, 223, 15, 15),
                         ),
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(1.0),
                             child: Text('Batalkan  Pesanan ?',
                                 style: Styles.bodyStyle(
-                                    color: Colors.white, size: 14)),
+                                    color: Colors.red, size: 14)),
                           ),
                         ),
                       ),
@@ -458,15 +527,17 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                   height: 45,
                   width: double.infinity,
                   decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color(0xff198754),
+                    ),
                     borderRadius: BorderRadius.circular(11),
-                    color: const Color(0xff034779),
                   ),
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: Text('Sedang dikirim ke alamat',
-                          style:
-                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                          style: Styles.bodyStyle(
+                              color: Color(0xff198754), size: 14)),
                     ),
                   ),
                 ),
@@ -475,15 +546,16 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                   height: 45,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11),
-                    color: const Color(0xff034779),
+                    border: Border.all(
+                      color: const Color(0xff198754),
+                    ),
                   ),
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: Text('Pesanan Sudah diterima',
-                          style:
-                              Styles.bodyStyle(color: Colors.white, size: 14)),
+                          style: Styles.bodyStyle(
+                              color: Color(0xff198754), size: 14)),
                     ),
                   ),
                 ),
@@ -503,7 +575,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                           padding: const EdgeInsets.all(1.0),
                           child: Text('Pesanan telah dibatalkan',
                               style: Styles.bodyStyle(
-                                  color: Colors.black, size: 14)),
+                                  color: Color(0xffBB2124), size: 14)),
                         ),
                       ),
                     ),

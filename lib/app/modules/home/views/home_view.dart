@@ -46,9 +46,11 @@ class HomeView extends GetView<HomeController> {
                       failure: const Center(
                         child: Text('Produk yang kamu cari tidak ada :('),
                       ),
-                      filter: (product) => [
-                        product.title,
-                      ],
+                      filter: (product) {
+                        return [
+                          product.title,
+                        ];
+                      },
                       builder: (product) => SearchView(
                         products: product,
                       ),
@@ -81,7 +83,7 @@ class HomeView extends GetView<HomeController> {
                           contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 4),
                           border: InputBorder
                               .none, // Hapus border pada input decoration TextField
-                          hintText: 'Cari Produk di Mall UKM',
+                          hintText: 'Cari Produk',
                           hintStyle: const TextStyle(fontSize: 12),
                           prefixIcon: const Icon(
                             Icons.search,
@@ -115,7 +117,7 @@ class HomeView extends GetView<HomeController> {
                   }
                 },
                 child: const Icon(
-                  Icons.shopping_cart,
+                  Icons.shopping_cart_outlined,
                   color: Colors.black,
                   size: 22,
                 ),
@@ -137,6 +139,7 @@ class HomeView extends GetView<HomeController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Card(
+                    elevation: 0.0,
                     child: Column(
                       children: [
                         Container(
@@ -234,10 +237,8 @@ class HomeView extends GetView<HomeController> {
                                                             imageProvider) =>
                                                         Image(
                                                       image: imageProvider,
-                                                      width: 45,
-                                                      height: 45,
-                                                      color: Colors
-                                                          .deepOrange[400],
+                                                      width: 43,
+                                                      height: 43,
                                                       fit: BoxFit.fill,
                                                       alignment:
                                                           Alignment.center,
@@ -494,8 +495,8 @@ class HomeView extends GetView<HomeController> {
                               crossAxisCount: 2,
                               shrinkWrap: true,
                               physics: const ScrollPhysics(),
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 2,
+                              crossAxisSpacing: 5,
                               itemCount: controller.products.length,
                               itemBuilder: (context, index) {
                                 var product = controller.products[index];
@@ -507,118 +508,150 @@ class HomeView extends GetView<HomeController> {
                                     Get.toNamed('product-detail',
                                         arguments: [productDetails]);
                                   },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        color: Colors.white),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CachedNetworkImage(
-                                          imageUrl: product.photo.first,
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  ClipRRect(
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
                                             borderRadius:
-                                                const BorderRadius.only(
-                                              topLeft: Radius.circular(10.0),
-                                              topRight: Radius.circular(10.0),
+                                                BorderRadius.circular(10.0),
+                                            color: Colors.white),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            AspectRatio(
+                                              aspectRatio: 4 / 5,
+                                              child: CachedNetworkImage(
+                                                imageUrl: product.photo.first,
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10.0),
+                                                    topRight:
+                                                        Radius.circular(10.0),
+                                                  ),
+                                                  child: Image(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    Center(
+                                                        child:
+                                                            Shimmer.fromColors(
+                                                  baseColor:
+                                                      Colors.grey.shade300,
+                                                  highlightColor:
+                                                      Colors.grey.shade100,
+                                                  child: Container(
+                                                    width: 200,
+                                                    height: 100,
+                                                    color:
+                                                        Colors.deepOrange[400],
+                                                  ),
+                                                )),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(
+                                                  Icons
+                                                      .image_not_supported_rounded,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
                                             ),
-                                            child: Image(
-                                              image: imageProvider,
-                                            ),
-                                          ),
-                                          placeholder: (context, url) => Center(
-                                              child: Shimmer.fromColors(
-                                            baseColor: Colors.grey.shade300,
-                                            highlightColor:
-                                                Colors.grey.shade100,
-                                            child: Container(
-                                              width: 200,
-                                              height: 100,
-                                              color: Colors.deepOrange[400],
-                                            ),
-                                          )),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(
-                                            Icons.image_not_supported_rounded,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 5),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 2,
+                                                      vertical: 5),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      product.title,
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 16,
-                                                          color: Color.fromRGBO(
-                                                              74, 74, 74, 1)),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          product.title,
+                                                          maxLines: 2,
+                                                          style: const TextStyle(
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .fade,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontSize: 16,
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      74,
+                                                                      74,
+                                                                      74,
+                                                                      1)),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 2.0),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          controller.convertToIdr(
+                                                              double.parse(
+                                                                  product
+                                                                      .price),
+                                                              0),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          133,
+                                                                          133,
+                                                                          133,
+                                                                          1)),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 2,
+                                                        ),
+                                                        Text(
+                                                          controller.convertToIdr(
+                                                              double.parse(product
+                                                                  .priceRetail),
+                                                              0),
+                                                          style: const TextStyle(
+                                                              fontSize: 12,
+                                                              color: Colors.red,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .lineThrough),
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                              const SizedBox(
-                                                height: 4,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 2.0),
-                                                child: Column(
-                                                  children: [
-                                                    Text(
-                                                      controller.convertToIdr(
-                                                          double.parse(
-                                                              product.price),
-                                                          0),
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color: Color.fromRGBO(
-                                                              133,
-                                                              133,
-                                                              133,
-                                                              1)),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 2,
-                                                    ),
-                                                    Text(
-                                                      controller.convertToIdr(
-                                                          double.parse(product
-                                                              .priceRetail),
-                                                          0),
-                                                      style: const TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.red,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .lineThrough),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );

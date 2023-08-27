@@ -14,6 +14,7 @@ class AddressIndexView extends GetView<AddressController> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {

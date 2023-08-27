@@ -86,8 +86,8 @@ class NavbarPageView extends GetView<NavbarPageController> {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 3,
+            spreadRadius: 1,
+            blurRadius: 1,
             offset: Offset(0, 2), // changes position of shadow
           ),
         ],

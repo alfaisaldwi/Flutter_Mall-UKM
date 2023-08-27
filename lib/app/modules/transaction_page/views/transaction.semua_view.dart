@@ -80,7 +80,7 @@ class TransactionCard extends StatelessWidget {
       padding: const EdgeInsets.all(2.0),
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        elevation: 2,
+        elevation: 0.2,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

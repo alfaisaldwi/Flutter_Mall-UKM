@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -20,6 +21,7 @@ class CategoryView extends GetView<CategoryController> {
     var title = arguments[1] as String;
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Kategori $title',
@@ -37,6 +39,7 @@ class CategoryView extends GetView<CategoryController> {
                   children: [
                     if (categoryDetail.products!.isEmpty)
                       Container(
+                        height: 600,
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
@@ -65,90 +68,127 @@ class CategoryView extends GetView<CategoryController> {
                               Get.toNamed('product-detail',
                                   arguments: [productDetails]);
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: Colors.white),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10.0),
-                                      topRight: Radius.circular(10.0),
-                                    ),
-                                    child: Image.network(category.photo),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                category.title,
-                                                maxLines: 2,
-                                                style: const TextStyle(
-                                                    overflow: TextOverflow.fade,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 16,
-                                                    color: Color.fromRGBO(
-                                                        74, 74, 74, 1)),
-                                              ),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: Colors.white),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      AspectRatio(
+                                        aspectRatio: 4 / 5,
+                                        child: CachedNetworkImage(
+                                          imageUrl: category.photo,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(10.0),
+                                              topRight: Radius.circular(10.0),
                                             ),
-                                            // IconButton(
-                                            //     onPressed: () {},
-                                            //     icon: const Icon(
-                                            //       Icons.arrow_forward_outlined,
-                                            //       color: Colors.teal,
-                                            //     ))
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 2.0),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                controller.convertToIdr(
-                                                    double.parse(
-                                                        category.price),
-                                                    2),
-                                                style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Color.fromRGBO(
-                                                        133, 133, 133, 1)),
-                                              ),
-                                              const SizedBox(
-                                                height: 2,
-                                              ),
-                                              Text(
-                                                controller.convertToIdr(
-                                                    double.parse(
-                                                        category.priceRetail),
-                                                    2),
-                                                style: const TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.red,
-                                                    decoration: TextDecoration
-                                                        .lineThrough),
-                                              )
-                                            ],
+                                            child: Image(
+                                              image: imageProvider,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          ),
+                                          placeholder: (context, url) => Center(
+                                              child: Shimmer.fromColors(
+                                            baseColor: Colors.grey.shade300,
+                                            highlightColor:
+                                                Colors.grey.shade100,
+                                            child: Container(
+                                              width: 200,
+                                              height: 100,
+                                              color: Colors.deepOrange[400],
+                                            ),
+                                          )),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(
+                                            Icons.image_not_supported_rounded,
+                                            color: Colors.grey,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    category.title,
+                                                    maxLines: 2,
+                                                    style: const TextStyle(
+                                                        overflow:
+                                                            TextOverflow.fade,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 16,
+                                                        color: Color.fromRGBO(
+                                                            74, 74, 74, 1)),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 4,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 2.0),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    controller.convertToIdr(
+                                                        double.parse(
+                                                            category.price),
+                                                        0),
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color: Color.fromRGBO(
+                                                            133, 133, 133, 1)),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 2,
+                                                  ),
+                                                  Text(
+                                                    controller.convertToIdr(
+                                                        double.parse(category
+                                                            .priceRetail),
+                                                        0),
+                                                    style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.red,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           );

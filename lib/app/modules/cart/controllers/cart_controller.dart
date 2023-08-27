@@ -16,13 +16,13 @@ class CartController extends GetxController {
   RxList<bool> isCheckedList = <bool>[].obs;
   RxList<SelectedCartItem> selectedItems = <SelectedCartItem>[].obs;
   RxList<RxInt> counter = <RxInt>[].obs;
-
   RxBool counterPlus = false.obs;
   RxDouble totalHarga = 0.0.obs;
   RxBool? isCheckedBox;
   RxList<RxDouble> priceC = <RxDouble>[].obs;
   RxDouble totalWeight = 0.0.obs;
   RxList<RxDouble> subWeightC = <RxDouble>[].obs;
+  var selectAllChecked = false.obs;
 
   @override
   void onInit() {
@@ -70,6 +70,12 @@ class CartController extends GetxController {
   void setChecked(bool value, int index) {
     if (index >= 0 && index < isCheckedList.length) {
       isCheckedList[index] = value;
+    }
+  }
+
+  void setCheckedAll(bool value) {
+    for (int i = 0; i < isCheckedList.length; i++) {
+      isCheckedList[i] = value;
     }
   }
 
