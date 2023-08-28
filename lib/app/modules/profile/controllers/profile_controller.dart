@@ -9,6 +9,7 @@ import 'package:mall_ukm/app/routes/app_pages.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
+import 'package:mall_ukm/app/utils/show_general_dialog.dart';
 
 class ProfileController extends GetxController {
   TextEditingController cemail = TextEditingController();
@@ -23,7 +24,6 @@ class ProfileController extends GetxController {
   var isError = false.obs;
   var errmsg = "".obs;
   var accountData = RxMap<String, dynamic>({});
-
 
   @override
   void onInit() {
@@ -47,6 +47,7 @@ class ProfileController extends GetxController {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.loginEmail);
       Map body = {'email': cemail.text.trim(), 'password': cpw.text};
+      showLoadingDialog(Get.context!);
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
       print(response.body);
@@ -77,6 +78,7 @@ class ProfileController extends GetxController {
             fontSize: 14.0,
           );
         }
+        Navigator.of(Get.context!, rootNavigator: true).pop();
       } else {
         Fluttertoast.showToast(
           msg: 'Periksa kembali email dan password',
@@ -102,6 +104,7 @@ class ProfileController extends GetxController {
         'email': cemail.text.trim(),
         'password': cpw.text
       };
+      showLoadingDialog(Get.context!);
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
       print(response.body);
@@ -140,6 +143,7 @@ class ProfileController extends GetxController {
           fontSize: 14.0,
         );
       }
+      Navigator.of(Get.context!, rootNavigator: true).pop();
     } catch (error) {
       Fluttertoast.showToast(
         msg: 'Periksa kembali nama, email dan password',
@@ -192,7 +196,7 @@ class ProfileController extends GetxController {
       'Authorization': 'Bearer $token',
     };
     GetStorage().remove('token');
-
+    showLoadingDialog(Get.context!);
     try {
       var url =
           Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.logout);
@@ -221,6 +225,7 @@ class ProfileController extends GetxController {
       } else {
         throw 'Gagal logout: ${response.reasonPhrase}|| ${response.statusCode}';
       }
+      Navigator.of(Get.context!, rootNavigator: true).pop();
     } catch (error) {
       GetStorage().remove('token');
 
@@ -246,7 +251,6 @@ class ProfileController extends GetxController {
       accountData.value = RxMap<String, dynamic>(jsonData['data']);
     }
   }
-
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;

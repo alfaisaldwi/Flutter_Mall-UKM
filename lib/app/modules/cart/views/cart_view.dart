@@ -238,12 +238,9 @@ class CartView extends GetView<CartController> {
                                                             controller
                                                                 .selectedItems
                                                                 .length) {
-                                                          controller
-                                                              .toggleSelectAll(
-                                                                  value ??
-                                                                      false);
+                                                         
                                                           selectAll.value =
-                                                              value ?? false;
+                                                              true;
                                                           print('kondisi 1');
                                                         }
                                                       } else {
