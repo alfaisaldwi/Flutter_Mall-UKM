@@ -38,8 +38,8 @@ class CartView extends GetView<CartController> {
                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: Row(
                   children: [
-                    Obx(
-                      () => Row(
+                    Obx(() {
+                      return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -60,8 +60,8 @@ class CartView extends GetView<CartController> {
                             ),
                           ),
                         ],
-                      ),
-                    ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -193,7 +193,6 @@ class CartView extends GetView<CartController> {
                                     controller.priceC[index].value = cart.price;
                                     // var isChecked =
                                     //     controller.isChecked(index).obs;
-                                    bool selectAll = false;
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0),
@@ -234,6 +233,19 @@ class CartView extends GetView<CartController> {
                                                                         true,
                                                                     cart:
                                                                         cart));
+                                                        if (controller
+                                                                .carts.length ==
+                                                            controller
+                                                                .selectedItems
+                                                                .length) {
+                                                          controller
+                                                              .toggleSelectAll(
+                                                                  value ??
+                                                                      false);
+                                                          selectAll.value =
+                                                              value ?? false;
+                                                          print('kondisi 1');
+                                                        }
                                                       } else {
                                                         controller.totalHarga
                                                             .value -= controller
@@ -255,6 +267,9 @@ class CartView extends GetView<CartController> {
                                                                 (item) =>
                                                                     item.cart ==
                                                                     cart);
+
+                                                        selectAll.value = false;
+                                                        print('kondisi 2');
                                                       }
                                                     },
                                                   ),

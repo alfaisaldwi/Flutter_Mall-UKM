@@ -16,7 +16,11 @@ class WebviewCheckout extends GetView<TransactionPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Pembayaran'),
+          elevation: 0,
+          title: Text(
+            'Pembayaran',
+            style: TextStyle(color: Colors.black),
+          ),
           iconTheme: const IconThemeData(color: Colors.black),
           backgroundColor: Colors.white,
           actions: [

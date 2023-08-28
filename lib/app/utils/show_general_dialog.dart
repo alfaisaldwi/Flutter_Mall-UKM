@@ -15,7 +15,7 @@ void showLoadingDialog(BuildContext context) {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(),
+              const CircularProgressIndicator(),
             ],
           ),
         ),

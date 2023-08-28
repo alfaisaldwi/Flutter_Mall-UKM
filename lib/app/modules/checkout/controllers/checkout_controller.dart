@@ -38,7 +38,7 @@ class CheckoutController extends GetxController {
   final List<String> layanan = ['jne', 'pos', 'sicepat', 'jnt'];
   Rx<Future<AddressSelect>>? futureAddress;
 
- RxBool isLoadingDialog = false.obs;
+  RxBool isLoadingDialog = false.obs;
 
   Future<TransaksiStore> tambahDataTransaksi(CheckoutData checkoutData) async {
     String? token = GetStorage().read('token');
@@ -51,7 +51,7 @@ class CheckoutController extends GetxController {
     final url = Uri.parse(
         ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.store);
     final body = jsonEncode(checkoutData.toJson());
-
+    showLoadingDialog(Get.context!);
     final response = await http.post(url, body: body, headers: headers);
 
     if (response.statusCode == 200) {
@@ -60,14 +60,14 @@ class CheckoutController extends GetxController {
 
       if (transaksi.data!.paymentUrl != null) {
         String paymentUrl = transaksi.data!.paymentUrl!;
+        Navigator.of(Get.context!, rootNavigator: true).pop();
+
         ctr = WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..setBackgroundColor(const Color(0x00000000))
           ..setNavigationDelegate(
             NavigationDelegate(
-              onProgress: (int progress) {
-                // Update loading bar.
-              },
+              onProgress: (int progress) {},
               onPageStarted: (String url) {},
               onPageFinished: (String url) {},
               onWebResourceError: (WebResourceError error) {},
@@ -114,7 +114,7 @@ class CheckoutController extends GetxController {
       "weight": totalWeight.toString(),
       "courier": selectedCourier.value,
     };
- showLoadingDialog(Get.context!);
+    showLoadingDialog(Get.context!);
     var response = await http.post(Uri.parse(apiUrl),
         headers: headers, body: json.encode(requestBody));
 
@@ -123,8 +123,8 @@ class CheckoutController extends GetxController {
 
     services.value =
         jsonData['rajaongkir']['results'][0]['costs'] as List<dynamic>;
-  isLoadingDialog.value = false;
-  Navigator.of(Get.context!, rootNavigator: true).pop();
+    isLoadingDialog.value = false;
+    Navigator.of(Get.context!, rootNavigator: true).pop();
     print(' serviceee ${services.value}');
   }
 

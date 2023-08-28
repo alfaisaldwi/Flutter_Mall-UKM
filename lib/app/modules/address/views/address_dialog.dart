@@ -7,6 +7,10 @@ class AddressSelectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -14,10 +18,21 @@ class AddressSelectionDialog extends StatelessWidget {
           children: [
             Obx(
               () => DropdownButtonFormField<String>(
+                style: TextStyle(color: Colors.black),
+                dropdownColor: Colors.white,
                 value: address.provinces.isNotEmpty
                     ? address.provinces[0]['province_id']
                     : null,
-                decoration: InputDecoration(labelText: 'Provinsi'),
+                decoration: InputDecoration(
+                  labelText: 'Provinsi',
+                  labelStyle: TextStyle(color: Colors.blue),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
                 onChanged: (value) {
                   address.cityId.value = '';
                   address.districtId.value = '';
@@ -40,13 +55,22 @@ class AddressSelectionDialog extends StatelessWidget {
                 }).toList(),
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 10.0),
             Obx(
               () => DropdownButtonFormField<String>(
                 value: address.cityId.value.isNotEmpty
                     ? address.cityId.value
                     : null,
-                decoration: const InputDecoration(labelText: 'Kota'),
+                decoration: InputDecoration(
+                  labelText: 'Kota',
+                  labelStyle: TextStyle(color: Colors.blue),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
                 onChanged: (value) {
                   address.districtId.value = '';
                   address.cityId.value = value!;
@@ -74,12 +98,24 @@ class AddressSelectionDialog extends StatelessWidget {
                 }).toList(),
               ),
             ),
+            const SizedBox(
+              height: 10,
+            ),
             Obx(
               () => DropdownButtonFormField<String>(
                 value: address.districtId.value.isNotEmpty
                     ? address.districtId.value
                     : null,
-                decoration: const InputDecoration(labelText: 'Kecamatan'),
+                decoration: InputDecoration(
+                  labelText: 'Kecamatan',
+                  labelStyle: TextStyle(color: Colors.blue),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
                 onChanged: (value) {
                   address.districtId.value = value!;
 
@@ -101,7 +137,11 @@ class AddressSelectionDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              child: Text('Simpan'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue, // Warna latar belakang tombol
+                onPrimary: Colors.white, // Warna teks tombol saat ditekan
+              ),
+              child: Text('Simpan Alamat'),
               onPressed: () {
                 print(
                     ' haisl ==== ${address.selectedProvinceName.value} , ${address.selectedCityName.value}, ${address.selectedDistrictName.value}, id kecamatan ${address.selectedSubdistrictId.value}');
