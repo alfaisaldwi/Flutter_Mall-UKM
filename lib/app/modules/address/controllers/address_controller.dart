@@ -46,9 +46,11 @@ class AddressController extends GetxController {
   }
 
   void fetchProvinces() async {
-    var response = await http.get(Uri.parse(ApiEndPoints.rajaOngkirEndPoints.addressProvince), headers: {
-      'key': ApiEndPoints.rajaOngkirEndPoints.key,
-    });
+    var response = await http.get(
+        Uri.parse(ApiEndPoints.rajaOngkirEndPoints.addressProvince),
+        headers: {
+          'key': ApiEndPoints.rajaOngkirEndPoints.key,
+        });
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
       provinces.value = jsonData['rajaongkir']['results'];
@@ -62,9 +64,11 @@ class AddressController extends GetxController {
     lastSelectedProvinceId = provinceId;
 
     showLoadingDialog(Get.context!);
-    var response = await http.get(Uri.parse(ApiEndPoints.rajaOngkirEndPoints.addressCity+'$provinceId'), headers: {
-      'key': ApiEndPoints.rajaOngkirEndPoints.key,
-    });
+    var response = await http.get(
+        Uri.parse(ApiEndPoints.rajaOngkirEndPoints.addressCity + '$provinceId'),
+        headers: {
+          'key': ApiEndPoints.rajaOngkirEndPoints.key,
+        });
 
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
@@ -75,13 +79,14 @@ class AddressController extends GetxController {
 
   void fetchSubdistricts(String cityId) async {
     lastSelectedCityId = cityId;
-    final String apiUrl =
-        "https://pro.rajaongkir.com/api/subdistrict?city=$cityId";
-    final String apiKey = "ef61419fa7acff0b3771ac86a6b6e349";
+
     showLoadingDialog(Get.context!);
-    var response = await http.get(Uri.parse(apiUrl), headers: {
-      'key': apiKey,
-    });
+    var response = await http.get(
+        Uri.parse(
+            ApiEndPoints.rajaOngkirEndPoints.addressSubDistrict + '$cityId'),
+        headers: {
+          'key': ApiEndPoints.rajaOngkirEndPoints.key,
+        });
     var jsonData = json.decode(response.body);
     districts.value = jsonData['rajaongkir']['results'];
     Navigator.of(Get.context!, rootNavigator: true).pop();

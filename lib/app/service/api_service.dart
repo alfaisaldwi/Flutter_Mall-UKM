@@ -45,6 +45,7 @@ class _RajaOngkirEndPoints {
   final String shippingData = 'https://pro.rajaongkir.com/api/cost';
   final String addressProvince = 'https://pro.rajaongkir.com/api/province';
   final String addressCity = 'https://pro.rajaongkir.com/api/city?province=';
+  final String addressSubDistrict = 'https://pro.rajaongkir.com/api/subdistrict?city=';
 }
 
 class _TransactionEndPoints {
