@@ -34,6 +34,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Checkout',

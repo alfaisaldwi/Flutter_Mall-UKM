@@ -16,6 +16,7 @@ import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
+import 'package:mall_ukm/app/utils/show_general_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -36,6 +37,8 @@ class CheckoutController extends GetxController {
   final List<String> couriers = ['jne', 'pos', 'sicepat', 'jnt'];
   final List<String> layanan = ['jne', 'pos', 'sicepat', 'jnt'];
   Rx<Future<AddressSelect>>? futureAddress;
+
+ RxBool isLoadingDialog = false.obs;
 
   Future<TransaksiStore> tambahDataTransaksi(CheckoutData checkoutData) async {
     String? token = GetStorage().read('token');
@@ -96,6 +99,7 @@ class CheckoutController extends GetxController {
     String origin = "109";
     String originType = "city";
     String destinationType = "subdistrict";
+    isLoadingDialog.value = true;
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -110,7 +114,7 @@ class CheckoutController extends GetxController {
       "weight": totalWeight.toString(),
       "courier": selectedCourier.value,
     };
-
+ showLoadingDialog(Get.context!);
     var response = await http.post(Uri.parse(apiUrl),
         headers: headers, body: json.encode(requestBody));
 
@@ -119,7 +123,8 @@ class CheckoutController extends GetxController {
 
     services.value =
         jsonData['rajaongkir']['results'][0]['costs'] as List<dynamic>;
-
+  isLoadingDialog.value = false;
+  Navigator.of(Get.context!, rootNavigator: true).pop();
     print(' serviceee ${services.value}');
   }
 
