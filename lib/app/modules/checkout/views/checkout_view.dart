@@ -34,6 +34,7 @@ class CheckoutView extends GetView<CheckoutController> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Checkout',
@@ -369,7 +370,7 @@ class CheckoutView extends GetView<CheckoutController> {
                         children: [
                           Obx(
                             () => ListTile(
-                              title: const Text('Kurir'),
+                              title: const Text('Jasa Kirim'),
                               subtitle: DropdownButtonFormField<String>(
                                 value:
                                     controller.selectedCourier.value.isNotEmpty

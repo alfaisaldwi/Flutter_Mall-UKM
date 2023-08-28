@@ -10,6 +10,7 @@ import 'package:mall_ukm/app/model/cart/cart_model.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:mall_ukm/app/utils/show_general_dialog.dart';
 
 class CartController extends GetxController {
   RxList<Cart> carts = <Cart>[].obs;
@@ -72,17 +73,19 @@ class CartController extends GetxController {
       isCheckedList[index] = value;
     }
   }
-
-  RxBool selectAll = false.obs;
+void initializeCheckedList(int itemCount) {
+    isCheckedList.assignAll(List.generate(itemCount, (index) => false ));
+  }
 
   void toggleSelectAll(bool value) {
-       for (int index = 0; index < isCheckedList.length; index++) {
+    for (int index = 0; index < isCheckedList.length; index++) {
       isCheckedList[index] = value;
       if (value) {
         totalHarga.value += priceC[index].value * counter[index].value;
         totalWeight.value += counter[index].value * subWeightC[index].value;
 
-        selectedItems.add(SelectedCartItem(isChecked: true, cart: carts[index]));
+        selectedItems
+            .add(SelectedCartItem(isChecked: true, cart: carts[index]));
       } else {
         totalHarga.value -= priceC[index].value * counter[index].value;
         totalWeight.value -= counter[index].value * subWeightC[index].value;
@@ -92,7 +95,6 @@ class CartController extends GetxController {
     }
     update();
   }
-  
 
   // void updateTotalsAndSelectedItems( bool value) {
   //   if (value) {
@@ -158,8 +160,8 @@ class CartController extends GetxController {
       'Authorization': 'Bearer $token',
     };
 
+    showLoadingDialog(Get.context!);
     var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.cartEndPoints.cart);
-
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
@@ -171,6 +173,8 @@ class CartController extends GetxController {
           var cart = Cart.fromJson(data);
           cartList.add(cart);
         }
+        Navigator.of(Get.context!, rootNavigator: true).pop();
+
         return cartList;
       } else {
         print('Data Store berhasil diambil: $jsonResponse');

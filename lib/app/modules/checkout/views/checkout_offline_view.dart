@@ -35,6 +35,7 @@ class CheckoutOfflineView extends GetView<CheckoutOfflineController> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Checkout',

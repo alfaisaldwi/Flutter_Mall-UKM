@@ -48,7 +48,6 @@ class AddressView extends GetView<AddressController> {
               const SizedBox(height: 16.0),
               InkWell(
                 onTap: () {
-                  // Tampilkan popup untuk memilih kecamatan, kota, dan provinsi
                   Get.dialog(AddressSelectionDialog());
                 },
                 child: IgnorePointer(
@@ -75,7 +74,16 @@ class AddressView extends GetView<AddressController> {
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
-                child: Text('Tambah Alamat'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  onPrimary: Colors.blue,
+                  side: BorderSide(color: Colors.blue.shade900, width: 1),
+                ),
+                child: Text(
+                  'Tambah Alamat',
+                  style: TextStyle(
+                      color: Colors.blue.shade900), // Warna teks tombol
+                ),
                 onPressed: () async {
                   if (address.nameController.text.isEmpty ||
                       address.phoneController.text.isEmpty ||
@@ -93,19 +101,20 @@ class AddressView extends GetView<AddressController> {
                     var idKecamatan =
                         int.parse(address.selectedSubdistrictId.value);
                     Address addressItem = Address(
-                        username: address.nameController.text,
-                        phone: address.phoneController.text,
-                        address: address.addressName.value,
-                        addressDetail: address.addressDetail.text,
-                        destinationId:
-                            int.parse(address.selectedSubdistrictId.value),
-                        status: 'unselected');
+                      username: address.nameController.text,
+                      phone: address.phoneController.text,
+                      address: address.addressName.value,
+                      addressDetail: address.addressDetail.text,
+                      destinationId:
+                          int.parse(address.selectedSubdistrictId.value),
+                      status: 'unselected',
+                    );
 
                     checkoutO.refreshAddress();
                     await address.addAdress(addressItem);
                   }
                 },
-              ),
+              )
             ],
           ),
         ),
