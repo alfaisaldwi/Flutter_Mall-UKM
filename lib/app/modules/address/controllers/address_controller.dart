@@ -10,6 +10,7 @@ import 'package:mall_ukm/app/model/address/address_model.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_offline_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
+import 'package:mall_ukm/app/utils/show_general_dialog.dart';
 
 class AddressController extends GetxController {
   var checkoutC = Get.put(CheckoutController());
@@ -45,11 +46,8 @@ class AddressController extends GetxController {
   }
 
   void fetchProvinces() async {
-    final String apiUrl = "https://pro.rajaongkir.com/api/province";
-    final String apiKey =
-        "ef61419fa7acff0b3771ac86a6b6e349"; // Ganti dengan API key Anda
-    var response = await http.get(Uri.parse(apiUrl), headers: {
-      'key': apiKey,
+    var response = await http.get(Uri.parse(ApiEndPoints.rajaOngkirEndPoints.addressProvince), headers: {
+      'key': ApiEndPoints.rajaOngkirEndPoints.key,
     });
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
@@ -62,30 +60,31 @@ class AddressController extends GetxController {
 
   void fetchCities(String provinceId) async {
     lastSelectedProvinceId = provinceId;
-    final String apiUrl =
-        "https://pro.rajaongkir.com/api/city?province=$provinceId";
-    final String apiKey =
-        "ef61419fa7acff0b3771ac86a6b6e349"; // Ganti dengan API key Anda
-    var response = await http.get(Uri.parse(apiUrl), headers: {
-      'key': apiKey,
+
+    showLoadingDialog(Get.context!);
+    var response = await http.get(Uri.parse(ApiEndPoints.rajaOngkirEndPoints.addressCity+'$provinceId'), headers: {
+      'key': ApiEndPoints.rajaOngkirEndPoints.key,
     });
 
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
       cities.value = jsonData['rajaongkir']['results'];
     }
+    Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
   void fetchSubdistricts(String cityId) async {
     lastSelectedCityId = cityId;
     final String apiUrl =
         "https://pro.rajaongkir.com/api/subdistrict?city=$cityId";
-    final String apiKey = "ef61419fa7acff0b3771ac86a6b6e349"; //
+    final String apiKey = "ef61419fa7acff0b3771ac86a6b6e349";
+    showLoadingDialog(Get.context!);
     var response = await http.get(Uri.parse(apiUrl), headers: {
       'key': apiKey,
     });
     var jsonData = json.decode(response.body);
     districts.value = jsonData['rajaongkir']['results'];
+    Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
   final count = 0.obs;

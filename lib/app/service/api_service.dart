@@ -26,6 +26,7 @@ class _ProfileCompany {
 class _CheckHaversine {
   final String check = '/api/check/haverinse';
 }
+
 class _CSI {
   final String question = '/api/auth/question';
   final String store = '/api/auth/result/store';
@@ -40,7 +41,10 @@ class _AddressEndPoints {
 }
 
 class _RajaOngkirEndPoints {
+  final String key = 'ef61419fa7acff0b3771ac86a6b6e349';
   final String shippingData = 'https://pro.rajaongkir.com/api/cost';
+  final String addressProvince = 'https://pro.rajaongkir.com/api/province';
+  final String addressCity = 'https://pro.rajaongkir.com/api/city?province=';
 }
 
 class _TransactionEndPoints {
