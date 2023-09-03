@@ -68,7 +68,9 @@ class CheckoutController extends GetxController {
           ..setNavigationDelegate(
             NavigationDelegate(
               onProgress: (int progress) {},
-              onPageStarted: (String url) {},
+              onPageStarted: (String url) {
+                print('$url');
+              },
               onPageFinished: (String url) {},
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) {
