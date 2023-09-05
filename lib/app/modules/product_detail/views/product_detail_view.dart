@@ -636,6 +636,7 @@ void showOrderDialogDirect(BuildContext context) {
                               double weight = double.parse(product.weight) *
                                   controllerProductDetail.counter.value;
                               print(product.id);
+                              Navigator.of(context).pop();
                               Get.toNamed('/checkout-direct', arguments: [
                                 product.id,
                                 product,
@@ -728,7 +729,7 @@ void showOrderDialog(BuildContext context) {
                     style: GoogleFonts.roboto(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Wrap(
@@ -825,6 +826,7 @@ void showOrderDialog(BuildContext context) {
                               controllerProductDetail.counter.value = 1;
                               controllerProductDetail.selectedVariant.value =
                                   '';
+                              Navigator.of(context).pop();
                               Get.toNamed(
                                 ('/cart'),
                               );

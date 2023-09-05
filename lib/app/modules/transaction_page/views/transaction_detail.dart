@@ -84,7 +84,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                           InkWell(
                             onTap: () {
                               Clipboard.setData(
-                                  ClipboardData(text: trsDetail.orderId));
+                                  ClipboardData(text: trsDetail.orderId!));
                               Fluttertoast.showToast(
                                 msg: 'Disalin',
                                 toastLength: Toast.LENGTH_SHORT,
@@ -213,7 +213,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                                     InkWell(
                                       onTap: () {
                                         Clipboard.setData(ClipboardData(
-                                            text: trsDetail.receiptNumber));
+                                            text: trsDetail.receiptNumber!));
                                         Fluttertoast.showToast(
                                           msg: 'Disalin',
                                           toastLength: Toast.LENGTH_SHORT,
