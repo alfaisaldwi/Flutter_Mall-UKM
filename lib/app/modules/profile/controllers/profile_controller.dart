@@ -10,6 +10,7 @@ import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/utils/show_general_dialog.dart';
+import 'package:mall_ukm/app/utils/toast_dialog.dart';
 
 class ProfileController extends GetxController {
   TextEditingController cemail = TextEditingController();
@@ -60,34 +61,14 @@ class ProfileController extends GetxController {
           await Get.offAllNamed('navbar-page');
           cemail.clear();
           cpw.clear();
-          Fluttertoast.showToast(
-            msg: 'Login Berhasil',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.grey[800],
-            textColor: Colors.white,
-            fontSize: 14.0,
-          );
+          ToastUtil.showToast(msg: 'Login Berhasil');
         } else {
-          Fluttertoast.showToast(
-            msg: 'Periksa kembali email dan password',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.grey[800],
-            textColor: Colors.white,
-            fontSize: 14.0,
-          );
+          ToastUtil.showToast(msg: 'Periksa kembali email dan password');
         }
         Navigator.of(Get.context!, rootNavigator: true).pop();
       } else {
-        Fluttertoast.showToast(
-          msg: 'Periksa kembali email dan password',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[800],
-          textColor: Colors.white,
-          fontSize: 14.0,
-        );
+        ToastUtil.showToast(msg: 'Periksa kembali email dan password');
+        Navigator.of(Get.context!, rootNavigator: true).pop();
       }
     } catch (error) {
       error;
@@ -115,44 +96,21 @@ class ProfileController extends GetxController {
           Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
           cemail.clear();
           cpw.clear();
-          Fluttertoast.showToast(
-            msg: 'Register Berhasil',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.grey[800],
-            textColor: Colors.white,
-            fontSize: 14.0,
-          );
+          ToastUtil.showToast(msg: 'Register Berhasil');
+        } else if (json['code'] == 400) {
+          ToastUtil.showToast(
+              msg:
+                  '${json['message']['password'][0] ?? ''} \n${json['message']['email'][0] ?? ''}');
         } else {
-          Fluttertoast.showToast(
-            msg: 'Periksa kembali nama, email dan password',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.grey[800],
-            textColor: Colors.white,
-            fontSize: 14.0,
-          );
+          ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
         }
       } else {
-        Fluttertoast.showToast(
-          msg: 'Periksa kembali nama, email dan password',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[800],
-          textColor: Colors.white,
-          fontSize: 14.0,
-        );
+        ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
       }
       Navigator.of(Get.context!, rootNavigator: true).pop();
     } catch (error) {
-      Fluttertoast.showToast(
-        msg: 'Periksa kembali nama, email dan password',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.grey[800],
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
+      Navigator.of(Get.context!, rootNavigator: true).pop();
     }
   }
 
@@ -207,14 +165,8 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
-          Fluttertoast.showToast(
-            msg: 'Logout Berhasil',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.grey[800],
-            textColor: Colors.white,
-            fontSize: 14.0,
-          );
+                 ToastUtil.showToast(msg: 'Login Berhasil');
+
           Timer(
               const Duration(seconds: 1), () => Get.offAll((NavbarPageView())));
 
