@@ -10,7 +10,7 @@ import 'package:mall_ukm/app/model/address/address_model.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_offline_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
-import 'package:mall_ukm/app/utils/show_general_dialog.dart';
+import 'package:mall_ukm/app/component/show_general_dialog.dart';
 
 class AddressController extends GetxController {
   var checkoutC = Get.put(CheckoutController());

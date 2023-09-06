@@ -103,7 +103,8 @@ class HomeView extends GetView<HomeController> {
                 onTap: () {
                   String? token = GetStorage().read('token');
                   if (token != null) {
-                    Get.toNamed('/cart');
+                    // Get.toNamed('/cart');
+                    Get.toNamed('/payment');
                   } else {
                     Fluttertoast.showToast(
                       msg: 'Silahkan Signin terlebih dahulu',
@@ -408,7 +409,7 @@ class HomeView extends GetView<HomeController> {
                                                 const SizedBox(height: 10),
                                                 Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 8.0,
                                                       vertical: 4.0),
                                                   child: Text(
@@ -424,7 +425,7 @@ class HomeView extends GetView<HomeController> {
                                                 ),
                                                 Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 8.0,
                                                       vertical: 2.0),
                                                   child: Text(
@@ -608,7 +609,7 @@ class HomeView extends GetView<HomeController> {
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 2.0),
                                                     child: Column(
                                                       children: [

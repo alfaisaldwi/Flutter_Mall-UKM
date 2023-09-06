@@ -25,6 +25,7 @@ abstract class Routes {
   static const CATEGORY = _Paths.CATEGORY;
   static const PROFILE_COMPANY = _Paths.PROFILE_COMPANY;
   static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
+  static const PAYMENT = _Paths.PAYMENT;
 }
 
 abstract class _Paths {
@@ -49,4 +50,5 @@ abstract class _Paths {
   static const CATEGORY = '/category';
   static const PROFILE_COMPANY = '/profile-company';
   static const CHANGE_PASSWORD = '/change-password';
+  static const PAYMENT = '/payment';
 }

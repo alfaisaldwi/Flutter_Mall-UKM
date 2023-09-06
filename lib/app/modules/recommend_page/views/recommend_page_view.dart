@@ -139,7 +139,19 @@ class RecommendPageView extends GetView<RecommendPageController> {
                 controller.recomendProduct();
               },
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 20),
+                    child: Text(
+                      'Rekomendasi Produk',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -175,7 +187,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 2,
-                                                      horizontal: 0),
+                                                      horizontal: 12),
                                               child: Text(
                                                 recomend.title!,
                                                 style: Styles.headerStyles(),
@@ -216,11 +228,11 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                           width: 140,
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(5),
+                                                                  .all(12),
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     top: 5.0,
                                                                     left: 8.0,
                                                                     right: 8.0,
@@ -254,7 +266,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                     height: 10),
                                                                 Padding(
                                                                   padding: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       horizontal:
                                                                           8.0,
                                                                       vertical:
@@ -276,9 +288,9 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                 ),
                                                                 Padding(
                                                                   padding: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       horizontal:
-                                                                          8.0,
+                                                                          12.0,
                                                                       vertical:
                                                                           2.0),
                                                                   child: Text(

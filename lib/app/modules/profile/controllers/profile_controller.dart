@@ -9,8 +9,8 @@ import 'package:mall_ukm/app/routes/app_pages.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
-import 'package:mall_ukm/app/utils/show_general_dialog.dart';
-import 'package:mall_ukm/app/utils/toast_dialog.dart';
+import 'package:mall_ukm/app/component/show_general_dialog.dart';
+import 'package:mall_ukm/app/component/toast_dialog.dart';
 
 class ProfileController extends GetxController {
   TextEditingController cemail = TextEditingController();
