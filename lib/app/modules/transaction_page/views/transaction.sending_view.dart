@@ -3,13 +3,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_index_model.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
-import 'package:mall_ukm/app/style/styles.dart';
 
 class TransactionSendingView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
-    bool hasPaidTransactions;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -19,37 +17,42 @@ class TransactionSendingView extends GetView<TransactionPageController> {
         color: Colors.white,
         child: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                child: Obx(
-                  () => ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: ctrT.transactionIndexList.length,
-                    itemBuilder: (context, index) {
-                      var trs = ctrT.transactionIndexList[index];
-                      if (trs.status == 'sending') {
-                        hasPaidTransactions = true;
-                        return TransactionCard(transaction: trs);
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ),
-            if (hasPaidTransactions = false)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 300.0),
+            if (ctrT.transactionSending.isEmpty)
+              SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-                  color: Colors.white,
+                  height: 400,
                   child: const Align(
                     alignment: Alignment.center,
                     child: Text('Tidak ada transaksi'),
+                  ),
+                ),
+              )
+            else
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.callGettrs();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 0),
+                    child: Obx(
+                      () => ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: ctrT.transactionSending.length,
+                          itemBuilder: (context, index) {
+                            var trs = ctrT.transactionSending[index];
+                            // Check if there are any unpaid transactions
+                            if (trs.status == 'sending') {
+                              return TransactionCard(transaction: trs);
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          }),
+                    ),
                   ),
                 ),
               ),
@@ -67,7 +70,8 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createdAt = DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
+    final createdAt =
+        DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
     final formattedDate = DateFormat('dd MMM yyyy').format(createdAt);
     var ctrT = Get.put(TransactionPageController());
 
@@ -80,7 +84,7 @@ class TransactionCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-               Padding(
+              Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                 child: Row(
@@ -189,7 +193,8 @@ class TransactionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(transaction.productPhoto ?? "Sedang memuat.."),
+                      image: NetworkImage(transaction.productPhoto ??
+                          "https://icons.veryicon.com/png/o/internet--web/website-common-icons/picture-loading-failed.png"),
                       fit: BoxFit.cover,
                     ),
                   ),

@@ -9,7 +9,6 @@ class TransactionCanceledView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
-    bool hasPaidTransactions = false;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -19,37 +18,43 @@ class TransactionCanceledView extends GetView<TransactionPageController> {
         color: Colors.white,
         child: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                child: Obx(
-                  () => ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: ctrT.transactionIndexList.length,
-                    itemBuilder: (context, index) {
-                      var trs = ctrT.transactionIndexList[index];
-                      if (trs.status == 'canceled') {
-                        hasPaidTransactions = true;
-                        return TransactionCard(transaction: trs);
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ),
-            if (hasPaidTransactions = false)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 300.0),
+            if (ctrT.transactionCanceled.isEmpty)
+              SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-                  color: Colors.white,
+                  height: 400,
                   child: const Align(
                     alignment: Alignment.center,
                     child: Text('Tidak ada transaksi'),
+                  ),
+                ),
+              )
+            else
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.callGettrs();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 0),
+                    child: Obx(
+                      () => ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: ctrT.transactionCanceled.length,
+                          itemBuilder: (context, index) {
+                            var trs = ctrT.transactionCanceled[index];
+                            // Check if there are any unpaid transactions
+                            if (trs.status == 'canceled') {
+                              controller.hasPaidTransactions = true;
+                              return TransactionCard(transaction: trs);
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          }),
+                    ),
                   ),
                 ),
               ),
@@ -190,8 +195,8 @@ class TransactionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(
-                          transaction.productPhoto ?? "Sedang memuat.."),
+                      image: NetworkImage(transaction.productPhoto ??
+                          "https://icons.veryicon.com/png/o/internet--web/website-common-icons/picture-loading-failed.png"),
                       fit: BoxFit.cover,
                     ),
                   ),

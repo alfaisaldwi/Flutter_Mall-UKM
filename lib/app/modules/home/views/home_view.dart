@@ -103,8 +103,8 @@ class HomeView extends GetView<HomeController> {
                 onTap: () {
                   String? token = GetStorage().read('token');
                   if (token != null) {
-                    // Get.toNamed('/cart');
-                    Get.toNamed('/payment');
+                    Get.toNamed('/cart');
+                    // Get.toNamed('/payment');
                   } else {
                     Fluttertoast.showToast(
                       msg: 'Silahkan Signin terlebih dahulu',
