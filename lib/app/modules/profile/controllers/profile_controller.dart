@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/component/awesome_dialog.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/navbar_page/views/navbar_page_view.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
@@ -54,6 +55,7 @@ class ProfileController extends GetxController {
       print(response.body);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
+
         if (json['code'] == "200") {
           var token = json['data'];
           GetStorage().write('token', token);
@@ -63,12 +65,23 @@ class ProfileController extends GetxController {
           cpw.clear();
           ToastUtil.showToast(msg: 'Login Berhasil');
         } else {
-          ToastUtil.showToast(msg: 'Periksa kembali email dan password');
+          ErrorDialog.show(
+            context: Get.context!,
+            title: 'Gagal Mengubah Password',
+            desc: 'Password lama tidak sesuai',
+            btnCancelOnPress: () {},
+            btnOkOnPress: () {},
+          );
         }
-        Navigator.of(Get.context!, rootNavigator: true).pop();
       } else {
-        ToastUtil.showToast(msg: 'Periksa kembali email dan password');
         Navigator.of(Get.context!, rootNavigator: true).pop();
+        ErrorDialog.show(
+            context: Get.context!,
+            title: 'Gagal',
+            desc: 'Periksa kembali email dan password',
+            btnOkOnPress: (() {
+              Get.back();
+            }));
       }
     } catch (error) {
       error;
@@ -165,7 +178,7 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
-                 ToastUtil.showToast(msg: 'Logout Berhasil');
+          ToastUtil.showToast(msg: 'Logout Berhasil');
 
           Timer(
               const Duration(seconds: 1), () => Get.offAll((NavbarPageView())));

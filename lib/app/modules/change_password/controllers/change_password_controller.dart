@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:mall_ukm/app/component/awesome_dialog.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 
 class ChangePasswordController extends GetxController {
@@ -65,13 +66,12 @@ class ChangePasswordController extends GetxController {
         );
         print('Berhasil');
       } else if (jsonResponse['code'] == 400) {
-        Fluttertoast.showToast(
-          msg: 'Password lama tidak sesuai',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[800],
-          textColor: Colors.white,
-          fontSize: 14.0,
+        ErrorDialog.show(
+          context: Get.context!,
+          title: 'Gagal Mengubah Password',
+          desc: 'Password lama tidak sesuai',
+          btnCancelOnPress: () {},
+          btnOkOnPress: () {},
         );
       } else {
         Fluttertoast.showToast(

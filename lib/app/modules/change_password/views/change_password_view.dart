@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mall_ukm/app/component/awesome_dialog.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 
 import '../controllers/change_password_controller.dart';
@@ -14,6 +15,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Ubah password',
@@ -89,30 +91,45 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                     ),
                   )),
               SizedBox(height: 32),
-              Container(
-                width: 100,
-                height: 45,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xffF8C800),
-                    shape: const StadiumBorder(),
+              GestureDetector(
+                onTap: (() {
+                  if (controller.oldPasswordController.text == '' &&
+                      controller.newPasswordController.text == '') {
+                    Fluttertoast.showToast(
+                      msg: 'Harap isi semua field nya',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[800],
+                      textColor: Colors.white,
+                      fontSize: 14.0,
+                    );
+                  } else {
+                    WarningDialog.show(
+                      context: context,
+                      title: 'Yakin mengubah password ?',
+                      btnCancelOnPress: () {
+                        Get.back();
+                      },
+                      btnOkOnPress: () {
+                        controller.updatePassword();
+                      },
+                    );
+                  }
+                }),
+                child: Container(
+                  height: 45,
+                  width: MediaQuery.of(context).size.width * 95,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: const Color(0xff034779),
                   ),
-                  child: Text('Simpan Perubahan',
-                      style: TextStyle(fontSize: 16, color: Colors.black54)),
-                  onPressed: () async {
-                    if (controller.oldPasswordController.text == '' &&
-                        controller.newPasswordController.text == '') {
-                      Fluttertoast.showToast(
-                        msg: 'Harap isi semua field nya',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        backgroundColor: Colors.grey[800],
-                        textColor: Colors.white,
-                        fontSize: 14.0,
-                      );
-                    }
-                    controller.updatePassword();
-                  },
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text('Ubah Password',
+                          style: Styles.bodyStyle(color: Colors.white)),
+                    ),
+                  ),
                 ),
               ),
             ],
