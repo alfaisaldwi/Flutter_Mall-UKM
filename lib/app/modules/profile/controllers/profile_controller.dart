@@ -60,10 +60,11 @@ class ProfileController extends GetxController {
           var token = json['data'];
           GetStorage().write('token', token);
           // cNav.tabController.index = 2;
+          ToastUtil.showToast(msg: 'Login Berhasil');
+
           await Get.offAllNamed('navbar-page');
           cemail.clear();
           cpw.clear();
-          ToastUtil.showToast(msg: 'Login Berhasil');
         } else {
           ErrorDialog.show(
             context: Get.context!,
@@ -90,41 +91,39 @@ class ProfileController extends GetxController {
 
   Future<void> signUp() async {
     var headers = {'Content-Type': 'application/json'};
-    try {
-      var url =
-          Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
-      Map body = {
-        'name': cnamalengkap.text,
-        'email': cemail.text.trim(),
-        'password': cpw.text
-      };
-      showLoadingDialog(Get.context!);
-      http.Response response =
-          await http.post(url, body: jsonEncode(body), headers: headers);
-      print(response.body);
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-        if (json['code'] == 200) {
-          cNav.tabController.index = 2;
-          Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
-          cemail.clear();
-          cpw.clear();
-          ToastUtil.showToast(msg: 'Register Berhasil');
-        } else if (json['code'] == 400) {
-          ToastUtil.showToast(
-              msg:
-                  '${json['message']['password'][0] ?? ''} \n${json['message']['email'][0] ?? ''}');
-        } else {
-          ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
-        }
+
+    var url =
+        Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
+    Map body = {
+      'name': cnamalengkap.text,
+      'email': cemail.text.trim(),
+      'password': cpw.text
+    };
+    showLoadingDialog(Get.context!);
+    http.Response response =
+        await http.post(url, body: jsonEncode(body), headers: headers);
+    print(response.body);
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      if (json['code'] == 200) {
+        cNav.tabController.index = 2;
+        Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
+        cemail.clear();
+        cpw.clear();
+        ToastUtil.showToast(msg: 'Register Berhasil');
+      } else if (json['code'] == 400) {
+        ToastUtil.showToast(
+            msg:
+                '\n ${json['message']['password']?[0] ?? ' '} \n${json['message']['email']?[0] ?? ' '} \n');
       } else {
-        ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
+        ToastUtil.showToast(
+            msg:
+                '${json['message']['password']?[0] ?? ' '} \n${json['message']['email']?[0] ?? ' '}');
       }
-      Navigator.of(Get.context!, rootNavigator: true).pop();
-    } catch (error) {
-      ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
-      Navigator.of(Get.context!, rootNavigator: true).pop();
+    } else {
+      ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password ');
     }
+    Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
   Future<void> me() async {
