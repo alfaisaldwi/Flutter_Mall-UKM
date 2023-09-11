@@ -89,7 +89,7 @@ class TransactionPageController extends GetxController {
           ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.index);
       http.Response response = await http.get(url, headers: headers);
       print(response.body);
-      showLoadingDialog(Get.context!);
+      // showLoadingDialog(Get.context!);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -112,7 +112,7 @@ class TransactionPageController extends GetxController {
     } catch (error) {
       throw '${error.toString()}';
     }
-    Navigator.of(Get.context!, rootNavigator: true).pop();
+    // Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
   Future<void> getTransactionPaid() async {
