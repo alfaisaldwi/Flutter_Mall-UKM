@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
-import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
 import 'package:mall_ukm/app/modules/home/views/search_view.dart';
-import 'package:mall_ukm/app/modules/product_detail/controllers/product_detail_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 
@@ -193,9 +187,16 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                 style: Styles.headerStyles(),
                                               ),
                                             ),
+                                            if (recomend.products!.isEmpty)
+                                              Container(
+                                                  height: 100,
+                                                  width: double.infinity,
+                                                  child: Center(
+                                                    child: Text(
+                                                        'Tidak ada produk pada kategori ini'),
+                                                  )),
                                             SizedBox(
-                                              height:
-                                                  180, // Atur tinggi untuk menampilkan beberapa produk dalam satu kategori
+                                              height: 180,
                                               child: ListView.builder(
                                                 physics:
                                                     const ClampingScrollPhysics(),

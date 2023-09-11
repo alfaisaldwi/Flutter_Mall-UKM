@@ -16,6 +16,7 @@ import 'package:mall_ukm/app/modules/product_detail/views/product_detail_promo.d
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../component/show_general_dialog.dart';
 import '../../../model/category/category_model.dart';
 
 class HomeController extends GetxController {
@@ -34,13 +35,14 @@ class HomeController extends GetxController {
   Timer? _timer;
 
   @override
+
   void onInit() {
     fetchProduct();
     startDataRefreshTimer();
     fetchCategories();
     getCarouselData();
     fetchPromo();
-
+    requestLocationPermission();
     super.onInit();
   }
 
@@ -61,7 +63,7 @@ class HomeController extends GetxController {
   }
 
   void reFetch() {
-    postCurrentLocation();
+    // postCurrentLocation();
     fetchProduct();
     fetchCategories();
     getCarouselData();
@@ -263,6 +265,8 @@ class HomeController extends GetxController {
       'Content-Type': 'application/json'
     };
 
+    showLoadingDialog(Get.context!);
+
     try {
       geolocator.Position position =
           await geolocator.Geolocator.getCurrentPosition(
@@ -315,6 +319,7 @@ class HomeController extends GetxController {
     } catch (e) {
       print("Terjadi kesalahan: $e");
     }
+    Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
   void storeOffline() async {

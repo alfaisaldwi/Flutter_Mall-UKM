@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mall_ukm/app/component/awesome_dialog.dart';
 import 'package:mall_ukm/app/model/profile_company/profile_company.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/profile/controllers/profile_controller.dart';
@@ -272,7 +273,17 @@ class AccountView extends GetView<ProfileController> {
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {
-                        controllerP.logout();
+                        WarningDialog.show(
+                          context: context,
+                          title: 'Anda yakin ingin keluar ?',
+                          btnCancelOnPress: () {
+                            Get.back();
+                          },
+                          btnOkOnPress: () {
+                            controllerP.logout();
+                          },
+                        );
+
                         // GetStorage().remove('token');
                       },
                       child: Row(

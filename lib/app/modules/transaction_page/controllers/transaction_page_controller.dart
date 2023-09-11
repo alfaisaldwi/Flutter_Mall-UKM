@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:mall_ukm/app/component/show_general_dialog.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_index_model.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew_checkout%20.dart';
@@ -14,7 +14,6 @@ import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
 
 class TransactionPageController extends GetxController {
-  final iconSize = 350.0.obs;
   var transactionIndexList = <Transaction>[].obs;
   var transactionPaid = <Transaction>[].obs;
   var transactionUnpaid = <Transaction>[].obs;
@@ -90,6 +89,8 @@ class TransactionPageController extends GetxController {
           ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.index);
       http.Response response = await http.get(url, headers: headers);
       print(response.body);
+      showLoadingDialog(Get.context!);
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -111,6 +112,7 @@ class TransactionPageController extends GetxController {
     } catch (error) {
       throw '${error.toString()}';
     }
+    Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
   Future<void> getTransactionPaid() async {
@@ -322,6 +324,10 @@ class TransactionPageController extends GetxController {
   void callGettrs() {
     getTransaction();
     getTransactionPaid();
+    getTransactionSending();
+    getTransactionDelivered();
+    getTransactionUnpaid();
+    getTransactionCanceled();
   }
 
   void bayar(String url) {

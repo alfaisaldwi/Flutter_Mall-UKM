@@ -165,12 +165,10 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
-                 ToastUtil.showToast(msg: 'Login Berhasil');
+                 ToastUtil.showToast(msg: 'Logout Berhasil');
 
           Timer(
               const Duration(seconds: 1), () => Get.offAll((NavbarPageView())));
-
-          // Lakukan tindakan yang diperlukan setelah logout berhasil
         } else {
           throw 'Gagal logout: ${responseData['message']}';
         }
