@@ -9,8 +9,8 @@ import 'package:mall_ukm/app/routes/app_pages.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
-import 'package:mall_ukm/app/utils/show_general_dialog.dart';
-import 'package:mall_ukm/app/utils/toast_dialog.dart';
+import 'package:mall_ukm/app/component/show_general_dialog.dart';
+import 'package:mall_ukm/app/component/toast_dialog.dart';
 
 class ProfileController extends GetxController {
   TextEditingController cemail = TextEditingController();
@@ -165,12 +165,10 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
-                 ToastUtil.showToast(msg: 'Login Berhasil');
+                 ToastUtil.showToast(msg: 'Logout Berhasil');
 
           Timer(
               const Duration(seconds: 1), () => Get.offAll((NavbarPageView())));
-
-          // Lakukan tindakan yang diperlukan setelah logout berhasil
         } else {
           throw 'Gagal logout: ${responseData['message']}';
         }

@@ -9,7 +9,6 @@ class TransactionUnpaidView extends GetView<TransactionPageController> {
   @override
   Widget build(BuildContext context) {
     var ctrT = Get.put(TransactionPageController());
-    bool hasUnpaidTransactions;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -19,40 +18,37 @@ class TransactionUnpaidView extends GetView<TransactionPageController> {
         color: Colors.white,
         child: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                child: Obx(
-                  () => ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: ctrT.transactionIndexList.length,
-                    itemBuilder: (context, index) {
-                      var trs = ctrT.transactionIndexList[index];
-                      // Check if there are any unpaid transactions
-                      if (trs.status == 'unpaid') {
-                        hasUnpaidTransactions = true;
-                        return TransactionCard(transaction: trs);
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    },
+            if (ctrT.transactionUnpaid.isEmpty)
+              SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  height: 400,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text('Tidak ada transaksi'),
                   ),
                 ),
-              ),
-            ),
-            // Check if there are no unpaid transactions to show the message
-            if (hasUnpaidTransactions = false)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 300.0),
-                child: Container(
-                  color: Colors.white,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Tidak ada transaksi',
+              )
+            else
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.callGettrs();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 0),
+                    child: Obx(
+                      () => ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: ctrT.transactionUnpaid.length,
+                          itemBuilder: (context, index) {
+                            var trs = ctrT.transactionUnpaid[index];
+                            // Check if there are any unpaid transactions
+                            return TransactionCard(transaction: trs);
+                          }),
                     ),
                   ),
                 ),
@@ -64,6 +60,8 @@ class TransactionUnpaidView extends GetView<TransactionPageController> {
   }
 }
 
+// Check if there are no unpaid transactions to show the message
+
 class TransactionCard extends StatelessWidget {
   final Transaction transaction;
 
@@ -71,7 +69,8 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createdAt = DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
+    final createdAt =
+        DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
     final formattedDate = DateFormat('dd MMM yyyy').format(createdAt);
     var ctrT = Get.put(TransactionPageController());
 
@@ -137,7 +136,8 @@ class TransactionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(transaction.productPhoto ?? "Sedang memuat.."),
+                      image: NetworkImage(transaction.productPhoto ??
+                          'https://icons.veryicon.com/png/o/internet--web/website-common-icons/picture-loading-failed.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -145,7 +145,8 @@ class TransactionCard extends StatelessWidget {
                 title: Text(transaction.productName ?? "Sedang memuat.."),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [  const SizedBox(
+                  children: [
+                    const SizedBox(
                       height: 8,
                     ),
                     Text(

@@ -16,7 +16,7 @@ import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
-import 'package:mall_ukm/app/utils/show_general_dialog.dart';
+import 'package:mall_ukm/app/component/show_general_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -67,8 +67,7 @@ class CheckoutController extends GetxController {
           ..setBackgroundColor(const Color(0x00000000))
           ..setNavigationDelegate(
             NavigationDelegate(
-              onProgress: (int progress) {},
-              onPageStarted: (String url) {
+            onPageStarted: (String url) {
                 print('$url');
               },
               onPageFinished: (String url) {},

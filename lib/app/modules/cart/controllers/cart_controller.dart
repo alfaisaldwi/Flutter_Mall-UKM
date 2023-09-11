@@ -10,7 +10,7 @@ import 'package:mall_ukm/app/model/cart/cart_model.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:http/http.dart' as http;
-import 'package:mall_ukm/app/utils/show_general_dialog.dart';
+import 'package:mall_ukm/app/component/show_general_dialog.dart';
 
 class CartController extends GetxController {
   RxList<Cart> carts = <Cart>[].obs;

@@ -14,42 +14,49 @@ class TransactionPaidView extends GetView<TransactionPageController> {
     return RefreshIndicator(
       onRefresh: () async {
         controller.callGettrs();
+        controller.update();
       },
       child: Container(
         color: Colors.white,
         child: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                child: Obx(
-                  () => ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: ctrT.transactionIndexList.length,
-                    itemBuilder: (context, index) {
-                      var trs = ctrT.transactionIndexList[index];
-                      if (trs.status == 'paid') {
-                        hasPaidTransactions = true;
-                        return TransactionCard(transaction: trs);
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ),
-            if (hasPaidTransactions = false)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 300.0),
+            if (ctrT.transactionPaid.isEmpty)
+              SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-                  color: Colors.white,
+                  height: 400,
                   child: const Align(
                     alignment: Alignment.center,
                     child: Text('Tidak ada transaksi'),
+                  ),
+                ),
+              )
+            else
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    controller.callGettrs();
+                    controller.update();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 0),
+                    child: Obx(
+                      () => ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: ctrT.transactionPaid.length,
+                        itemBuilder: (context, index) {
+                          var trs = ctrT.transactionPaid[index];
+                          if (trs.status == 'paid') {
+                            return TransactionCard(transaction: trs);
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -67,7 +74,8 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createdAt = DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
+    final createdAt =
+        DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
     final formattedDate = DateFormat('dd MMM yyyy').format(createdAt);
     var ctrT = Get.put(TransactionPageController());
 
@@ -133,7 +141,8 @@ class TransactionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(transaction.productPhoto ?? "Sedang memuat.."),
+                      image: NetworkImage(transaction.productPhoto ??
+                          "https://icons.veryicon.com/png/o/internet--web/website-common-icons/picture-loading-failed.png"),
                       fit: BoxFit.cover,
                     ),
                   ),

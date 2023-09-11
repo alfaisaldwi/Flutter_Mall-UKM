@@ -6,7 +6,6 @@ import 'package:mall_ukm/app/modules/transaction_page/views/transaction.delivere
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.sending_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.unpaid_view.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.paid_view.dart';
-import 'package:mall_ukm/app/modules/transaction_page/views/transaction.selesai_view%20.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction.semua_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 

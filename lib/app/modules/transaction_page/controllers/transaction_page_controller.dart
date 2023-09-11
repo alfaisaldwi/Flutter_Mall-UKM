@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:mall_ukm/app/component/show_general_dialog.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_index_model.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew_checkout%20.dart';
@@ -14,10 +14,12 @@ import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
 
 class TransactionPageController extends GetxController {
-  final iconSize = 350.0.obs;
   var transactionIndexList = <Transaction>[].obs;
-  var transactionIndexPaid = <Transaction>[].obs;
-  var transactionIndexUnpaid = <Transaction>[].obs;
+  var transactionPaid = <Transaction>[].obs;
+  var transactionUnpaid = <Transaction>[].obs;
+  var transactionSending = <Transaction>[].obs;
+  var transactionDelivered = <Transaction>[].obs;
+  var transactionCanceled = <Transaction>[].obs;
   var isLoading = true.obs;
   var transactionDetail = Rx<TransactionShow>(TransactionShow());
   WebViewController ctr = WebViewController();
@@ -25,7 +27,7 @@ class TransactionPageController extends GetxController {
   RxString remainingTime = ''.obs;
   late Timer _timer;
   late DateTime _endTime;
-
+  bool hasPaidTransactions = false;
   void startCountdown(String createdAt) {
     DateTime parsedCreatedAt = DateTime.parse(createdAt);
     _endTime = parsedCreatedAt.add(Duration(days: 1));
@@ -60,7 +62,11 @@ class TransactionPageController extends GetxController {
   @override
   void onInit() {
     getTransaction();
-
+    getTransactionPaid();
+    getTransactionSending();
+    getTransactionDelivered();
+    getTransactionUnpaid();
+    getTransactionCanceled();
     super.onInit();
   }
 
@@ -83,6 +89,8 @@ class TransactionPageController extends GetxController {
           ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.index);
       http.Response response = await http.get(url, headers: headers);
       print(response.body);
+      showLoadingDialog(Get.context!);
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -94,6 +102,177 @@ class TransactionPageController extends GetxController {
             transactionListData.add(address);
           }
           transactionIndexList.assignAll(transactionListData);
+          print(transactionListData);
+        } else {
+          throw jsonResponse['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      throw '${error.toString()}';
+    }
+    Navigator.of(Get.context!, rootNavigator: true).pop();
+  }
+
+  Future<void> getTransactionPaid() async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.paid);
+      http.Response response = await http.get(url, headers: headers);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['code'] == 200) {
+          final addressData = jsonResponse['data'] as List<dynamic>;
+          List<Transaction> transactionListData = [];
+          for (var data in addressData) {
+            var address = Transaction.fromJson(data);
+            transactionListData.add(address);
+          }
+          transactionPaid.assignAll(transactionListData);
+          print(transactionListData);
+        } else {
+          throw jsonResponse['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      throw '${error.toString()}';
+    }
+  }
+
+  Future<void> getTransactionUnpaid() async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.unpaid);
+      http.Response response = await http.get(url, headers: headers);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['code'] == 200) {
+          final addressData = jsonResponse['data'] as List<dynamic>;
+          List<Transaction> transactionListData = [];
+          for (var data in addressData) {
+            var address = Transaction.fromJson(data);
+            transactionListData.add(address);
+          }
+          transactionUnpaid.assignAll(transactionListData);
+          print(transactionListData);
+        } else {
+          throw jsonResponse['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      throw '${error.toString()}';
+    }
+  }
+
+  Future<void> getTransactionSending() async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.sending);
+      http.Response response = await http.get(url, headers: headers);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['code'] == 200) {
+          final addressData = jsonResponse['data'] as List<dynamic>;
+          List<Transaction> transactionListData = [];
+          for (var data in addressData) {
+            var address = Transaction.fromJson(data);
+            transactionListData.add(address);
+          }
+          transactionSending.assignAll(transactionListData);
+          print(transactionListData);
+        } else {
+          throw jsonResponse['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      throw '${error.toString()}';
+    }
+  }
+
+  Future<void> getTransactionDelivered() async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.delivered);
+      http.Response response = await http.get(url, headers: headers);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['code'] == 200) {
+          final addressData = jsonResponse['data'] as List<dynamic>;
+          List<Transaction> transactionListData = [];
+          for (var data in addressData) {
+            var address = Transaction.fromJson(data);
+            transactionListData.add(address);
+          }
+          transactionDelivered.assignAll(transactionListData);
+          print(transactionListData);
+        } else {
+          throw jsonResponse['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      throw '${error.toString()}';
+    }
+  }
+
+  Future<void> getTransactionCanceled() async {
+    String? token = GetStorage().read('token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.transactionEndPoints.canceled);
+      http.Response response = await http.get(url, headers: headers);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['code'] == 200) {
+          final addressData = jsonResponse['data'] as List<dynamic>;
+          List<Transaction> transactionListData = [];
+          for (var data in addressData) {
+            var address = Transaction.fromJson(data);
+            transactionListData.add(address);
+          }
+          transactionCanceled.assignAll(transactionListData);
           print(transactionListData);
         } else {
           throw jsonResponse['message'];
@@ -144,6 +323,11 @@ class TransactionPageController extends GetxController {
 
   void callGettrs() {
     getTransaction();
+    getTransactionPaid();
+    getTransactionSending();
+    getTransactionDelivered();
+    getTransactionUnpaid();
+    getTransactionCanceled();
   }
 
   void bayar(String url) {

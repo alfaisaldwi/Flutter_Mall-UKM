@@ -45,7 +45,8 @@ class _RajaOngkirEndPoints {
   final String shippingData = 'https://pro.rajaongkir.com/api/cost';
   final String addressProvince = 'https://pro.rajaongkir.com/api/province';
   final String addressCity = 'https://pro.rajaongkir.com/api/city?province=';
-  final String addressSubDistrict = 'https://pro.rajaongkir.com/api/subdistrict?city=';
+  final String addressSubDistrict =
+      'https://pro.rajaongkir.com/api/subdistrict?city=';
 }
 
 class _TransactionEndPoints {
@@ -55,6 +56,9 @@ class _TransactionEndPoints {
   final String storeOffline = '/api/auth/transaction/store/offline';
   final String unpaid = '/api/auth/transaction/unpaid';
   final String paid = '/api/auth/transaction/paid';
+  final String sending = '/api/auth/transaction/sending';
+  final String delivered = '/api/auth/transaction/delivered';
+  final String canceled = '/api/auth/transaction/canceled';
   final String changeStatus = '/api/auth/transaction/update/status/payment/';
 }
 

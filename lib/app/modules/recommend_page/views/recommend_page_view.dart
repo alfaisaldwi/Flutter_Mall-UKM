@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
-import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
 import 'package:mall_ukm/app/modules/home/views/search_view.dart';
-import 'package:mall_ukm/app/modules/product_detail/controllers/product_detail_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 
@@ -139,7 +133,19 @@ class RecommendPageView extends GetView<RecommendPageController> {
                 controller.recomendProduct();
               },
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 20),
+                    child: Text(
+                      'Rekomendasi Produk',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -175,15 +181,22 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 2,
-                                                      horizontal: 0),
+                                                      horizontal: 12),
                                               child: Text(
                                                 recomend.title!,
                                                 style: Styles.headerStyles(),
                                               ),
                                             ),
+                                            if (recomend.products!.isEmpty)
+                                              Container(
+                                                  height: 100,
+                                                  width: double.infinity,
+                                                  child: Center(
+                                                    child: Text(
+                                                        'Tidak ada produk pada kategori ini'),
+                                                  )),
                                             SizedBox(
-                                              height:
-                                                  180, // Atur tinggi untuk menampilkan beberapa produk dalam satu kategori
+                                              height: 180,
                                               child: ListView.builder(
                                                 physics:
                                                     const ClampingScrollPhysics(),
@@ -216,11 +229,11 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                           width: 140,
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(5),
+                                                                  .all(12),
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     top: 5.0,
                                                                     left: 8.0,
                                                                     right: 8.0,
@@ -254,7 +267,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                     height: 10),
                                                                 Padding(
                                                                   padding: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       horizontal:
                                                                           8.0,
                                                                       vertical:
@@ -276,9 +289,9 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                 ),
                                                                 Padding(
                                                                   padding: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       horizontal:
-                                                                          8.0,
+                                                                          12.0,
                                                                       vertical:
                                                                           2.0),
                                                                   child: Text(
