@@ -61,7 +61,8 @@ class ProfileController extends GetxController {
           GetStorage().write('token', token);
           // cNav.tabController.index = 2;
           ToastUtil.showToast(msg: 'Login Berhasil');
-
+          GetStorage().read(token);
+          
           await Get.offAllNamed('navbar-page');
           cemail.clear();
           cpw.clear();

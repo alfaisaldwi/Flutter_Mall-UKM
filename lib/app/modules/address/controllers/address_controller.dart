@@ -1,10 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:mall_ukm/app/component/awesome_dialog.dart';
+import 'package:mall_ukm/app/component/toast_dialog.dart';
 import 'package:mall_ukm/app/model/address/address_index.dart';
 import 'package:mall_ukm/app/model/address/address_model.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
@@ -113,21 +114,24 @@ class AddressController extends GetxController {
     checkoutO.refreshAddress();
   }
 
+  void refreshAddress() {
+    getAddress();
+  }
+
   Future<void> getAddress() async {
     String? token = GetStorage().read('token');
     var headers = {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     };
+
     try {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.addressEndPoints.addressIndex);
       http.Response response = await http.get(url, headers: headers);
-      // print('response getadress ${response.statusCode}');
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        // print('response getadress decode  ${response.statusCode}');
-
         if (jsonResponse['code'] == "200") {
           final addressData = jsonResponse['data'] as List<dynamic>;
           List<AddressIndex> addressListData = [];
@@ -136,9 +140,8 @@ class AddressController extends GetxController {
             addressListData.add(address);
           }
           addressIndexList.assignAll(addressListData);
-          // print(addressList);
         } else {
-          throw jsonResponse['message'];
+          Navigator.of(Get.context!, rootNavigator: true).pop();
         }
       } else {
         throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
@@ -146,6 +149,10 @@ class AddressController extends GetxController {
     } catch (error) {
       throw error.toString();
     }
+    nameController.text = '';
+    phoneController.text = '';
+    addressDetail.text = '';
+    addressName.value = '';
   }
 
   Future<void> addAdress(Address address) async {
@@ -205,14 +212,15 @@ class AddressController extends GetxController {
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       if (jsonResponse['code'] == "200") {
-        Fluttertoast.showToast(
-          msg: 'Berhasil mengubah alamat utama',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[800],
-          textColor: Colors.white,
-          fontSize: 14.0,
+        SuccessDialog.show(
+          title: 'Berhasil mengubah alamat utama',
+          context: Get.context!,
+          btnOkOnPress: () {
+            getAdrresNow();
+            Navigator.pop(Get.context!);
+          },
         );
+        // ToastUtil.showToast(msg: 'Berhasil mengubah alamat utama');
         print('Alamat berhasil dipilih');
       } else {
         print(
@@ -242,13 +250,12 @@ class AddressController extends GetxController {
       if (jsonResponse['code'] == "200") {
         getAddress();
 
-        Fluttertoast.showToast(
-          msg: 'Berhasil mengahapus alamat',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[800],
-          textColor: Colors.white,
-          fontSize: 14.0,
+        SuccessDialog.show(
+          context: Get.context!,
+          title: 'Berhasil Hapus Alamat',
+          btnOkOnPress: () {
+            Navigator.pop(Get.context!);
+          },
         );
       } else {
         print(

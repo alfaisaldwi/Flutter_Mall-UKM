@@ -7,8 +7,8 @@ class SuccessDialog {
     required BuildContext context,
     required String title,
     String? desc,
-    required Function() btnCancelOnPress,
-    required Function() btnOkOnPress,
+     Function()? btnCancelOnPress,
+     Function()? btnOkOnPress,
   }) {
     AwesomeDialog(
       btnOkText: 'Oke',
