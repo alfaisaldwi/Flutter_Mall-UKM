@@ -144,7 +144,6 @@ class ProfileController extends GetxController {
           print(responseData['message']);
           GetStorage().remove('token');
 
-          // Lakukan tindakan yang diperlukan setelah logout berhasil
         } else {
           throw 'Gagal : ${responseData['message']}';
         }

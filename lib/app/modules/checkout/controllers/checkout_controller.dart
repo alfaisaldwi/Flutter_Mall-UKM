@@ -33,7 +33,7 @@ class CheckoutController extends GetxController {
   var idkecamatan = '';
   var weight = ''.obs;
   RxList<RxInt> weight2 = <RxInt>[].obs;
-  var totalWeight = ''.obs;
+  var totalWeight = GetStorage().read('totalWeight');
   final List<String> couriers = ['jne', 'pos', 'sicepat', 'jnt'];
   final List<String> layanan = ['jne', 'pos', 'sicepat', 'jnt'];
   Rx<Future<AddressSelect>>? futureAddress;
@@ -67,7 +67,7 @@ class CheckoutController extends GetxController {
           ..setBackgroundColor(const Color(0x00000000))
           ..setNavigationDelegate(
             NavigationDelegate(
-            onPageStarted: (String url) {
+              onPageStarted: (String url) {
                 print('$url');
               },
               onPageFinished: (String url) {},

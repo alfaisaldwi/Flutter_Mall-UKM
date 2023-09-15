@@ -16,9 +16,9 @@ class NavbarPageController extends GetxController {
     transaksiController.getTransaction();
 
     RecommendPageController recommendPageController =
-        Get.find<RecommendPageController>();
+        Get.put(RecommendPageController());
     // recommendPageController.fetchRecomend();
-    recommendPageController.recomendProduct();
+    recommendPageController.fetchRecomend();
 
     // recommendPageController.fetchRecomend2();
     ProfileController profileController = Get.find<ProfileController>();
