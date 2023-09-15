@@ -73,26 +73,33 @@ class CartController extends GetxController {
       isCheckedList[index] = value;
     }
   }
-void initializeCheckedList(int itemCount) {
-    isCheckedList.assignAll(List.generate(itemCount, (index) => false ));
+
+  void initializeCheckedList(int itemCount) {
+    isCheckedList.assignAll(List.generate(itemCount, (index) => false));
   }
 
   void toggleSelectAll(bool value) {
-    for (int index = 0; index < isCheckedList.length; index++) {
-      isCheckedList[index] = value;
-      if (value) {
-        totalHarga.value += priceC[index].value * counter[index].value;
-        totalWeight.value += counter[index].value * subWeightC[index].value;
-
-        selectedItems
-            .add(SelectedCartItem(isChecked: true, cart: carts[index]));
-      } else {
-        totalHarga.value -= priceC[index].value * counter[index].value;
-        totalWeight.value -= counter[index].value * subWeightC[index].value;
-
-        selectedItems.removeWhere((item) => item.cart == carts[index]);
+    if (value) {
+      for (int index = 0; index < isCheckedList.length; index++) {
+        if (!isCheckedList[index]) {
+          isCheckedList[index] = true;
+          totalHarga.value += priceC[index].value * counter[index].value;
+          totalWeight.value += counter[index].value * subWeightC[index].value;
+          selectedItems
+              .add(SelectedCartItem(isChecked: true, cart: carts[index]));
+        }
+      }
+    } else {
+      for (int index = 0; index < isCheckedList.length; index++) {
+        if (isCheckedList[index]) {
+          isCheckedList[index] = false;
+          totalHarga.value -= priceC[index].value * counter[index].value;
+          totalWeight.value -= counter[index].value * subWeightC[index].value;
+          selectedItems.removeWhere((item) => item.cart == carts[index]);
+        }
       }
     }
+
     update();
   }
 

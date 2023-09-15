@@ -13,6 +13,7 @@ class ToastUtil {
     double? fontSize,
   }) {
     Fluttertoast.showToast(
+      
       msg: msg!,
       toastLength: Toast.LENGTH_SHORT,
       gravity: gravity ?? ToastGravity.BOTTOM,

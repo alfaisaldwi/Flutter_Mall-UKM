@@ -128,26 +128,26 @@ class RecommendPageView extends GetView<RecommendPageController> {
           color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 10),
-            child: RefreshIndicator(
-              onRefresh: () async {
-                controller.recomendProduct();
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 20),
-                    child: Text(
-                      'Rekomendasi Produk',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0, vertical: 20),
+                  child: Text(
+                    'Rekomendasi Produk',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Expanded(
-                    child: SingleChildScrollView(
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        controller.recomendProduct();
+                      },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,15 +205,17 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                     Axis.horizontal,
                                                 itemCount:
                                                     recomend.products?.length,
-                                                itemBuilder: (context, index) {
-                                                  var product =
-                                                      recomend.products![index];
+                                                itemBuilder:
+                                                    (context, index) {
+                                                  var product = recomend
+                                                      .products![index];
                                                   return GestureDetector(
                                                     onTap: () async {
                                                       var productDetails =
                                                           await productDetail
                                                               .fetchProductDetails(
-                                                                  product.id!);
+                                                                  product
+                                                                      .id!);
                                                       Get.toNamed(
                                                           'product-detail',
                                                           arguments: [
@@ -222,7 +224,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                     },
                                                     child: Padding(
                                                       padding:
-                                                          const EdgeInsets.only(
+                                                          const EdgeInsets
+                                                              .only(
                                                               left: 2.0),
                                                       child: Card(
                                                         child: Container(
@@ -236,7 +239,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                     .only(
                                                                     top: 5.0,
                                                                     left: 8.0,
-                                                                    right: 8.0,
+                                                                    right:
+                                                                        8.0,
                                                                     bottom:
                                                                         0.0),
                                                             child: Column(
@@ -248,8 +252,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                   child:
                                                                       ClipRRect(
                                                                     borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(4),
+                                                                        BorderRadius.circular(
+                                                                            4),
                                                                     child: Image
                                                                         .network(
                                                                       product
@@ -264,7 +268,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                   ),
                                                                 ),
                                                                 const SizedBox(
-                                                                    height: 10),
+                                                                    height:
+                                                                        10),
                                                                 Padding(
                                                                   padding: const EdgeInsets
                                                                       .symmetric(
@@ -278,7 +283,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                     textAlign:
                                                                         TextAlign
                                                                             .left,
-                                                                    maxLines: 1,
+                                                                    maxLines:
+                                                                        1,
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
@@ -299,7 +305,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                                     textAlign:
                                                                         TextAlign
                                                                             .left,
-                                                                    maxLines: 1,
+                                                                    maxLines:
+                                                                        1,
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
@@ -329,8 +336,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

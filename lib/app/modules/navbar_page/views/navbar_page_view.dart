@@ -8,6 +8,7 @@ import 'package:mall_ukm/app/modules/profile/views/account_view.dart';
 import 'package:mall_ukm/app/modules/profile/views/profile_view.dart';
 import 'package:mall_ukm/app/modules/profile/views/signin_view.dart';
 import 'package:mall_ukm/app/modules/recommend_page/views/recommend_page_view.dart';
+import 'package:mall_ukm/app/modules/transaction_page/views/transaction_index.dart';
 import 'package:mall_ukm/app/modules/transaction_page/views/transaction_page_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -28,7 +29,7 @@ class NavbarPageView extends GetView<NavbarPageController> {
     return [
       HomeView(),
       RecommendPageView(),
-      TransactionPageView(),
+      TransactionIndex(),
       ProfileView()
     ];
   }

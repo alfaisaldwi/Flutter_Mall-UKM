@@ -309,7 +309,7 @@ class HomeView extends GetView<HomeController> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Promo Kemerdekaan',
+                                      'Produk Promo',
                                       style: Styles.headerStyles(size: 16),
                                     ),
                                     SizedBox(

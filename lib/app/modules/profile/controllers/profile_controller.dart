@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:mall_ukm/app/component/awesome_dialog.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
 import 'package:mall_ukm/app/modules/navbar_page/views/navbar_page_view.dart';
 import 'package:mall_ukm/app/routes/app_pages.dart';
@@ -54,21 +55,35 @@ class ProfileController extends GetxController {
       print(response.body);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
+
         if (json['code'] == "200") {
           var token = json['data'];
           GetStorage().write('token', token);
           // cNav.tabController.index = 2;
+          ToastUtil.showToast(msg: 'Login Berhasil');
+          GetStorage().read(token);
+          
           await Get.offAllNamed('navbar-page');
           cemail.clear();
           cpw.clear();
-          ToastUtil.showToast(msg: 'Login Berhasil');
         } else {
-          ToastUtil.showToast(msg: 'Periksa kembali email dan password');
+          ErrorDialog.show(
+            context: Get.context!,
+            title: 'Gagal Mengubah Password',
+            desc: 'Password lama tidak sesuai',
+            btnCancelOnPress: () {},
+            btnOkOnPress: () {},
+          );
         }
-        Navigator.of(Get.context!, rootNavigator: true).pop();
       } else {
-        ToastUtil.showToast(msg: 'Periksa kembali email dan password');
         Navigator.of(Get.context!, rootNavigator: true).pop();
+        ErrorDialog.show(
+            context: Get.context!,
+            title: 'Gagal',
+            desc: 'Periksa kembali email dan password',
+            btnOkOnPress: (() {
+              Get.back();
+            }));
       }
     } catch (error) {
       error;
@@ -77,41 +92,39 @@ class ProfileController extends GetxController {
 
   Future<void> signUp() async {
     var headers = {'Content-Type': 'application/json'};
-    try {
-      var url =
-          Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
-      Map body = {
-        'name': cnamalengkap.text,
-        'email': cemail.text.trim(),
-        'password': cpw.text
-      };
-      showLoadingDialog(Get.context!);
-      http.Response response =
-          await http.post(url, body: jsonEncode(body), headers: headers);
-      print(response.body);
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-        if (json['code'] == 200) {
-          cNav.tabController.index = 2;
-          Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
-          cemail.clear();
-          cpw.clear();
-          ToastUtil.showToast(msg: 'Register Berhasil');
-        } else if (json['code'] == 400) {
-          ToastUtil.showToast(
-              msg:
-                  '${json['message']['password'][0] ?? ''} \n${json['message']['email'][0] ?? ''}');
-        } else {
-          ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
-        }
+
+    var url =
+        Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
+    Map body = {
+      'name': cnamalengkap.text,
+      'email': cemail.text.trim(),
+      'password': cpw.text
+    };
+    showLoadingDialog(Get.context!);
+    http.Response response =
+        await http.post(url, body: jsonEncode(body), headers: headers);
+    print(response.body);
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      if (json['code'] == 200) {
+        cNav.tabController.index = 2;
+        Timer(const Duration(seconds: 1), () => Get.toNamed('navbar-page'));
+        cemail.clear();
+        cpw.clear();
+        ToastUtil.showToast(msg: 'Register Berhasil');
+      } else if (json['code'] == 400) {
+        ToastUtil.showToast(
+            msg:
+                '\n ${json['message']['password']?[0] ?? ' '} \n${json['message']['email']?[0] ?? ' '} \n');
       } else {
-        ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
+        ToastUtil.showToast(
+            msg:
+                '${json['message']['password']?[0] ?? ' '} \n${json['message']['email']?[0] ?? ' '}');
       }
-      Navigator.of(Get.context!, rootNavigator: true).pop();
-    } catch (error) {
-      ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password');
-      Navigator.of(Get.context!, rootNavigator: true).pop();
+    } else {
+      ToastUtil.showToast(msg: 'Periksa kembali nama, email dan password ');
     }
+    Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
   Future<void> me() async {
@@ -165,7 +178,7 @@ class ProfileController extends GetxController {
         if (responseData['code'] == '200') {
           print(responseData['message']);
           GetStorage().remove('token');
-                 ToastUtil.showToast(msg: 'Logout Berhasil');
+          ToastUtil.showToast(msg: 'Logout Berhasil');
 
           Timer(
               const Duration(seconds: 1), () => Get.offAll((NavbarPageView())));
