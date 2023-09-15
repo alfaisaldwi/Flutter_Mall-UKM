@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -245,8 +247,9 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                 shrinkWrap: true,
                                                 scrollDirection:
                                                     Axis.horizontal,
-                                                itemCount:
-                                                    recomend.products?.length,
+                                                itemCount: min(
+                                                    recomend.products!.length,
+                                                    6),
                                                 itemBuilder: (context, index) {
                                                   var product =
                                                       recomend.products![index];

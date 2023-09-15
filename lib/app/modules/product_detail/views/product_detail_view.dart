@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
@@ -404,7 +406,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             physics: const ClampingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: controller.recomend.length,
+                            itemCount: min(controller.recomend.length, 7),
                             itemBuilder: (context, index) {
                               var recomend = controller.recomend[index];
 
