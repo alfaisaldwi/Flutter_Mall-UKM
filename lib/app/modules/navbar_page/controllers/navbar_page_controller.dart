@@ -10,24 +10,25 @@ class NavbarPageController extends GetxController {
   var transactionC = Get.put(TransactionPageController);
 
   final PersistentTabController tabController = PersistentTabController();
-  void _callGettrs() {
-    TransactionPageController transaksiController =
-        Get.find<TransactionPageController>();
-    transaksiController.getTransaction();
+  void callGettrs() {
+    TransactionPageController transactionPageController =
+        Get.put(TransactionPageController());
 
+    transactionPageController.callGettrs();
     RecommendPageController recommendPageController =
         Get.put(RecommendPageController());
     // recommendPageController.fetchRecomend();
     recommendPageController.fetchRecomend();
 
     // recommendPageController.fetchRecomend2();
-    ProfileController profileController = Get.find<ProfileController>();
-    profileController.getUsers();
+    ProfileController profilePageController = Get.put(ProfileController());
+
+    profilePageController.getUsers();
   }
 
   @override
   void onInit() {
-    _callGettrs();
+    callGettrs();
     super.onInit();
   }
 

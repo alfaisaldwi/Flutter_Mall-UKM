@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mall_ukm/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
+import 'package:mall_ukm/app/modules/payment/views/pending_transaction.dart';
+import 'package:mall_ukm/app/modules/payment/views/succes_transaction.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -11,6 +13,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebviewCheckout extends GetView<TransactionPageController> {
   var contr = Get.put(CheckoutController());
   var controllerNav = Get.put(NavbarPageController());
+  var transaksiController = Get.put(TransactionPageController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +30,18 @@ class WebviewCheckout extends GetView<TransactionPageController> {
             IconButton(
               icon: Icon(Icons.close),
               onPressed: () async {
-                await Get.toNamed('navbar-page')?.then((value) {
-                  Future.delayed(Duration(milliseconds: 4000), () {
-                    controllerNav.tabController.index = 2;
-                  });
-                });
+                controllerNav.callGettrs();
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TransactionPending(),
+                    ));
+                // await Get.toNamed('navbar-page')?.then((value) {
+                //   Future.delayed(Duration(milliseconds: 4000), () {
+                //     controllerNav.tabController.index = 2;
+                //   });
+                // });
               },
             ),
           ],
@@ -50,8 +60,8 @@ class WebviewCheckout extends GetView<TransactionPageController> {
             }
           },
           child: WebViewWidget(
-              controller: controller.ctr, gestureRecognizers: const <
-                  Factory<OneSequenceGestureRecognizer>>{}),
+              controller: controller.ctr, gestureRecognizers: const <Factory<
+                  OneSequenceGestureRecognizer>>{}),
         )));
   }
 }

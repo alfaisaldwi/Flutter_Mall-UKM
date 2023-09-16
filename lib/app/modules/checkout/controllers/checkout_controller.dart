@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:mall_ukm/app/component/awesome_dialog.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/transaction/checkout_data.dart';
 import 'package:mall_ukm/app/model/transaction/transaction_store_model.dart';
@@ -14,6 +15,8 @@ import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
 import 'package:mall_ukm/app/modules/cart/views/cart_view.dart';
 import 'package:mall_ukm/app/modules/checkout/views/webwiew.dart';
 import 'package:mall_ukm/app/modules/navbar_page/controllers/navbar_page_controller.dart';
+import 'package:mall_ukm/app/modules/payment/views/error_transaction.dart';
+import 'package:mall_ukm/app/modules/payment/views/succes_transaction.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
 import 'package:mall_ukm/app/component/show_general_dialog.dart';
@@ -69,6 +72,55 @@ class CheckoutController extends GetxController {
             NavigationDelegate(
               onPageStarted: (String url) {
                 print('$url');
+                if (url.contains('&status_code=406')) {
+                  ErrorDialog.show(
+                    context: Get.context!,
+                    title: 'Pembayaran Gagal',
+                    desc:
+                        'Pembayaran Gagal, Silahkan lakukan pembayaran pada halaman Traksaksi',
+                    btnOkOnPress: () {
+                      controllerNav.callGettrs();
+
+                      Navigator.push(
+                          Get.context!,
+                          MaterialPageRoute(
+                            builder: (context) => TransactionError(),
+                          ));
+                    },
+                  );
+                }
+                if (url.contains('status_code=200')) {
+                  SuccessDialog.show(
+                    context: Get.context!,
+                    title: 'Pembayaran Sukses',
+                    desc: 'Silahkan cek halaman Transaksi',
+                    btnOkOnPress: () {
+                      controllerNav.callGettrs();
+
+                      Navigator.push(
+                          Get.context!,
+                          MaterialPageRoute(
+                            builder: (context) => TransactionSucces(),
+                          ));
+                    },
+                  );
+                }
+                if (url.contains('status_code=201')) {
+                  WarningDialog.show(
+                    context: Get.context!,
+                    title: 'Pembayaran Tertunda',
+                    desc: 'Silahkan cek halaman Transaksi',
+                    btnOkOnPress: () {
+                      controllerNav.callGettrs();
+
+                      Navigator.push(
+                          Get.context!,
+                          MaterialPageRoute(
+                            builder: (context) => TransactionSucces(),
+                          ));
+                    },
+                  );
+                }
               },
               onPageFinished: (String url) {},
               onWebResourceError: (WebResourceError error) {},
