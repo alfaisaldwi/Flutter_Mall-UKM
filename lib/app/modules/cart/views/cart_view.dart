@@ -4,6 +4,7 @@ import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
@@ -105,14 +106,21 @@ class CartView extends GetView<CartController> {
               ),
               Center(
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (controller.selectedItems.isNotEmpty) {
-                      print(controller.totalHarga.value);
+                      await GetStorage().remove('totalWeight');
+                      await GetStorage().remove('totalPrice');
+                      await GetStorage()
+                          .write('totalWeight', controller.totalWeight.value);
+                      await GetStorage().write(
+                        'totalPrice',
+                        controller.totalHarga.value,
+                      );
                       Get.toNamed('/checkout', arguments: [
                         controller.selectedItems,
-                        controller.totalHarga.value,
-                        controller.totalWeight.value,
                       ]);
+
+                      print(GetStorage().read('totalWeight'));
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Pilih barang terlebih dahulu',

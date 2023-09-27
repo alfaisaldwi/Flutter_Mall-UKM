@@ -35,7 +35,6 @@ class HomeController extends GetxController {
   Timer? _timer;
 
   @override
-
   void onInit() {
     fetchProduct();
     startDataRefreshTimer();
@@ -223,7 +222,7 @@ class HomeController extends GetxController {
     var headers = {
       'Accept': 'application/json',
     };
-
+    showLoadingDialog(Get.context!);
     var url = Uri.parse(
       ApiEndPoints.baseUrl +
           ApiEndPoints.productEndPoints.categoryshow +
@@ -232,8 +231,12 @@ class HomeController extends GetxController {
     http.Response response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonData = jsonDecode(response.body);
+      Navigator.of(Get.context!, rootNavigator: true).pop();
+
       return CategoryShow.fromJson(jsonData);
     } else {
+      Navigator.of(Get.context!, rootNavigator: true).pop();
+
       throw Exception('Failed to load category data');
     }
   }

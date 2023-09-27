@@ -28,7 +28,7 @@ class WarningDialog {
     required BuildContext context,
     required String title,
     String? desc,
-    required Function() btnCancelOnPress,
+     Function()? btnCancelOnPress,
     required Function() btnOkOnPress,
   }) {
     AwesomeDialog(

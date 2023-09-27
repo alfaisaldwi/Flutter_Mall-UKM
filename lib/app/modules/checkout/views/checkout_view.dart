@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'dart:math';
@@ -17,14 +18,12 @@ class CheckoutView extends GetView<CheckoutController> {
   final List<SelectedCartItem> dataCart =
       Get.arguments[0] as List<SelectedCartItem>;
 
-  var hargaBarang = Get.arguments[1];
+  var hargaBarang = GetStorage().read('totalPrice');
   var subtot = 0.0.obs;
 
   var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
-    controller.totalWeight.value = Get.arguments[2].toString();
-
     var addressId = 0;
     var productId = 0;
     var cartId = 0;
@@ -110,7 +109,6 @@ class CheckoutView extends GetView<CheckoutController> {
                             controller.isLoading.value = false;
                             print('Error: $error');
                           });
-                          
                         } else {
                           Fluttertoast.showToast(
                             msg: 'Kamu belum memilih Kurir',
@@ -493,7 +491,7 @@ class CheckoutView extends GetView<CheckoutController> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         trailing: Text(
-                          '${double.parse(controller.totalWeight.value).toStringAsFixed(2)}gram',
+                          '${double.parse(controller.totalWeight.toString()).toStringAsFixed(2)}gram',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),

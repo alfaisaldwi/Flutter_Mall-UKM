@@ -70,6 +70,7 @@ class TransactionCard extends StatelessWidget {
         DateTime.parse(transaction.createdAt ?? "Sedang memuat..");
     final formattedDate = DateFormat('dd MMM yyyy').format(createdAt);
     var ctrT = Get.put(TransactionPageController());
+    var totalProduct = transaction.totalproducts! - 1;
 
     return Padding(
       padding: const EdgeInsets.all(2.0),
@@ -194,7 +195,15 @@ class TransactionCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                title: Text(transaction.productName ?? "Sedang memuat.."),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(transaction.productName ?? "Sedang memuat.."),
+                    if (transaction.totalproducts! > 1)
+                      Text(
+                          '& ${transaction.totalproducts! - 1} Produk lainnya'),
+                  ],
+                ),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -202,7 +211,7 @@ class TransactionCard extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                        'Total:  ${ctrT.convertToIdr(double.parse(transaction.total ?? "Sedang memuat.."), 2)}'),
+                        'Total:  ${ctrT.convertToIdr(double.parse(transaction.total ?? "Gagal memuat.."), 2)}'),
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward),

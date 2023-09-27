@@ -1,9 +1,7 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/model/address/address_select.dart';
 import 'package:mall_ukm/app/model/cart/selectedCart.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
@@ -21,17 +19,14 @@ class CheckoutDirectView extends GetView<CheckoutController> {
   var kuantiti = Get.arguments[2];
   var hargaBarang = Get.arguments[3];
   var selectVariant = Get.arguments[4];
-  var total = Get.arguments[5];
+  var total = GetStorage().read('totalPrice');
   var subtot = 0.0.obs;
 
   var qty = 0.obs;
   @override
   Widget build(BuildContext context) {
-    controller.totalWeight.value = Get.arguments[6].toString();
-
     var addressId = 0;
     var ongkir = 0.0.obs;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -63,15 +58,18 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                     child: Text('Total Harga', style: Styles.bodyStyle()),
                   ),
                   Padding(
-                      padding: const EdgeInsets.only(left: 8.0, bottom: 8),
-                      child: Obx(() => Text(
-                            controller.convertToIdr(
-                                double.parse(subtot.toString()), 2),
-                            style: Styles.bodyStyle(
-                              weight: FontWeight.w500,
-                              size: 15,
-                            ),
-                          )))
+                    padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                    child: Obx(
+                      () => Text(
+                        controller.convertToIdr(
+                            double.parse(subtot.toString()), 2),
+                        style: Styles.bodyStyle(
+                          weight: FontWeight.w500,
+                          size: 15,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
               Center(
@@ -97,7 +95,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                           courier: controller.selectedCourier.value,
                           costCourier: ongkir.value.toInt(),
                           statusPayment: 'online',
-                          total: subtot.value.toInt(),
+                          total: subtot.toInt(),
                           products: productsList,
                         );
 
@@ -447,7 +445,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   const SizedBox(height: 10),
@@ -463,7 +461,7 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         trailing: Text(
-                          '${double.parse(controller.totalWeight.value).toStringAsFixed(2)}gram',
+                          '${double.parse(controller.totalWeight.toString()).toStringAsFixed(2)}gram',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
@@ -471,13 +469,13 @@ class CheckoutDirectView extends GetView<CheckoutController> {
                   ),
                   const SizedBox(height: 10),
                   Card(
-                    margin: EdgeInsets.all(8.0),
+                    margin: const EdgeInsets.all(8.0),
                     elevation: 2,
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Obx(
                         () => ListTile(
-                          title: Text(
+                          title: const Text(
                             'Ongkir',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
