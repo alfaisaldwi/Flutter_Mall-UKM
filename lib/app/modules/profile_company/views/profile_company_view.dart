@@ -14,6 +14,7 @@ class ProfileCompanyView extends GetView<ProfileCompanyController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
           'Syarat dan Ketentuan ',
@@ -21,72 +22,79 @@ class ProfileCompanyView extends GetView<ProfileCompanyController> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-            color: Colors.white, // Tambahkan background putih
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Syarat:',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: Colors.grey),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Text(
-                        _profileController.profileCompany.value.terms!,
-                        textAlign: TextAlign.justify,
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Syarat:',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  Text(
-                    'Ketentuan:',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: Colors.grey),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Text(
-                        _profileController.profileCompany.value.provision!,
-                        textAlign: TextAlign.justify,
+                      SizedBox(height: 8),
+                      Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            _profileController.profileCompany.value.terms!,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                      Text(
+                        'Ketentuan:',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                    ),
+                      SizedBox(height: 8),
+                      Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            _profileController.profileCompany.value.provision!,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            )),
+            ),
+          ],
+        ),
       ),
     );
   }
