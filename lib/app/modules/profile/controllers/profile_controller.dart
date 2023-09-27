@@ -127,38 +127,7 @@ class ProfileController extends GetxController {
     Navigator.of(Get.context!, rootNavigator: true).pop();
   }
 
-  Future<void> me() async {
-    String? token = GetStorage().read('token');
-    var headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
-
-    try {
-      var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.me);
-      http.Response response = await http.post(url, headers: headers);
-
-      if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
-        if (responseData['code'] == '200') {
-          print(responseData['message']);
-          GetStorage().remove('token');
-
-        } else {
-          throw 'Gagal : ${responseData['message']}';
-        }
-      } else {
-        throw 'Gagal : ${response.reasonPhrase}|| ${response.statusCode}';
-      }
-    } catch (error) {
-      GetStorage().remove('token');
-
-      print('print tokennn ---- $token');
-
-      throw 'Terjadi kesalahan saat logout: $error ||||| $token';
-    }
-  }
-
+ 
   Future<void> logout() async {
     String? token = GetStorage().read('token');
     var headers = {
