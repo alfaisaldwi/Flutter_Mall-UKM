@@ -34,6 +34,7 @@ class _TransactionPendingState extends State<TransactionPending> {
           // );
           NavbarPageController navbarPageController =
               Get.put(NavbarPageController());
+          navbarPageController.callGettrs();
           navbarPageController.tabController.index = 2;
 
           PersistentNavBarNavigator.pushNewScreen(

@@ -10,7 +10,7 @@ class NavbarPageController extends GetxController {
   var transactionC = Get.put(TransactionPageController);
 
   final PersistentTabController tabController = PersistentTabController();
-  void callGettrs() {
+  void callGettrs() async {
     TransactionPageController transactionPageController =
         Get.put(TransactionPageController());
 
