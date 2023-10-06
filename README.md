@@ -1,16 +1,29 @@
-# MALL UKM KOTA CIREBON
+# Mall UKM 
+[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
 
-A new Flutter project.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Auth
+- Home Product
+- Payment with Midtrans
+- Transaction
+- Category Product
+- Carousel Slider
+- Search Product
+- Delivery API Raja Ongkir
+- Adderss API Raja Ongkir
+- Cart
+- Get Location for Promo using Haversine 
+- Using Costumer Satisfaction Index for feedback
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tech
+- [Dart] - Scalable and structured programming language for building efficient  mobile applications.
+- [Flutter] - A versatile framework for creating natively compiled applications for mobile, web, and desktop from a single codebase.
+- [Laravel] - A powerful and elegant PHP framework for backend.
+- [Visual Studio Code] - A highly customizable, open-source code editor that provides an efficient and enjoyable development experience.
+
+
+
