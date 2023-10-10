@@ -16,6 +16,7 @@
 - Cart
 - Get Location for Promo using Haversine 
 - Using Costumer Satisfaction Index for feedback
+- State Management GetX
 
 
 
