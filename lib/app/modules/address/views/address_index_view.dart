@@ -24,7 +24,7 @@ class AddressIndexView extends GetView<AddressController> {
 
               Get.back();
             }),
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Styles.colorPrimary()),
         title: Text(
           'Alamat',
           style: Styles.headerStyles(weight: FontWeight.w500, size: 16),
@@ -46,8 +46,8 @@ class AddressIndexView extends GetView<AddressController> {
                 height: 45,
                 width: MediaQuery.of(context).size.width * 95,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: const Color(0xff034779),
+                  borderRadius: BorderRadius.circular(6),
+                  color: Styles.colorPrimary(),
                 ),
                 child: Center(
                   child: Padding(

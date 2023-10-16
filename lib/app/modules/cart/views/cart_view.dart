@@ -28,7 +28,7 @@ class CartView extends GetView<CartController> {
             children: [
               AppBar(
                 elevation: 0,
-                iconTheme: const IconThemeData(color: Colors.black),
+                iconTheme: IconThemeData(color: Styles.colorPrimary()),
                 title: Text(
                   'Keranjang',
                   style: Styles.headerStyles(weight: FontWeight.w500, size: 16),
@@ -134,10 +134,10 @@ class CartView extends GetView<CartController> {
                   },
                   child: Container(
                     height: 45,
-                    width: 120,
+                    width: 140,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(11),
-                      color: const Color(0xff034779),
+                      color: Styles.colorPrimary(),
                     ),
                     child: Center(
                       child: Padding(

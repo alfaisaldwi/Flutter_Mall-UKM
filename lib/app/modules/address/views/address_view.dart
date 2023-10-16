@@ -21,7 +21,7 @@ class AddressView extends GetView<AddressController> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Styles.colorPrimary()),
         title: Text(
           'Alamat',
           style: Styles.headerStyles(weight: FontWeight.w500, size: 16),
@@ -31,7 +31,7 @@ class AddressView extends GetView<AddressController> {
       body: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 22),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -72,19 +72,24 @@ class AddressView extends GetView<AddressController> {
                 controller: controller.addressDetail,
                 decoration: InputDecoration(labelText: 'Alamat Lengkap'),
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.blue,
-                  side: BorderSide(color: Colors.blue.shade900, width: 1),
+              const SizedBox(height: 20.0),
+              GestureDetector(
+                child: Container(
+                  height: 40,
+                  width: 140,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(11),
+                    color: Styles.colorPrimary(),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text('Tambah Alamat',
+                          style: Styles.bodyStyle(color: Colors.white)),
+                    ),
+                  ),
                 ),
-                child: Text(
-                  'Tambah Alamat',
-                  style: TextStyle(
-                      color: Colors.blue.shade900), // Warna teks tombol
-                ),
-                onPressed: () async {
+                onTap: () async {
                   if (address.nameController.text.isEmpty ||
                       address.phoneController.text.isEmpty ||
                       address.addressName.value.isEmpty ||
