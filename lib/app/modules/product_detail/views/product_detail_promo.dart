@@ -29,7 +29,8 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
 
     return Scaffold(
       appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
+          elevation: 0,
+          iconTheme: IconThemeData(color: Styles.colorPrimary()),
           backgroundColor: Colors.white,
           title: Text(
             product.title,
@@ -62,9 +63,9 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                 );
               },
               child: Icon(
-                Icons.search,
+                Icons.search_outlined,
                 size: 22,
-                color: Colors.black,
+                color: Styles.colorPrimary(),
               ),
             ),
             IconButton(
@@ -85,9 +86,9 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                     Get.toNamed('/profile');
                   }
                 },
-                child: const Icon(
-                  Icons.shopping_cart,
-                  color: Colors.black,
+                child: Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Styles.colorPrimary(),
                   size: 22,
                 ),
               ),
@@ -104,8 +105,8 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(36, 54, 101, 1.0),
-                  border: Border.all(),
+                  color: Styles.colorPrimary(),
+                  border: Border.all(color: Colors.white),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
                   ),
@@ -220,6 +221,7 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                                     int.parse(product.promo!), 2),
                                 style: TextStyle(
                                   fontSize: 18,
+                                  fontWeight: FontWeight.w700,
                                   color: Colors.black,
                                 ),
                                 children: [

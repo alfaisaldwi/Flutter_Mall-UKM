@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -117,9 +119,9 @@ class HomeView extends GetView<HomeController> {
                     Get.toNamed('/profile');
                   }
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.shopping_cart_outlined,
-                  color: Colors.black,
+                  color: Styles.colorPrimary(),
                   size: 22,
                 ),
               ),
@@ -134,26 +136,34 @@ class HomeView extends GetView<HomeController> {
           child: Container(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Card(
-                    elevation: 0.0,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          child: Obx(() => CarouselSlider(
-                                options: CarouselOptions(
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    autoPlay: true,
-                                    viewportFraction: 0.97,
-                                    aspectRatio: 16 / 9),
-                                items: controller.carouselList.map((carousel) {
-                                  return Container(
-                                    child: CachedNetworkImage(
+                  Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Obx(() {
+                                return CarouselSlider(
+                                  options: CarouselOptions(
+                                      autoPlay: true,
+                                      enlargeCenterPage: true,
+                                      viewportFraction: 1,
+                                      aspectRatio: 16 / 9,
+                                      onPageChanged: (index, reason) {
+                                        controller.currentCaraousel.value =
+                                            index;
+                                      }),
+                                  items:
+                                      controller.carouselList.map((carousel) {
+                                    return CachedNetworkImage(
                                       imageUrl: carousel.photo,
                                       imageBuilder: (context, imageProvider) =>
                                           Image(
@@ -163,136 +173,168 @@ class HomeView extends GetView<HomeController> {
                                         alignment: Alignment.center,
                                       ),
                                       placeholder: (context, url) => Center(
-                                          child: Shimmer.fromColors(
-                                              baseColor: Colors.grey.shade300,
-                                              highlightColor:
-                                                  Colors.grey.shade100,
-                                              child: Container(
-                                                margin: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ))),
+                                        child: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade300,
+                                          highlightColor: Colors.grey.shade100,
+                                          child: Container(
+                                            margin: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                       errorWidget: (context, url, error) =>
                                           const Icon(
                                         Icons.image_not_supported_rounded,
                                         color: Colors.grey,
                                       ),
+                                    );
+                                  }).toList(),
+                                );
+                              }),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 1,
+                            child: Obx(() {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: controller.carouselList
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  return GestureDetector(
+                                    onTap: () => controller.controllerCaraousel
+                                        .animateToPage(entry.key),
+                                    child: Container(
+                                      width: 6.0,
+                                      height: 6.0,
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 4.0),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: (Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? Styles.colorPrimary()
+                                                  : Colors.black)
+                                              .withOpacity(
+                                                  controller.currentCaraousel ==
+                                                          entry.key
+                                                      ? 0.9
+                                                      : 0.4)),
                                     ),
                                   );
                                 }).toList(),
-                              )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15.0, horizontal: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Kategori',
-                              style: Styles.headerStyles(),
-                            ),
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15.0, horizontal: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Kategori',
+                            style: Styles.headerStyles(),
                           ),
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * .1 + 3,
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: Obx(() => ListView.builder(
-                              physics: const ClampingScrollPhysics(),
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: controller.category.length,
-                              itemBuilder: (context, index) {
-                                var category = controller.category[index];
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .1 + 3,
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: Obx(() => ListView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: controller.category.length,
+                            itemBuilder: (context, index) {
+                              var category = controller.category[index];
 
-                                return GestureDetector(
-                                  onTap: () async {
-                                    var categoryDetail = await controller
-                                        .categotyDetail(category.id);
-                                    print(category.id);
+                              return GestureDetector(
+                                onTap: () async {
+                                  var categoryDetail = await controller
+                                      .categotyDetail(category.id);
+                                  print(category.id);
 
-                                    Get.toNamed('category', arguments: [
-                                      categoryDetail,
-                                      category.title
-                                    ]);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(0),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8.0, bottom: 0.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              height: 80,
-                                              width: 60,
-                                              child: Column(
-                                                children: [
-                                                  CachedNetworkImage(
-                                                    imageUrl: category.photo,
-                                                    imageBuilder: (context,
-                                                            imageProvider) =>
-                                                        Image(
-                                                      image: imageProvider,
-                                                      width: 43,
-                                                      height: 43,
-                                                      fit: BoxFit.fill,
-                                                      alignment:
-                                                          Alignment.center,
-                                                    ),
-                                                    placeholder:
-                                                        (context, url) =>
-                                                            Center(
-                                                      child:
-                                                          LoadingAnimationWidget
-                                                              .flickr(
-                                                        rightDotColor: Colors
-                                                            .grey.shade200,
-                                                        leftDotColor:
-                                                            const Color(
-                                                                0xfffd0079),
-                                                        size: 25,
-                                                      ),
-                                                    ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            const Icon(
-                                                      Icons
-                                                          .image_not_supported_rounded,
-                                                      color: Colors.grey,
+                                  Get.toNamed('category', arguments: [
+                                    categoryDetail,
+                                    category.title
+                                  ]);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0, bottom: 0.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                            height: 80,
+                                            width: 60,
+                                            child: Column(
+                                              children: [
+                                                CachedNetworkImage(
+                                                  imageUrl: category.photo,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Image(
+                                                    image: imageProvider,
+                                                    width: 43,
+                                                    height: 43,
+                                                    fit: BoxFit.fill,
+                                                    alignment: Alignment.center,
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                    child:
+                                                        LoadingAnimationWidget
+                                                            .flickr(
+                                                      rightDotColor:
+                                                          Colors.grey.shade200,
+                                                      leftDotColor: const Color(
+                                                          0xfffd0079),
+                                                      size: 25,
                                                     ),
                                                   ),
-                                                  Expanded(
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        category.title,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: Styles.bodyStyle(
-                                                            size: 13),
-                                                      ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          const Icon(
+                                                    Icons
+                                                        .image_not_supported_rounded,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      category.title,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: Styles.bodyStyle(
+                                                          size: 13),
                                                     ),
                                                   ),
-                                                ],
-                                              )),
-                                        ],
-                                      ),
+                                                ),
+                                              ],
+                                            )),
+                                      ],
                                     ),
                                   ),
-                                );
-                              })),
-                        ),
-                      ],
-                    ),
+                                ),
+                              );
+                            })),
+                      ),
+                    ],
                   ),
                   Obx(
                     () {

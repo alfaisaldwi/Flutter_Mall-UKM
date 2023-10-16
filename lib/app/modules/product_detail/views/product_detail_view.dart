@@ -41,8 +41,9 @@ class ProductDetailView extends GetView<ProductDetailController> {
         (1 / ratio);
     return Scaffold(
       appBar: AppBar(
+          forceMaterialTransparency: true,
           elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Styles.colorPrimary()),
           backgroundColor: Colors.white,
           title: Text(
             product.title,
@@ -75,9 +76,9 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 );
               },
               child: Icon(
-                Icons.search,
+                Icons.search_outlined,
                 size: 22,
-                color: Colors.black,
+                color: Styles.colorPrimary(),
               ),
             ),
             IconButton(
@@ -98,9 +99,9 @@ class ProductDetailView extends GetView<ProductDetailController> {
                     Get.toNamed('/profile');
                   }
                 },
-                child: const Icon(
-                  Icons.shopping_cart,
-                  color: Colors.black,
+                child: Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Styles.colorPrimary(),
                   size: 22,
                 ),
               ),
@@ -118,7 +119,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(),
+                  border: Border.all(color: Styles.colorPrimary()),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
                   ),
@@ -134,7 +135,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                       child: Text('Beli Langsung',
                           textAlign: TextAlign.center,
                           style: Styles.bodyStyle(
-                              color: const Color.fromRGBO(36, 54, 101, 1.0),
+                              color: Styles.colorPrimary(),
                               weight: FontWeight.w500,
                               size: 13)),
                     ),
@@ -143,8 +144,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(36, 54, 101, 1.0),
-                  border: Border.all(),
+                  color: Styles.colorPrimary(),
+                  border: Border.all(color: Colors.white),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
                   ),
@@ -254,6 +255,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                   double.parse(product.price), 2),
                               style: TextStyle(
                                 fontSize: 18,
+                                fontWeight: FontWeight.w700,
                                 color: Colors.black,
                               ),
                               children: [
@@ -286,7 +288,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: Styles.headerStyles(
-                              weight: FontWeight.w400, size: 17),
+                              weight: FontWeight.w400, size: 16),
                         ),
                       ),
                     ),
@@ -563,8 +565,8 @@ void showOrderDialogDirect(BuildContext context) {
                                 color: controllerProductDetail
                                             .selectedVariant.value ==
                                         variant
-                                    ? Colors.blue
-                                    : Colors.grey,
+                                    ? Styles.colorPrimary()
+                                    : Colors.grey.shade300,
                               ),
                               child: Obx(() => Text(
                                     variant,
@@ -614,8 +616,8 @@ void showOrderDialogDirect(BuildContext context) {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(36, 54, 101, 1.0),
-                      border: Border.all(),
+                      color: Styles.colorPrimary(),
+                      border: Border.all(color: Colors.white),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(8),
                       ),
@@ -755,8 +757,8 @@ void showOrderDialog(BuildContext context) {
                                 color: controllerProductDetail
                                             .selectedVariant.value ==
                                         variant
-                                    ? Colors.blue
-                                    : Colors.grey,
+                                    ? Styles.colorPrimary()
+                                    : Colors.grey.shade300,
                               ),
                               child: Obx(() => Text(
                                     variant,
@@ -807,8 +809,8 @@ void showOrderDialog(BuildContext context) {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(36, 54, 101, 1.0),
-                      border: Border.all(),
+                      color: Styles.colorPrimary(),
+                      border: Border.all(color: Colors.white),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(8),
                       ),

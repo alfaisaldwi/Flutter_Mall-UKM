@@ -129,7 +129,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
         child: Container(
           color: Colors.white,
           child: Padding(
-            padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 10),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -219,13 +219,12 @@ class RecommendPageView extends GetView<RecommendPageController> {
                                                       child: Opacity(
                                                         opacity: 0.7,
                                                         child: Text(
-                                                          'Lihat Selengkapnya',
+                                                          'Lihat Semua',
                                                           style: Styles
                                                               .headerStyles(
                                                                   size: 13,
-                                                                  color: Colors
-                                                                      .blue
-                                                                      .shade400),
+                                                                  color: Color(
+                                                                      0xffc77d08)),
                                                         ),
                                                       )),
                                                 ],

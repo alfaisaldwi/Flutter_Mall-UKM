@@ -16,7 +16,9 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Styles.colorPrimary(),
+        ),
         title: Text(
           'Ubah password',
           style: Styles.headerStyles(weight: FontWeight.w500, size: 16),
@@ -120,8 +122,8 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                   height: 45,
                   width: MediaQuery.of(context).size.width * 95,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: const Color(0xff034779),
+                    borderRadius: BorderRadius.circular(6),
+                    color: Styles.colorPrimary(),
                   ),
                   child: Center(
                     child: Padding(
