@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:http/http.dart' as http;
@@ -30,7 +31,8 @@ class HomeController extends GetxController {
   RxDouble longitude = 0.0.obs;
   var radius;
   var productsPromo = <ProductPromo>[].obs;
-
+  RxInt currentCaraousel = 0.obs;
+  final CarouselController controllerCaraousel = CarouselController();
   var carouselList = <CarouselIndex>[].obs;
   Timer? _timer;
 

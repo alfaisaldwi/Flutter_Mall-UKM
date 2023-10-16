@@ -26,12 +26,7 @@ class NavbarPageView extends GetView<NavbarPageController> {
 
   List<Widget> _buildScreen() {
     RxString tokenRx = RxString(token ?? '');
-    return [
-      HomeView(),
-      RecommendPageView(),
-      TransactionIndex(),
-      ProfileView()
-    ];
+    return [HomeView(), RecommendPageView(), TransactionIndex(), ProfileView()];
   }
 
   List<PersistentBottomNavBarItem> _navbarItem() {
@@ -39,34 +34,34 @@ class NavbarPageView extends GetView<NavbarPageController> {
       PersistentBottomNavBarItem(
           title: 'Beranda',
           icon: const Icon(
-            Icons.home_rounded,
+            Icons.home_outlined,
             size: 24,
             color: Color.fromRGBO(36, 54, 101, 1.0),
           ),
-          activeColorPrimary: const Color(0xfff75736),
+          activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: Colors.grey,
           inactiveColorSecondary: Colors.white),
       PersistentBottomNavBarItem(
           title: 'Rekomendasi',
           icon: const Icon(
-            Icons.thumb_up_alt,
+            Icons.thumb_up_alt_outlined,
             size: 24,
             color: Color.fromRGBO(36, 54, 101, 1.0),
           ),
-          activeColorPrimary: const Color(0xfff75736),
+          activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: CupertinoColors.systemGrey),
       PersistentBottomNavBarItem(
           title: 'Transaksi',
-          icon: const Icon(Icons.wallet_rounded,
+          icon: const Icon(Icons.wallet_outlined,
               size: 24, color: Color.fromRGBO(36, 54, 101, 1.0)),
-          activeColorPrimary: const Color(0xfff75736),
+          activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: Colors.grey,
           inactiveColorSecondary: Colors.white),
       PersistentBottomNavBarItem(
           title: 'Akun',
           icon: const Icon(Icons.person_outline,
               size: 24, color: Color.fromRGBO(36, 54, 101, 1.0)),
-          activeColorPrimary: const Color(0xfff75736),
+          activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: Colors.grey,
           inactiveColorSecondary: Colors.white),
     ];
