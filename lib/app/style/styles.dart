@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Styles {
-  // declare two fonts into separate varibales
+  static ButtonStyle buttonStyle({Color? color}) {
+    return ElevatedButton.styleFrom(backgroundColor: Color(0xffc77d08));
+  }
 
-  // header style
+  static Color colorPrimary({Color? color}) {
+    return Color(0xffc77d08);
+  }
+
   static TextStyle headerStyles(
       {Color? color, double? size, FontWeight? weight}) {
     return GoogleFonts.roboto(
@@ -13,7 +18,6 @@ class Styles {
         fontWeight: weight ?? FontWeight.bold);
   }
 
-  // extend the header style into body
   static bodyStyle({Color? color, double? size, FontWeight? weight}) {
     return GoogleFonts.roboto(
         color: color ?? Colors.black,

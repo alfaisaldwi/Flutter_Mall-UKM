@@ -119,9 +119,9 @@ class HomeView extends GetView<HomeController> {
                     Get.toNamed('/profile');
                   }
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.shopping_cart_outlined,
-                  color: Colors.black,
+                  color: Styles.colorPrimary(),
                   size: 22,
                 ),
               ),
@@ -217,7 +217,7 @@ class HomeView extends GetView<HomeController> {
                                           color: (Theme.of(context)
                                                           .brightness ==
                                                       Brightness.light
-                                                  ? Colors.white
+                                                  ? Styles.colorPrimary()
                                                   : Colors.black)
                                               .withOpacity(
                                                   controller.currentCaraousel ==
