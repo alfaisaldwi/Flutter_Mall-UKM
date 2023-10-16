@@ -101,9 +101,10 @@ class AccountView extends GetView<ProfileController> {
                                   controllerNav.tabController.index = 2;
                                 },
                                 child: ListTile(
-                                  leading: const Icon(
-                                    Icons.wallet_rounded,
+                                  leading: Icon(
+                                    Icons.wallet_outlined,
                                     size: 20,
+                                    color: Styles.colorPrimary(),
                                   ),
                                   title: Text(
                                     'Daftar Transaksi',
@@ -114,9 +115,10 @@ class AccountView extends GetView<ProfileController> {
                               GestureDetector(
                                 onTap: () => (Get.toNamed('/cart')),
                                 child: ListTile(
-                                  leading: const Icon(
-                                    Icons.shopping_cart,
+                                  leading: Icon(
+                                    Icons.shopping_cart_outlined,
                                     size: 20,
+                                    color: Styles.colorPrimary(),
                                   ),
                                   title: Text(
                                     'Keranjang',
@@ -161,9 +163,10 @@ class AccountView extends GetView<ProfileController> {
                                 onTap: () {
                                   Get.toNamed('/address-index');
                                 },
-                                leading: const Icon(
+                                leading: Icon(
                                   Icons.location_on_outlined,
                                   size: 20,
+                                  color: Styles.colorPrimary(),
                                 ),
                                 title: Text(
                                   'Alamat Pengiriman',
@@ -174,7 +177,10 @@ class AccountView extends GetView<ProfileController> {
                                 onTap: () {
                                   Get.toNamed('/change-password');
                                 },
-                                leading: const Icon(Icons.key_outlined),
+                                leading: Icon(
+                                  Icons.key_outlined,
+                                  color: Styles.colorPrimary(),
+                                ),
                                 title: Text(
                                   'Ubah Kata Sandi',
                                   style: Styles.bodyStyle(),
@@ -239,9 +245,10 @@ class AccountView extends GetView<ProfileController> {
                                     debugPrint('Something bad happened ,$err');
                                   }
                                 },
-                                leading: const Icon(
-                                  Icons.quick_contacts_dialer,
+                                leading: Icon(
+                                  Icons.quick_contacts_dialer_outlined,
                                   size: 20,
+                                  color: Styles.colorPrimary(),
                                 ),
                                 title: Text(
                                   'Hubungi Customer Service',
@@ -253,7 +260,10 @@ class AccountView extends GetView<ProfileController> {
                                   await profileCompany.fetchProfileCompany();
                                   Get.toNamed('profile-company');
                                 },
-                                leading: const Icon(Icons.file_copy_rounded),
+                                leading: Icon(
+                                  Icons.file_copy_rounded,
+                                  color: Styles.colorPrimary(),
+                                ),
                                 title: Text(
                                   'Syarat dan Ketentuan',
                                   style: Styles.bodyStyle(),
