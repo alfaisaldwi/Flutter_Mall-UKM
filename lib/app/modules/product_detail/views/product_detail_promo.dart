@@ -616,7 +616,7 @@ void showOrderDialogOffline(BuildContext context) {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(36, 54, 101, 1.0),
+                      color: Styles.colorPrimary(),
                       border: Border.all(),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(8),

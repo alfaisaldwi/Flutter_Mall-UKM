@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mall_ukm/app/component/search_widget.dart';
 import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
 import 'package:mall_ukm/app/component/search_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
@@ -27,7 +28,6 @@ class RecommendPageView extends GetView<RecommendPageController> {
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
-          
           backgroundColor: Colors.white,
           title: Container(
             width: double.infinity,
@@ -36,27 +36,8 @@ class RecommendPageView extends GetView<RecommendPageController> {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  showSearch(
-                    context: context,
-                    delegate: SearchPage(
-                      barTheme: ThemeData.light(useMaterial3: true),
-                      onQueryUpdate: print,
-                      items: productDetail.products,
-                      searchLabel: 'Cari..',
-                      suggestion: const Center(
-                        child: Text('Cari produk yang kamu kebutuhan'),
-                      ),
-                      failure: const Center(
-                        child: Text('Produk yang kamu cari tidak ada :('),
-                      ),
-                      filter: (product) => [
-                        product.title,
-                      ],
-                      builder: (product) => SearchView(
-                        products: product,
-                      ),
-                    ),
-                  );
+                  SearchWidget.showCustomSearch(
+                      context, productDetail.products);
                 },
                 child: Row(
                   children: [
@@ -68,31 +49,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
                     SizedBox(
                       width: 10,
                     ),
-                    Container(
-                      width: 240,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: const TextField(
-                        enabled: false,
-                        textAlign: TextAlign.justify,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                          border: InputBorder
-                              .none, // Hapus border pada input decoration TextField
-                          hintText: 'Cari Produk di Mall UKM',
-                          hintStyle: const TextStyle(fontSize: 12),
-                          prefixIcon: const Icon(
-                            Icons.search,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
+                    SearchForm()
                   ],
                 ),
               ),
@@ -117,9 +74,9 @@ class RecommendPageView extends GetView<RecommendPageController> {
                     Get.toNamed('/profile');
                   }
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.shopping_cart_outlined,
-                  color: Colors.black,
+                  color: Styles.colorPrimary(),
                   size: 22,
                 ),
               ),

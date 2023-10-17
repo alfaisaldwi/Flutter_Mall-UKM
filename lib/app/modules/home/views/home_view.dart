@@ -48,32 +48,7 @@ class HomeView extends GetView<HomeController> {
                     SizedBox(
                       width: 10,
                     ),
-                    Container(
-                      width: 240,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Styles.colorPrimary()),
-                      ),
-                      child: TextField(
-                        enabled: false,
-                        textAlign: TextAlign.justify,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          border: InputBorder
-                              .none, // Hapus border pada input decoration TextField
-                          hintText: 'Cari Produk',
-                          hintStyle: TextStyle(
-                              fontSize: 15, color: Styles.colorPrimary()),
-                          prefixIcon: Icon(
-                            Icons.search_outlined,
-                            color: Styles.colorPrimary(),
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
+                    SearchForm()
                   ],
                 ),
               ),
