@@ -75,20 +75,21 @@ class HomeView extends GetView<HomeController> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Colors.grey),
+                        border: Border.all(color: Styles.colorPrimary()),
                       ),
-                      child: const TextField(
+                      child: TextField(
                         enabled: false,
                         textAlign: TextAlign.justify,
                         decoration: InputDecoration(
                           fillColor: Colors.white,
-                          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 4),
                           border: InputBorder
                               .none, // Hapus border pada input decoration TextField
                           hintText: 'Cari Produk',
-                          hintStyle: const TextStyle(fontSize: 12),
-                          prefixIcon: const Icon(
-                            Icons.search,
+                          hintStyle: TextStyle(
+                              fontSize: 15, color: Styles.colorPrimary()),
+                          prefixIcon: Icon(
+                            Icons.search_outlined,
+                            color: Styles.colorPrimary(),
                             size: 16,
                           ),
                         ),
@@ -351,7 +352,7 @@ class HomeView extends GetView<HomeController> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Produk Promo',
+                                      'Sedang Promo',
                                       style: Styles.headerStyles(size: 16),
                                     ),
                                     SizedBox(
@@ -396,6 +397,7 @@ class HomeView extends GetView<HomeController> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 2.0),
                                       child: Card(
+                                        elevation: 2,
                                         child: Container(
                                           width: 140,
                                           padding: const EdgeInsets.all(5),
@@ -555,6 +557,7 @@ class HomeView extends GetView<HomeController> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
+                                    elevation: 1.5,
                                     color: Colors.white,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
