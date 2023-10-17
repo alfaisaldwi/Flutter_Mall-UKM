@@ -27,6 +27,7 @@ class RecommendPageView extends GetView<RecommendPageController> {
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
+          
           backgroundColor: Colors.white,
           title: Container(
             width: double.infinity,
