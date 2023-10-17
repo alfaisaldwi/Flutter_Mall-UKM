@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
-import 'package:mall_ukm/app/modules/home/views/search_view.dart';
+import 'package:mall_ukm/app/component/search_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 

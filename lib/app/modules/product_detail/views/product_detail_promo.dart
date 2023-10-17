@@ -12,7 +12,7 @@ import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
 import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
 import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
-import 'package:mall_ukm/app/modules/home/views/search_view.dart';
+import 'package:mall_ukm/app/component/search_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 import '../controllers/product_detail_controller.dart';

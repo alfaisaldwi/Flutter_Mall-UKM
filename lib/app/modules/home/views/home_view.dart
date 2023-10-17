@@ -11,8 +11,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:mall_ukm/app/component/search_widget.dart';
 import 'package:mall_ukm/app/modules/category/views/category_view.dart';
-import 'package:mall_ukm/app/modules/home/views/search_view.dart';
+import 'package:mall_ukm/app/component/search_view.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_view.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
@@ -35,29 +36,7 @@ class HomeView extends GetView<HomeController> {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  showSearch(
-                    context: context,
-                    delegate: SearchPage(
-                      barTheme: ThemeData.light(useMaterial3: true),
-                      onQueryUpdate: print,
-                      items: controller.products,
-                      searchLabel: 'Cari..',
-                      suggestion: const Center(
-                        child: Text('Cari produk yang kamu kebutuhan'),
-                      ),
-                      failure: const Center(
-                        child: Text('Produk yang kamu cari tidak ada :('),
-                      ),
-                      filter: (product) {
-                        return [
-                          product.title,
-                        ];
-                      },
-                      builder: (product) => SearchView(
-                        products: product,
-                      ),
-                    ),
-                  );
+                  SearchWidget.showCustomSearch(context, controller.products);
                 },
                 child: Row(
                   children: [
