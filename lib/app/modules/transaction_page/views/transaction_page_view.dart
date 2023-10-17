@@ -23,6 +23,7 @@ class TransactionPageView extends GetView<TransactionPageController> {
           backgroundColor: Colors.white,
           bottom: TabBar(
             isScrollable: true,
+            indicatorColor: Styles.colorPrimary(),
             indicatorPadding: EdgeInsets.zero,
             tabs: [
               Tab(

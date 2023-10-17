@@ -33,34 +33,40 @@ class NavbarPageView extends GetView<NavbarPageController> {
     return [
       PersistentBottomNavBarItem(
           title: 'Beranda',
-          icon: const Icon(
+          icon: Icon(
             Icons.home_outlined,
-            size: 24,
-            color: Color.fromRGBO(36, 54, 101, 1.0),
+            size: 28,
+            color: Colors.indigo.shade900,
           ),
           activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: Colors.grey,
           inactiveColorSecondary: Colors.white),
       PersistentBottomNavBarItem(
           title: 'Rekomendasi',
-          icon: const Icon(
+          icon: Icon(
             Icons.thumb_up_alt_outlined,
             size: 24,
-            color: Color.fromRGBO(36, 54, 101, 1.0),
+            color: Colors.indigo.shade900,
           ),
           activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: CupertinoColors.systemGrey),
       PersistentBottomNavBarItem(
           title: 'Transaksi',
-          icon: const Icon(Icons.wallet_outlined,
-              size: 24, color: Color.fromRGBO(36, 54, 101, 1.0)),
+          icon: Icon(
+            Icons.wallet_outlined,
+            size: 24,
+            color: Colors.indigo.shade900,
+          ),
           activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: Colors.grey,
           inactiveColorSecondary: Colors.white),
       PersistentBottomNavBarItem(
           title: 'Akun',
-          icon: const Icon(Icons.person_outline,
-              size: 24, color: Color.fromRGBO(36, 54, 101, 1.0)),
+          icon: Icon(
+            Icons.person_outline,
+            size: 24,
+            color: Colors.indigo.shade900,
+          ),
           activeColorPrimary: const Color(0xffc77d08),
           inactiveColorPrimary: Colors.grey,
           inactiveColorSecondary: Colors.white),

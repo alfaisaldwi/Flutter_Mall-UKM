@@ -36,7 +36,9 @@ class TransactionDetailView extends GetView<TransactionPageController> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Styles.colorPrimary(),
+        ),
         title: Column(
           children: [
             Text(
@@ -45,6 +47,27 @@ class TransactionDetailView extends GetView<TransactionPageController> {
             ),
           ],
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: IconButton(
+              icon: Icon(
+                Icons.headset_mic_outlined,
+                size: 24,
+                color: Styles.colorPrimary(),
+              ),
+              onPressed: () async {
+                try {
+                  final Uri _url = Uri.parse(
+                      'https://wa.me/6283823065878?text=Haloo Admin Mall UKM Kota Cirebon, Saya ingin bertanya sesuatu nih.');
+                  await launchUrl(_url, mode: LaunchMode.externalApplication);
+                } catch (err) {
+                  debugPrint('Something bad happened');
+                }
+              },
+            ),
+          )
+        ],
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
