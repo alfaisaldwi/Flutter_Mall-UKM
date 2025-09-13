@@ -1,10 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
+// import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart' as cs;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -20,7 +19,8 @@ import '../controllers/product_detail_controller.dart';
 class ProductDetailPromoView extends GetView<ProductDetailController> {
   var controllerProductDetail = Get.put(ProductDetailController());
   var productDetails = Get.arguments as List<ProductDetail>;
-  final CarouselController controllerCaraousel = CarouselController();
+  final CarouselSliderController controllerCaraousel =
+      CarouselSliderController();
   var homeC = Get.put(HomeController());
 
   @override
@@ -218,7 +218,7 @@ class ProductDetailPromoView extends GetView<ProductDetailController> {
                             child: RichText(
                               text: TextSpan(
                                 text: controllerProductDetail.convertToIdr(
-                                    int.parse(product.promo!), 2),
+                                    int.parse(product.promo!.toString()), 2),
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,
@@ -598,7 +598,7 @@ void showOrderDialogOffline(BuildContext context) {
                         buttonAspectRatio: 1.5,
                       ),
                       didChangeCount: (count) async {
-                        if (count <= int.parse(product.qty)) {
+                        if (count <= int.parse(product.qty.toString())) {
                           controllerProductDetail.counter.value = count;
                         } else {
                           Fluttertoast.showToast(
@@ -628,14 +628,14 @@ void showOrderDialogOffline(BuildContext context) {
                         if (token != null) {
                           if (controllerProductDetail
                               .selectedVariant.value.isNotEmpty) {
-                            if (int.parse(product.qty) >=
+                            if (int.parse(product.qty.toString()) >=
                                 controllerProductDetail.counter.value) {
                               print(controllerProductDetail
                                   .selectedVariant.value);
 
                               var total =
                                   controllerProductDetail.counter.value *
-                                      int.parse(product.promo!);
+                                      int.parse(product.promo!.toString());
                               var totalBefore =
                                   controllerProductDetail.counter.value *
                                       double.parse(product.price);
@@ -785,7 +785,7 @@ void showOrderDialog(BuildContext context) {
                       ),
                       didChangeCount: (count) async {
                         // if (count > controllerProductDetail.counter.value) {
-                        if (count <= int.parse(product.qty)) {
+                        if (count <= int.parse(product.qty.toString())) {
                           controllerProductDetail.counter.value = count;
                         } else {
                           Fluttertoast.showToast(
@@ -815,7 +815,7 @@ void showOrderDialog(BuildContext context) {
                         if (token != null) {
                           if (controllerProductDetail
                               .selectedVariant.value.isNotEmpty) {
-                            if (int.parse(product.qty) >=
+                            if (int.parse(product.qty.toString()) >=
                                 controllerProductDetail.counter.value) {
                               CartItem cartItem = CartItem(
                                   product_id: product.id,

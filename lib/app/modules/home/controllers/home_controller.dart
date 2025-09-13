@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_controller.dart' as cs;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ import 'package:mall_ukm/app/model/product/product_model.dart';
 import 'package:mall_ukm/app/model/product/product_promo_model.dart';
 import 'package:mall_ukm/app/modules/product_detail/views/product_detail_promo.dart';
 import 'package:mall_ukm/app/service/api_service.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../component/show_general_dialog.dart';
 import '../../../model/category/category_model.dart';
@@ -32,7 +30,8 @@ class HomeController extends GetxController {
   var radius;
   var productsPromo = <ProductPromo>[].obs;
   RxInt currentCaraousel = 0.obs;
-  final CarouselController controllerCaraousel = CarouselController();
+  final cs.CarouselSliderController controllerCaraousel =
+      cs.CarouselSliderController();
   var carouselList = <CarouselIndex>[].obs;
   Timer? _timer;
 
@@ -273,13 +272,28 @@ class HomeController extends GetxController {
     showLoadingDialog(Get.context!);
 
     try {
-      geolocator.Position position =
-          await geolocator.Geolocator.getCurrentPosition(
-        desiredAccuracy: geolocator.LocationAccuracy.high,
-      );
+      Location location = Location();
 
-      latitude.value = position.latitude;
-      longitude.value = position.longitude;
+      bool serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          return;
+        }
+      }
+
+      PermissionStatus permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          return;
+        }
+      }
+
+      LocationData locationData = await location.getLocation();
+
+      latitude.value = locationData.latitude!;
+      longitude.value = locationData.longitude!;
 
       Map<String, dynamic> requestBody = {
         "latitude": latitude.value,
@@ -383,48 +397,55 @@ class HomeController extends GetxController {
   }
 
   Future<void> requestLocationPermission() async {
-    var status = await Permission.location.request();
-    if (status.isGranted) {
-      LocationData locationData = await Location().getLocation();
-    } else if (status.isDenied) {
-      showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text('Akses Lokasi Diperlukan'),
-          content: Text(
-              'Anda telah menolak izin lokasi. Buka pengaturan untuk mengizinkannya?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Tutup'),
-            ),
-            TextButton(
-              onPressed: () => openAppSettings(),
-              child: Text('Buka Pengaturan'),
-            ),
-          ],
-        ),
-      );
-    } else if (status.isPermanentlyDenied) {
-      showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text('Akses Lokasi Diperlukan'),
-          content: Text(
-              'Anda telah menolak izin lokasi secara permanen. Buka pengaturan untuk mengizinkannya?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Tutup'),
-            ),
-            TextButton(
-              onPressed: () => openAppSettings(),
-              child: Text('Buka Pengaturan'),
-            ),
-          ],
-        ),
-      );
+    Location location = Location();
+
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        showDialog(
+          context: Get.context!,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Layanan Lokasi Diperlukan'),
+            content:
+                Text('Aktifkan layanan lokasi di pengaturan perangkat Anda.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Tutup'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
     }
+
+    PermissionStatus permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        showDialog(
+          context: Get.context!,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Akses Lokasi Diperlukan'),
+            content: Text('Izin akses lokasi diperlukan untuk fitur ini.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Tutup'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    }
+
+    // Get location if permission is granted
+    LocationData locationData = await location.getLocation();
+    latitude.value = locationData.latitude!;
+    longitude.value = locationData.longitude!;
   }
 
   String convertToIdr(dynamic number, int decimalDigit) {

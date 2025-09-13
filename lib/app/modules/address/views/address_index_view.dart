@@ -7,6 +7,8 @@ import 'package:mall_ukm/app/style/styles.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class AddressIndexView extends GetView<AddressController> {
+  const AddressIndexView({super.key});
+
   @override
   Widget build(BuildContext context) {
     RxDouble tot = 0.0.obs;
@@ -21,7 +23,6 @@ class AddressIndexView extends GetView<AddressController> {
             onPressed: () {
               checkoutO.refreshAddress();
               controller.getAdrresNow();
-
               Get.back();
             }),
         iconTheme: IconThemeData(color: Styles.colorPrimary()),
@@ -345,9 +346,9 @@ class AddressIndexView extends GetView<AddressController> {
                                                                               .deleteAdress(adr.id);
                                                                         }));
                                                               },
-                                                              child: const Icon(
+                                                              child:  Icon(
                                                                 PhosphorIcons
-                                                                    .trashFill,
+                                                                    .trashSimple,
                                                                 color: Colors
                                                                     .deepOrange,
                                                                 size: 20,

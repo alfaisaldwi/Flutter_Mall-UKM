@@ -1,12 +1,12 @@
 class RecommendProductDetail {
   final int id;
-  final String categoryId;
+  final int categoryId;
   final String title;
   final String price;
   final String priceRetail;
-  final String qty;
+  final int qty;
   final String weight;
-  final String? promo;
+  final int? promo;
   final String unit;
   final List<String> unitVariant;
   final String description;

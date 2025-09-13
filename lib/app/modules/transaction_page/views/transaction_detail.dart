@@ -11,8 +11,7 @@ import 'package:mall_ukm/app/model/transaction/transaction_show.dart';
 import 'package:mall_ukm/app/modules/transaction_page/controllers/transaction_page_controller.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+
 import 'package:url_launcher/url_launcher.dart';
 
 class TransactionDetailView extends GetView<TransactionPageController> {
@@ -414,7 +413,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                           print("Status pemesanan berubah");
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                         child: Text("Ya"),
                       ),
@@ -423,7 +422,7 @@ class TransactionDetailView extends GetView<TransactionPageController> {
                           Get.back();
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.red,
+                          backgroundColor: Colors.red,
                         ),
                         child: Text("Tidak"),
                       ),

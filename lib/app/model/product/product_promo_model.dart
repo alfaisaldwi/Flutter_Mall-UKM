@@ -5,7 +5,7 @@ class ProductPromo {
   final String priceRetail;
   final String qty;
   final String weight;
-  final String promo;
+  final int promo;
   final String unit;
   final List<String> unitVariant;
   final String description;

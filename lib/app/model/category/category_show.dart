@@ -41,7 +41,7 @@ class CategoryProductDetail {
   final String title;
   final String price;
   final String priceRetail;
-  final String qty;
+  final int qty;
   final String weight;
   final String unit;
   final String unitVariant;
@@ -69,7 +69,7 @@ class CategoryProductDetail {
   factory CategoryProductDetail.fromJson(Map<String, dynamic> json) {
     return CategoryProductDetail(
       id: json['id'],
-      categoryId: int.parse(json['category_id']),
+      categoryId: int.parse(json['category_id'].toString()),
       title: json['title'],
       price: json['price'],
       priceRetail: json['price_retail'],

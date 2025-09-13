@@ -1,10 +1,10 @@
 class Product {
   int id;
-  String? categoryId;
+  int? categoryId;
   String title;
   String price;
   String priceRetail;
-  String qty;
+  int qty;
   String unit;
   List<String>? unitVariant;
   String description;

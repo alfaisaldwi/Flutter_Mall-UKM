@@ -3,10 +3,8 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_carousel_slider/flutter_custom_carousel_slider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mall_ukm/app/model/cart/cartItem_model.dart';
@@ -14,7 +12,6 @@ import 'package:mall_ukm/app/model/product/product_detail_model.dart';
 import 'package:mall_ukm/app/modules/cart/controllers/cart_controller.dart';
 import 'package:mall_ukm/app/modules/home/controllers/home_controller.dart';
 import 'package:mall_ukm/app/modules/home/views/search_view.dart';
-import 'package:mall_ukm/app/modules/product_detail/views/product_detail_promo.dart';
 import 'package:mall_ukm/app/style/styles.dart';
 import 'package:search_page/search_page.dart';
 import '../controllers/product_detail_controller.dart';
@@ -23,7 +20,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
   var controllerProductDetail = Get.put(ProductDetailController());
   var ctrlCart = CartController();
   var productDetails = Get.arguments as List<ProductDetail>;
-  final CarouselController controllerCaraousel = CarouselController();
+  final CarouselSliderController controllerCaraousel =
+      CarouselSliderController();
   var homeC = Get.put(HomeController());
 
   @override
@@ -598,7 +596,7 @@ void showOrderDialogDirect(BuildContext context) {
                         buttonAspectRatio: 1.5,
                       ),
                       didChangeCount: (count) async {
-                        if (count <= int.parse(product.qty)) {
+                        if (count <= int.parse(product.qty.toString())) {
                           controllerProductDetail.counter.value = count;
                         } else {
                           Fluttertoast.showToast(
@@ -628,7 +626,7 @@ void showOrderDialogDirect(BuildContext context) {
                         if (token != null) {
                           if (controllerProductDetail
                               .selectedVariant.value.isNotEmpty) {
-                            if (int.parse(product.qty) >=
+                            if (int.parse(product.qty.toString()) >=
                                 controllerProductDetail.counter.value) {
                               print(controllerProductDetail
                                   .selectedVariant.value);
@@ -791,7 +789,7 @@ void showOrderDialog(BuildContext context) {
                       ),
                       didChangeCount: (count) async {
                         // if (count > controllerProductDetail.counter.value) {
-                        if (count <= int.parse(product.qty)) {
+                        if (count <= int.parse(product.qty.toString())) {
                           controllerProductDetail.counter.value = count;
                         } else {
                           Fluttertoast.showToast(
@@ -821,7 +819,7 @@ void showOrderDialog(BuildContext context) {
                         if (token != null) {
                           if (controllerProductDetail
                               .selectedVariant.value.isNotEmpty) {
-                            if (int.parse(product.qty) >=
+                            if (int.parse(product.qty.toString()) >=
                                 controllerProductDetail.counter.value) {
                               CartItem cartItem = CartItem(
                                   product_id: product.id,

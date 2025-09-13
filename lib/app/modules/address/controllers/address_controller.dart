@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -52,6 +53,8 @@ class AddressController extends GetxController {
         headers: {
           'key': ApiEndPoints.rajaOngkirEndPoints.key,
         });
+
+    log("Response PROVINSI: ${response.body} || Status: ${response.statusCode}");
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
       provinces.value = jsonData['rajaongkir']['results'];

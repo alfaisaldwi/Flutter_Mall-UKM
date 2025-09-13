@@ -473,7 +473,7 @@ class HomeView extends GetView<HomeController> {
                                                       horizontal: 8.0,
                                                       vertical: 2.0),
                                                   child: Text(
-                                                    ' ${controller.convertToIdr(int.parse(product.promo), 0)}',
+                                                    ' ${controller.convertToIdr(int.parse(product.promo.toString()), 0)}',
                                                     textAlign: TextAlign.left,
                                                     maxLines: 1,
                                                     overflow:

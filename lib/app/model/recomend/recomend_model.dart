@@ -26,9 +26,9 @@ class ProductRecomend {
   String? title;
   String? price;
   String? priceRetail;
-  String? qty;
+  int? qty;
   String? weight;
-  String? promo;
+  int? promo;
   String? unit;
   String? unitVariant;
   String? description;
@@ -52,7 +52,7 @@ class ProductRecomend {
   factory ProductRecomend.fromJson(Map<String, dynamic> json) {
     return ProductRecomend(
       id: json['id'],
-      categoryId: int.parse(json['category_id']),
+      categoryId: int.parse(json['category_id'].toString()),
       title: json['title'],
       price: json['price'],
       priceRetail: json['price_retail'],

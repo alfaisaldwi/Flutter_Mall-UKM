@@ -1,13 +1,13 @@
 class ProductDetail {
   int id;
-  String categoryId;
+  int categoryId;
   String title;
   String price;
   String priceRetail;
-  String qty;
+  int qty;
   String weight;
   String unit;
-  String? promo;
+  int? promo;
   String category;
   List<String> unitVariant;
   String description;

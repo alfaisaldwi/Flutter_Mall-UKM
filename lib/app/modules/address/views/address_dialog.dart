@@ -138,8 +138,7 @@ class AddressSelectionDialog extends StatelessWidget {
             const SizedBox(height: 16.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue, // Warna latar belakang tombol
-                onPrimary: Colors.white, // Warna teks tombol saat ditekan
+                foregroundColor: Colors.white, backgroundColor: Colors.blue, // Warna teks tombol saat ditekan
               ),
               child: Text('Simpan Alamat'),
               onPressed: () {
